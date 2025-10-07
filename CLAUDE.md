@@ -10,6 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Tailwind CSS 4** - Utility-first styling via Vite plugin
 - **Shadcn/ui** - UI component library (New York style, Lucide icons)
 - **Supabase** - Backend services and database (when configured)
+- **Zustand** - State management
 
 ## Development Commands
 
@@ -103,6 +104,12 @@ Shadcn component aliases from `components.json`:
 - Dark mode via `dark:` variant
 - Responsive: `sm:`, `md:`, `lg:`, etc.
 - State variants: `hover:`, `focus-visible:`, `active:`, etc.
+
+### Shadcn/ui
+
+- reusable components should be created with Shadcn/ui library
+- list of available shadcn components can be found here: https://ui.shadcn.com/r
+- to add new shadcn component use: npx shadcn@latest add [component-name]
 
 ### Accessibility (ARIA)
 

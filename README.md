@@ -1,94 +1,149 @@
-# 10x Astro Starter
+# Initiative Forge
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+A web application designed as a command center for Dungeons & Dragons 5e Game Masters to streamline campaign management and combat encounters.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Available Scripts](#available-scripts)
+- [Project Scope](#project-scope)
+- [Project Status](#project-status)
+- [License](#license)
+
+## Overview
+
+Initiative Forge addresses the common challenges faced by D&D 5e Game Masters, particularly beginners, by providing a centralized digital environment for managing campaigns and running combat encounters. The application eliminates the need to juggle multiple rulebooks and notes during sessions by offering:
+
+- **Global Monster Library** - Searchable database of creatures with SRD stats
+- **Global Spell Library** - Comprehensive spell reference with filtering by level and class
+- **Campaign Management** - Organize player characters and encounters for each campaign
+- **Combat Tracker** - Real-time initiative tracking, HP management, action resolution, and condition monitoring
+- **Automated Rolls** - Instant attack rolls, damage calculations, and initiative with advantage/disadvantage support
+
+The goal is to make combat rounds faster and more fluid, allowing DMs to focus on storytelling rather than rulebook management.
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
-- [React](https://react.dev/) v19.0.0 - UI library for building interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
+### Frontend
+- **[Astro 5](https://astro.build/)** - Modern web framework optimized for content-rich websites with SSR support
+- **[React 19](https://react.dev/)** - UI library for interactive components
+- **[TypeScript 5](https://www.typescriptlang.org/)** - Static type checking and enhanced IDE support
+- **[Tailwind CSS 4](https://tailwindcss.com/)** - Utility-first CSS framework for rapid UI development
+- **[Shadcn/ui](https://ui.shadcn.com/)** - Accessible component library built on Radix UI
+- **[Zustand](https://zustand-demo.pmnd.rs/)** - Lightweight state management for combat encounters
 
-## Prerequisites
+### Backend
+- **[Supabase](https://supabase.com/)** - Open-source backend-as-a-service providing:
+  - PostgreSQL database
+  - Built-in authentication
+  - Real-time subscriptions
+  - RESTful API
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+### Development & Deployment
+- **[ESLint](https://eslint.org/)** + **[Prettier](https://prettier.io/)** - Code linting and formatting
+- **[Husky](https://typicode.github.io/husky/)** - Git hooks for automated checks
+- **GitHub Actions** - CI/CD pipeline automation
+- **Vercel / Cloudflare** - Deployment and hosting
 
 ## Getting Started
 
-1. Clone the repository:
+### Prerequisites
 
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
+- **Node.js**: v22.14.0 (use [nvm](https://github.com/nvm-sh/nvm) for version management)
+- **npm**: Comes with Node.js
+- **Supabase Account**: Required for backend services (sign up at [supabase.com](https://supabase.com))
 
-2. Install dependencies:
+### Installation
 
-```bash
-npm install
-```
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd initiative-forge
+   ```
 
-3. Run the development server:
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-```bash
-npm run dev
-```
+3. **Set up environment variables**
 
-4. Build for production:
+   Create a `.env` file in the project root with your Supabase credentials:
+   ```env
+   PUBLIC_SUPABASE_URL=your_supabase_url
+   PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
-```bash
-npm run build
-```
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+   The application will be available at `http://localhost:3000`
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
+- **`npm run dev`** - Start development server with hot module replacement on port 3000
+- **`npm run build`** - Create optimized production build
+- **`npm run preview`** - Preview the production build locally
+- **`npm run lint`** - Check code for linting errors
+- **`npm run lint:fix`** - Automatically fix linting issues
+- **`npm run format`** - Format code with Prettier
 
-## Project Structure
+## Project Scope
 
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
+### MVP Features (In Scope)
 
-## AI Development Support
+**User Management**
+- Email and password authentication
+- Account creation and login
 
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
+**Campaign Management**
+- Create and manage campaigns
+- Add simplified player character cards with:
+  - Name, HP, AC, Speed
+  - Six core attributes (STR, DEX, CON, INT, WIS, CHA)
+  - Auto-calculated initiative modifier and passive perception
 
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
+**Global Libraries**
+- Monster library with search and CR filtering (SRD data)
+- Spell library with search, level, and class filtering (SRD data)
 
-### Cursor IDE
+**Combat Module**
+- Create encounters within campaigns
+- Add player characters, monsters (multiple instances), and NPCs
+- Automatic initiative rolling and sorting
+- Turn-by-turn tracking with active character highlighting
+- One-click action execution with automatic attack and damage rolls
+- Advantage/disadvantage roll mechanics
+- HP tracking (damage and healing)
+- Condition management with rule descriptions
 
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
+### Out of Scope (MVP)
 
-### GitHub Copilot
+- Magic items library
+- Advanced session journaling (plot notes, world details, NPC records)
+- Auto-save combat state after each turn
+- Full character sheets (inventory, skills, backstory, etc.)
 
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
+## Project Status
 
-### Windsurf
+**Current Version**: 0.0.1 (Early Development)
 
-The `.windsurfrules` file contains AI configuration for Windsurf.
+Initiative Forge is in active development. The MVP is being built to validate core functionality, focusing on delivering a seamless combat management experience for D&D 5e Game Masters.
 
-## Contributing
-
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
+**Success Criteria**:
+- Complete combat scenarios can be conducted smoothly from start to finish
+- Average combat round duration (4 players + 3 monsters) takes less than 10 minutes
 
 ## License
 
-MIT
+This project does not currently have a specified license. Please contact the repository owner for usage and distribution terms.
+
+### D&D Content Attribution
+
+This work includes material from the System Reference Document 5.2.1 ("SRD 5.2.1") by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode.
+
+Initiative Forge is compatible with fifth edition.
