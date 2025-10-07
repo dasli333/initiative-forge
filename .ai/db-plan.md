@@ -31,6 +31,7 @@ Uproszczone karty postaci graczy w kampaniach.
 | intelligence | smallint | NOT NULL | Atrybut: Inteligencja |
 | wisdom | smallint | NOT NULL | Atrybut: Mądrość |
 | charisma | smallint | NOT NULL | Atrybut: Charyzma |
+| actions | jsonb | | Akcje dostępne dla postaci (format: array obiektów) |
 | created_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data utworzenia |
 | updated_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data ostatniej modyfikacji |
 | **UNIQUE** | (campaign_id, name) | | Imię postaci unikalne w ramach kampanii |
@@ -78,6 +79,7 @@ Uczestnicy konkretnej walki (postacie graczy, potwory z biblioteki, NPC ad-hoc).
 | player_character_id | uuid | REFERENCES player_characters(id) ON DELETE CASCADE | FK do postaci gracza (opcjonalny) |
 | monster_id | uuid | REFERENCES monsters(id) ON DELETE SET NULL | FK do potwora z biblioteki (opcjonalny) |
 | stats_blob | jsonb | | Pełne statystyki dla NPC ad-hoc (gdy oba FK są NULL) |
+| display_name | text | | Nazwa wyświetlana w UI (np. "Goblin #1", "Goblin #2") |
 | initiative | smallint | NOT NULL | Wartość inicjatywy (po rzucie) |
 | current_hp | smallint | NOT NULL | Aktualne punkty życia |
 | is_active_turn | boolean | NOT NULL, DEFAULT false | Czy to aktualnie tura tego uczestnika |
@@ -379,7 +381,34 @@ CREATE POLICY "Public read access to conditions" ON conditions
 Schemat wykorzystuje model multi-tenant oparty na użytkownikach Supabase Auth (`auth.users`). Bezpieczeństwo i izolacja danych zapewniona jest przez mechanizmy RLS na poziomie wiersza w PostgreSQL.
 
 ### 5.2. Wykorzystanie typu JSONB
-Decyzja o szerokim wykorzystaniu typu `jsonb` dla bibliotek (`monsters.data`, `spells.data`) oraz statystyk NPC ad-hoc (`combat_participants.stats_blob`) wynika z priorytetu prostoty schematu w MVP. Kompromis polega na niższej wydajności filtrowania po zagnieżdżonych polach (np. `challenge_rating`, `level`) w zamian za elastyczność i szybkość implementacji. Indeksy GIN umożliwiają podstawowe filtrowanie po jsonb.
+Decyzja o szerokim wykorzystaniu typu `jsonb` dla bibliotek (`monsters.data`, `spells.data`), statystyk NPC ad-hoc (`combat_participants.stats_blob`), akcji postaci graczy (`player_characters.actions`) oraz stanów uczestników walki (`combat_participants.active_conditions`) wynika z priorytetu prostoty schematu w MVP.
+
+Kompromis polega na niższej wydajności filtrowania po zagnieżdżonych polach (np. `challenge_rating`, `level`) w zamian za elastyczność i szybkość implementacji. Indeksy GIN umożliwiają podstawowe filtrowanie po jsonb.
+
+**Format dla `player_characters.actions`:**
+```json
+[
+  {
+    "name": "Atak mieczem długim",
+    "type": "melee_weapon_attack",
+    "attack_bonus": 5,
+    "reach": "5 ft",
+    "damage_dice": "1d8",
+    "damage_bonus": 3,
+    "damage_type": "slashing"
+  },
+  {
+    "name": "Rzut oszczepem",
+    "type": "ranged_weapon_attack",
+    "attack_bonus": 5,
+    "range": "30/120 ft",
+    "damage_dice": "1d6",
+    "damage_bonus": 3,
+    "damage_type": "piercing"
+  }
+]
+```
+Ten format jest spójny ze strukturą akcji w `monsters.data` i `combat_participants.stats_blob`, co upraszcza logikę renderowania w module walki.
 
 ### 5.3. Obliczenia po stronie klienta
 Modyfikator inicjatywy (na podstawie Zręczności) oraz pasywna percepcja (na podstawie Mądrości) nie są przechowywane w bazie danych. Są dynamicznie obliczane po stronie frontendu (React), co upraszcza schemat, ale przenosi odpowiedzialność za spójność obliczeń na aplikację kliencką.
@@ -389,6 +418,8 @@ Centralna tabela modułu walki wykorzystuje elastyczny model z opcjonalnymi kluc
 - `player_character_id` - dla postaci graczy z kampanii
 - `monster_id` - dla potworów z biblioteki
 - `stats_blob` (jsonb) - dla NPC tworzonych ad-hoc (gdy oba FK są NULL)
+
+Kolumna `display_name` (text, nullable) służy do rozróżniania wielu instancji tego samego potwora lub NPC w walce (np. "Goblin #1", "Goblin #2", "Goblin #3"). Jeśli NULL, aplikacja powinna używać nazwy bazowej z odpowiedniej tabeli.
 
 Kolumna `is_active_turn` (boolean) służy do jednoznacznego oznaczania uczestnika, który aktualnie wykonuje swoją turę w walce.
 
