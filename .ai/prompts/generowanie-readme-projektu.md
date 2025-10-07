@@ -3,11 +3,11 @@ Jesteś doświadczonym programistą, którego zadaniem jest stworzenie pliku REA
 Oto pliki projektu, które należy przeanalizować:
 
 <prd>
-@prd.md
+@.ai/prd.md
 </prd>
 
 <tech_stack>
-@tech-stack.md
+@.ai/tech-stack.md
 </tech_stack>
 
 <dependencies>
