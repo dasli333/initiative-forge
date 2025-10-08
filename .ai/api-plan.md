@@ -338,31 +338,67 @@ The API exposes the following main resources mapped to database tables:
       "id": "uuid",
       "name": "Goblin",
       "data": {
-        "challenge_rating": "1/4",
-        "hit_points": "7 (2d6)",
-        "armor_class": 15,
-        "speed": "30 ft",
-        "size": "Small",
-        "type": "humanoid (goblinoid)",
-        "stats": {
-          "str": 8,
-          "dex": 14,
-          "con": 10,
-          "int": 10,
-          "wis": 8,
-          "cha": 8
+        "name": {
+          "en": "Goblin",
+          "pl": "Goblin"
         },
+        "size": "Small",
+        "type": "humanoid",
+        "category": "Goblin",
+        "alignment": "Neutral Evil",
+        "senses": ["Darkvision 60 ft.", "Passive Perception 9"],
+        "languages": ["Common", "Goblin"],
+        "abilityScores": {
+          "strength": { "score": 8, "modifier": -1, "save": -1 },
+          "dexterity": { "score": 14, "modifier": 2, "save": 2 },
+          "constitution": { "score": 10, "modifier": 0, "save": 0 },
+          "intelligence": { "score": 10, "modifier": 0, "save": 0 },
+          "wisdom": { "score": 8, "modifier": -1, "save": -1 },
+          "charisma": { "score": 8, "modifier": -1, "save": -1 }
+        },
+        "speed": ["30 ft."],
+        "hitPoints": {
+          "average": 7,
+          "formula": "2d6"
+        },
+        "armorClass": 15,
+        "challengeRating": {
+          "rating": "1/4",
+          "experiencePoints": 50,
+          "proficiencyBonus": 2
+        },
+        "skills": ["Stealth +6"],
+        "damageVulnerabilities": [],
+        "damageResistances": [],
+        "damageImmunities": [],
+        "conditionImmunities": [],
+        "gear": [],
+        "traits": [],
         "actions": [
           {
             "name": "Scimitar",
-            "type": "melee_weapon_attack",
-            "attack_bonus": 4,
-            "reach": "5 ft",
-            "damage_dice": "1d6",
-            "damage_bonus": 2,
-            "damage_type": "slashing"
+            "description": "Melee Attack Roll: +4, reach 5 ft. Hit: 5 (1d6 + 2) Slashing damage.",
+            "type": "melee",
+            "attackRoll": {
+              "type": "melee",
+              "bonus": 4
+            },
+            "damage": [
+              {
+                "average": 5,
+                "formula": "1d6 + 2",
+                "type": "Slashing"
+              }
+            ]
           }
-        ]
+        ],
+        "bonusActions": [],
+        "reactions": [],
+        "initiative": {
+          "modifier": 2,
+          "total": 12
+        },
+        "id": "goblin"
       },
       "created_at": "2025-01-10T00:00:00Z"
     }
@@ -414,14 +450,46 @@ The API exposes the following main resources mapped to database tables:
       "id": "uuid",
       "name": "Fireball",
       "data": {
+        "name": {
+          "en": "Fireball",
+          "pl": "Kula ognia"
+        },
         "level": 3,
         "school": "Evocation",
-        "casting_time": "1 action",
+        "isCantrip": false,
+        "classes": ["Sorcerer", "Wizard"],
+        "castingTime": {
+          "time": "Action",
+          "isRitual": false
+        },
         "range": "150 feet",
-        "components": ["V", "S", "M"],
-        "duration": "Instantaneous",
-        "classes": ["sorcerer", "wizard"],
-        "description": "A bright streak flashes from your pointing finger..."
+        "components": {
+          "verbal": true,
+          "somatic": true,
+          "material": true,
+          "materialDescription": "a tiny ball of bat guano and sulfur"
+        },
+        "duration": {
+          "durationType": "Instantaneous",
+          "concentration": false
+        },
+        "description": "A bright streak flashes from your pointing finger to a point you choose within range and then blossoms with a low roar into an explosion of flame...",
+        "attackType": "saving_throw",
+        "ritual": false,
+        "tags": [],
+        "damage": [
+          {
+            "formula": "8d6",
+            "damageType": "Fire",
+            "average": 28
+          }
+        ],
+        "savingThrow": {
+          "ability": "Dexterity",
+          "success": "half"
+        },
+        "higherLevels": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.",
+        "id": "fireball"
       },
       "created_at": "2025-01-10T00:00:00Z"
     }
@@ -937,25 +1005,29 @@ For filtering global libraries by nested JSONB fields:
 #### Monsters by Challenge Rating
 
 ```typescript
-// Exact CR match
-supabase.from("monsters").select("*").eq("data->>challenge_rating", "1/2");
-
-// CR range (requires casting to numeric)
+// Exact CR match (rating is nested in challengeRating object)
 supabase
   .from("monsters")
   .select("*")
-  .gte("(data->>challenge_rating)::numeric", 1)
-  .lte("(data->>challenge_rating)::numeric", 5);
+  .eq("data->challengeRating->>rating", "1/2");
+
+// CR range (requires casting to numeric, handle fractions)
+// Note: This requires custom logic to handle fractional CRs like "1/4", "1/2"
+supabase
+  .from("monsters")
+  .select("*")
+  .gte("(data->challengeRating->experiencePoints)::numeric", 100)
+  .lte("(data->challengeRating->experiencePoints)::numeric", 1800);
 ```
 
 #### Spells by Level and Class
 
 ```typescript
-// By level
-supabase.from("spells").select("*").eq("data->>level", "3");
+// By level (direct numeric field)
+supabase.from("spells").select("*").eq("(data->level)::int", 3);
 
-// By class (array contains check)
-supabase.from("spells").select("*").contains("data->classes", ["wizard"]);
+// By class (array contains check - case sensitive)
+supabase.from("spells").select("*").contains("data->classes", ["Wizard"]);
 ```
 
 **Note**: GIN indexes on `data` columns enable efficient JSONB queries.
