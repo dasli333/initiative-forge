@@ -66,29 +66,11 @@ Reprezentuje pojedynczą walkę w ramach kampanii.
 | name | text | NOT NULL | Nazwa walki (np. "Walka w karczmie") |
 | status | text | NOT NULL, DEFAULT 'active' | Status walki ('active', 'completed') |
 | current_round | smallint | NOT NULL, DEFAULT 1 | Numer aktualnej rundy |
+| state_snapshot | jsonb | | Snapshot stanu walki (uczestnicy, HP, inicjatywy, stany) |
 | created_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data utworzenia |
 | updated_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data ostatniej modyfikacji |
 
-### 1.6. combat_participants
-Uczestnicy konkretnej walki (postacie graczy, potwory z biblioteki, NPC ad-hoc).
-
-| Kolumna | Typ | Ograniczenia | Opis |
-|---------|-----|--------------|------|
-| id | uuid | PRIMARY KEY, DEFAULT gen_random_uuid() | Unikalny identyfikator uczestnika |
-| combat_id | uuid | NOT NULL, REFERENCES combats(id) ON DELETE CASCADE | Identyfikator walki |
-| player_character_id | uuid | REFERENCES player_characters(id) ON DELETE CASCADE | FK do postaci gracza (opcjonalny) |
-| monster_id | uuid | REFERENCES monsters(id) ON DELETE SET NULL | FK do potwora z biblioteki (opcjonalny) |
-| stats_blob | jsonb | | Pełne statystyki dla NPC ad-hoc (gdy oba FK są NULL) |
-| display_name | text | | Nazwa wyświetlana w UI (np. "Goblin #1", "Goblin #2") |
-| initiative | smallint | NOT NULL | Wartość inicjatywy (po rzucie) |
-| current_hp | smallint | NOT NULL | Aktualne punkty życia |
-| is_active_turn | boolean | NOT NULL, DEFAULT false | Czy to aktualnie tura tego uczestnika |
-| active_conditions | jsonb | | Aktywne stany (format: `[{"condition_id": "uuid", "duration_in_rounds": 3}, ...]`) |
-| created_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data utworzenia |
-
-**Uwaga:** Przynajmniej jedno z pól (player_character_id, monster_id, stats_blob) musi być wypełnione. Dla NPC ad-hoc stats_blob zawiera wszystkie dane (imię, statystyki, akcje).
-
-### 1.7. conditions
+### 1.6. conditions
 Statyczna tabela definicji stanów D&D 5e (np. "Oślepiony", "Oszołomiony").
 
 | Kolumna | Typ | Ograniczenia | Opis |
@@ -108,15 +90,6 @@ Statyczna tabela definicji stanów D&D 5e (np. "Oślepiony", "Oszołomiony").
 - **campaigns → combats** (1:N)
   Jedna kampania może mieć wiele walk. Klucz obcy: `combats.campaign_id` → `campaigns.id` (ON DELETE CASCADE)
 
-- **combats → combat_participants** (1:N)
-  Jedna walka może mieć wielu uczestników. Klucz obcy: `combat_participants.combat_id` → `combats.id` (ON DELETE CASCADE)
-
-- **player_characters → combat_participants** (1:N, opcjonalnie)
-  Jedna postać gracza może uczestniczyć w wielu walkach. Klucz obcy: `combat_participants.player_character_id` → `player_characters.id` (ON DELETE CASCADE, nullable)
-
-- **monsters → combat_participants** (1:N, opcjonalnie)
-  Jeden potwór z biblioteki może być użyty w wielu walkach. Klucz obcy: `combat_participants.monster_id` → `monsters.id` (ON DELETE SET NULL, nullable)
-
 ## 3. Indeksy
 
 ### 3.1. Indeksy B-Tree (standardowe)
@@ -127,19 +100,16 @@ CREATE INDEX idx_player_characters_campaign_id ON player_characters(campaign_id)
 CREATE INDEX idx_monsters_name ON monsters(name);
 CREATE INDEX idx_spells_name ON spells(name);
 CREATE INDEX idx_combats_campaign_id ON combats(campaign_id);
-CREATE INDEX idx_combat_participants_combat_id ON combat_participants(combat_id);
-CREATE INDEX idx_combat_participants_player_character_id ON combat_participants(player_character_id);
-CREATE INDEX idx_combat_participants_monster_id ON combat_participants(monster_id);
 ```
 
 ### 3.2. Indeksy GIN (dla kolumn jsonb)
 
-Umożliwiają efektywne filtrowanie po zagnieżdżonych w jsonb danych (np. challenge_rating, level, condition_id).
+Umożliwiają efektywne filtrowanie po zagnieżdżonych w jsonb danych (np. challenge_rating, level) oraz wyszukiwanie w snapshots walki.
 
 ```sql
 CREATE INDEX idx_monsters_data_gin ON monsters USING GIN(data);
 CREATE INDEX idx_spells_data_gin ON spells USING GIN(data);
-CREATE INDEX idx_combat_participants_active_conditions_gin ON combat_participants USING GIN(active_conditions);
+CREATE INDEX idx_combats_state_snapshot_gin ON combats USING GIN(state_snapshot);
 ```
 
 ## 4. Polityki Row Level Security (RLS)
@@ -150,7 +120,6 @@ CREATE INDEX idx_combat_participants_active_conditions_gin ON combat_participant
 ALTER TABLE campaigns ENABLE ROW LEVEL SECURITY;
 ALTER TABLE player_characters ENABLE ROW LEVEL SECURITY;
 ALTER TABLE combats ENABLE ROW LEVEL SECURITY;
-ALTER TABLE combat_participants ENABLE ROW LEVEL SECURITY;
 ```
 
 ### 4.2. Polityki dla campaigns
@@ -288,67 +257,7 @@ CREATE POLICY "Users can delete combats from own campaigns" ON combats
   );
 ```
 
-### 4.5. Polityki dla combat_participants
-
-```sql
--- SELECT: Użytkownik widzi uczestników walk tylko ze swoich kampanii
-CREATE POLICY "Users can view participants from own combats" ON combat_participants
-  FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM combats
-      JOIN campaigns ON campaigns.id = combats.campaign_id
-      WHERE combats.id = combat_participants.combat_id
-      AND campaigns.user_id = auth.uid()
-    )
-  );
-
--- INSERT: Użytkownik może dodawać uczestników tylko do walk w swoich kampaniach
-CREATE POLICY "Users can create participants in own combats" ON combat_participants
-  FOR INSERT
-  WITH CHECK (
-    EXISTS (
-      SELECT 1 FROM combats
-      JOIN campaigns ON campaigns.id = combats.campaign_id
-      WHERE combats.id = combat_id
-      AND campaigns.user_id = auth.uid()
-    )
-  );
-
--- UPDATE: Użytkownik może edytować uczestników tylko walk w swoich kampaniach
-CREATE POLICY "Users can update participants from own combats" ON combat_participants
-  FOR UPDATE
-  USING (
-    EXISTS (
-      SELECT 1 FROM combats
-      JOIN campaigns ON campaigns.id = combats.campaign_id
-      WHERE combats.id = combat_participants.combat_id
-      AND campaigns.user_id = auth.uid()
-    )
-  )
-  WITH CHECK (
-    EXISTS (
-      SELECT 1 FROM combats
-      JOIN campaigns ON campaigns.id = combats.campaign_id
-      WHERE combats.id = combat_id
-      AND campaigns.user_id = auth.uid()
-    )
-  );
-
--- DELETE: Użytkownik może usuwać uczestników tylko z walk w swoich kampaniach
-CREATE POLICY "Users can delete participants from own combats" ON combat_participants
-  FOR DELETE
-  USING (
-    EXISTS (
-      SELECT 1 FROM combats
-      JOIN campaigns ON campaigns.id = combats.campaign_id
-      WHERE combats.id = combat_participants.combat_id
-      AND campaigns.user_id = auth.uid()
-    )
-  );
-```
-
-### 4.6. Publiczny dostęp do globalnych bibliotek
+### 4.5. Publiczny dostęp do globalnych bibliotek
 
 Tabele `monsters`, `spells` i `conditions` są publicznie dostępne do odczytu dla wszystkich użytkowników (również niezalogowanych).
 
@@ -381,7 +290,7 @@ CREATE POLICY "Public read access to conditions" ON conditions
 Schemat wykorzystuje model multi-tenant oparty na użytkownikach Supabase Auth (`auth.users`). Bezpieczeństwo i izolacja danych zapewniona jest przez mechanizmy RLS na poziomie wiersza w PostgreSQL.
 
 ### 5.2. Wykorzystanie typu JSONB
-Decyzja o szerokim wykorzystaniu typu `jsonb` dla bibliotek (`monsters.data`, `spells.data`), statystyk NPC ad-hoc (`combat_participants.stats_blob`), akcji postaci graczy (`player_characters.actions`) oraz stanów uczestników walki (`combat_participants.active_conditions`) wynika z priorytetu prostoty schematu w MVP.
+Decyzja o szerokim wykorzystaniu typu `jsonb` dla bibliotek (`monsters.data`, `spells.data`), akcji postaci graczy (`player_characters.actions`) oraz snapshotu stanu walki (`combats.state_snapshot`) wynika z priorytetu prostoty schematu w MVP.
 
 Kompromis polega na niższej wydajności filtrowania po zagnieżdżonych polach (np. `challenge_rating`, `level`) w zamian za elastyczność i szybkość implementacji. Indeksy GIN umożliwiają podstawowe filtrowanie po jsonb.
 
@@ -408,35 +317,91 @@ Kompromis polega na niższej wydajności filtrowania po zagnieżdżonych polach 
   }
 ]
 ```
-Ten format jest spójny ze strukturą akcji w `monsters.data` i `combat_participants.stats_blob`, co upraszcza logikę renderowania w module walki.
+Ten format jest spójny ze strukturą akcji w `monsters.data`, co upraszcza logikę renderowania w module walki.
 
 ### 5.3. Obliczenia po stronie klienta
 Modyfikator inicjatywy (na podstawie Zręczności) oraz pasywna percepcja (na podstawie Mądrości) nie są przechowywane w bazie danych. Są dynamicznie obliczane po stronie frontendu (React), co upraszcza schemat, ale przenosi odpowiedzialność za spójność obliczeń na aplikację kliencką.
 
-### 5.4. Model combat_participants
-Centralna tabela modułu walki wykorzystuje elastyczny model z opcjonalnymi kluczami obcymi:
-- `player_character_id` - dla postaci graczy z kampanii
-- `monster_id` - dla potworów z biblioteki
-- `stats_blob` (jsonb) - dla NPC tworzonych ad-hoc (gdy oba FK są NULL)
+### 5.4. Model snapshot-based dla walki
+Moduł walki wykorzystuje podejście hybrydowe optymalizujące wydajność dla aplikacji single-user (DM):
+- **Stan w trakcie walki** zarządzany jest przez Zustand w przeglądarce (zero latencji)
+- **Persystencja** realizowana przez kolumnę `state_snapshot` (jsonb) w tabeli `combats`
+- **Zapis snapshot** odbywa się:
+  - Manualnie (przycisk "Save Combat")
+  - Automatycznie po zakończeniu każdej rundy
+  - Przy zamykaniu/kończeniu walki
 
-Kolumna `display_name` (text, nullable) służy do rozróżniania wielu instancji tego samego potwora lub NPC w walce (np. "Goblin #1", "Goblin #2", "Goblin #3"). Jeśli NULL, aplikacja powinna używać nazwy bazowej z odpowiedniej tabeli.
+**Format `combats.state_snapshot`:**
+```json
+{
+  "participants": [
+    {
+      "id": "temp-uuid-1",
+      "source": "player_character",
+      "player_character_id": "uuid",
+      "display_name": "Aragorn",
+      "initiative": 18,
+      "current_hp": 45,
+      "max_hp": 45,
+      "armor_class": 16,
+      "stats": { "str": 16, "dex": 14, "con": 14, "int": 10, "wis": 12, "cha": 14 },
+      "actions": [...],
+      "is_active_turn": false,
+      "active_conditions": [
+        { "condition_id": "uuid", "name": "Blessed", "duration_in_rounds": 3 }
+      ]
+    },
+    {
+      "id": "temp-uuid-2",
+      "source": "monster",
+      "monster_id": "uuid",
+      "display_name": "Goblin #1",
+      "initiative": 12,
+      "current_hp": 7,
+      "max_hp": 7,
+      "armor_class": 15,
+      "stats": { "str": 8, "dex": 14, "con": 10, "int": 10, "wis": 8, "cha": 8 },
+      "actions": [...],
+      "is_active_turn": true,
+      "active_conditions": []
+    },
+    {
+      "id": "temp-uuid-3",
+      "source": "ad_hoc_npc",
+      "display_name": "Bandit Leader",
+      "initiative": 15,
+      "current_hp": 25,
+      "max_hp": 30,
+      "armor_class": 14,
+      "stats": { "str": 14, "dex": 12, "con": 12, "int": 10, "wis": 10, "cha": 14 },
+      "actions": [...],
+      "is_active_turn": false,
+      "active_conditions": []
+    }
+  ],
+  "active_participant_index": 1
+}
+```
 
-Kolumna `is_active_turn` (boolean) służy do jednoznacznego oznaczania uczestnika, który aktualnie wykonuje swoją turę w walce.
+Pole `source` określa pochodzenie uczestnika:
+- `"player_character"` - postać gracza (zawiera `player_character_id`)
+- `"monster"` - potwór z biblioteki (zawiera `monster_id`)
+- `"ad_hoc_npc"` - NPC stworzony ad-hoc (brak FK, wszystkie dane w snapshot)
 
 ### 5.5. Zarządzanie stanami (Conditions)
 Implementacja uproszczona dla MVP z wykorzystaniem JSONB:
 - Tabela `conditions` przechowuje globalne definicje stanów (nazwy i opisy) i służy jako referencyjne źródło danych dla UI
-- Aktywne stany uczestników walki przechowywane są w kolumnie `active_conditions` (jsonb) w tabeli `combat_participants`
-- Format JSON: `[{"condition_id": "uuid", "duration_in_rounds": 3}, {"condition_id": "uuid", "duration_in_rounds": null}]`
+- Aktywne stany uczestników walki przechowywane są w `state_snapshot` w tablicy `participants[].active_conditions`
+- Format JSON: `[{"condition_id": "uuid", "name": "Blessed", "duration_in_rounds": 3}]`
 - `duration_in_rounds` jako NULL oznacza stan bez określonego limitu czasowego
-- Nazwy i opisy stanów są pobierane przez JOIN z tabelą `conditions` na podstawie `condition_id`
+- Pole `name` jest denormalizowane w snapshot dla szybszego dostępu (bez potrzeby JOIN)
 
 ### 5.6. Usuwanie kaskadowe
 Zastosowano reguły `ON DELETE CASCADE` dla zapewnienia integralności referencyjnej:
 - Usunięcie użytkownika (`auth.users`) → usuwa wszystkie jego kampanie
-- Usunięcie kampanii → usuwa wszystkie powiązane postaci graczy, walki i ich uczestników
-- Usunięcie walki → usuwa wszystkich jej uczestników (wraz z ich stanami w kolumnie `active_conditions`)
-- Usunięcie potwora z biblioteki → ustawia `monster_id` na NULL w `combat_participants` (`ON DELETE SET NULL`)
+- Usunięcie kampanii → usuwa wszystkie powiązane postaci graczy i walki (wraz z ich snapshots)
+- Usunięcie postaci gracza → snapshot pozostaje nienaruszony (zawiera kopię danych)
+- Usunięcie potwora z biblioteki → snapshot pozostaje nienaruszony (zawiera kopię danych)
 
 ### 5.7. Ograniczenia unikalności
 - `campaigns`: UNIQUE(user_id, name) - nazwa kampanii musi być unikalna w ramach konta użytkownika
