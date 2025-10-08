@@ -3,81 +3,87 @@
 ## 1. Tabele
 
 ### 1.1. campaigns
+
 Przechowuje kampanie użytkowników (Mistrzów Gry).
 
-| Kolumna | Typ | Ograniczenia | Opis |
-|---------|-----|--------------|------|
-| id | uuid | PRIMARY KEY, DEFAULT gen_random_uuid() | Unikalny identyfikator kampanii |
-| user_id | uuid | NOT NULL, REFERENCES auth.users(id) ON DELETE CASCADE | Identyfikator właściciela (DM) |
-| name | text | NOT NULL | Nazwa kampanii |
-| created_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data utworzenia |
-| updated_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data ostatniej modyfikacji |
-| **UNIQUE** | (user_id, name) | | Nazwa kampanii unikalna w ramach użytkownika |
+| Kolumna    | Typ                      | Ograniczenia                                          | Opis                                         |
+| ---------- | ------------------------ | ----------------------------------------------------- | -------------------------------------------- |
+| id         | uuid                     | PRIMARY KEY, DEFAULT gen_random_uuid()                | Unikalny identyfikator kampanii              |
+| user_id    | uuid                     | NOT NULL, REFERENCES auth.users(id) ON DELETE CASCADE | Identyfikator właściciela (DM)               |
+| name       | text                     | NOT NULL                                              | Nazwa kampanii                               |
+| created_at | timestamp with time zone | NOT NULL, DEFAULT now()                               | Data utworzenia                              |
+| updated_at | timestamp with time zone | NOT NULL, DEFAULT now()                               | Data ostatniej modyfikacji                   |
+| **UNIQUE** | (user_id, name)          |                                                       | Nazwa kampanii unikalna w ramach użytkownika |
 
 ### 1.2. player_characters
+
 Uproszczone karty postaci graczy w kampaniach.
 
-| Kolumna | Typ | Ograniczenia | Opis |
-|---------|-----|--------------|------|
-| id | uuid | PRIMARY KEY, DEFAULT gen_random_uuid() | Unikalny identyfikator postaci |
-| campaign_id | uuid | NOT NULL, REFERENCES campaigns(id) ON DELETE CASCADE | Identyfikator kampanii |
-| name | text | NOT NULL | Imię postaci |
-| max_hp | smallint | NOT NULL | Maksymalne punkty życia |
-| armor_class | smallint | NOT NULL | Klasa pancerza (AC) |
-| speed | smallint | NOT NULL | Szybkość poruszania się |
-| strength | smallint | NOT NULL | Atrybut: Siła |
-| dexterity | smallint | NOT NULL | Atrybut: Zręczność |
-| constitution | smallint | NOT NULL | Atrybut: Kondycja |
-| intelligence | smallint | NOT NULL | Atrybut: Inteligencja |
-| wisdom | smallint | NOT NULL | Atrybut: Mądrość |
-| charisma | smallint | NOT NULL | Atrybut: Charyzma |
-| actions | jsonb | | Akcje dostępne dla postaci (format: array obiektów) |
-| created_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data utworzenia |
-| updated_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data ostatniej modyfikacji |
-| **UNIQUE** | (campaign_id, name) | | Imię postaci unikalne w ramach kampanii |
+| Kolumna      | Typ                      | Ograniczenia                                         | Opis                                                |
+| ------------ | ------------------------ | ---------------------------------------------------- | --------------------------------------------------- |
+| id           | uuid                     | PRIMARY KEY, DEFAULT gen_random_uuid()               | Unikalny identyfikator postaci                      |
+| campaign_id  | uuid                     | NOT NULL, REFERENCES campaigns(id) ON DELETE CASCADE | Identyfikator kampanii                              |
+| name         | text                     | NOT NULL                                             | Imię postaci                                        |
+| max_hp       | smallint                 | NOT NULL                                             | Maksymalne punkty życia                             |
+| armor_class  | smallint                 | NOT NULL                                             | Klasa pancerza (AC)                                 |
+| speed        | smallint                 | NOT NULL                                             | Szybkość poruszania się                             |
+| strength     | smallint                 | NOT NULL                                             | Atrybut: Siła                                       |
+| dexterity    | smallint                 | NOT NULL                                             | Atrybut: Zręczność                                  |
+| constitution | smallint                 | NOT NULL                                             | Atrybut: Kondycja                                   |
+| intelligence | smallint                 | NOT NULL                                             | Atrybut: Inteligencja                               |
+| wisdom       | smallint                 | NOT NULL                                             | Atrybut: Mądrość                                    |
+| charisma     | smallint                 | NOT NULL                                             | Atrybut: Charyzma                                   |
+| actions      | jsonb                    |                                                      | Akcje dostępne dla postaci (format: array obiektów) |
+| created_at   | timestamp with time zone | NOT NULL, DEFAULT now()                              | Data utworzenia                                     |
+| updated_at   | timestamp with time zone | NOT NULL, DEFAULT now()                              | Data ostatniej modyfikacji                          |
+| **UNIQUE**   | (campaign_id, name)      |                                                      | Imię postaci unikalne w ramach kampanii             |
 
 ### 1.3. monsters
+
 Globalna biblioteka potworów (dane SRD).
 
-| Kolumna | Typ | Ograniczenia | Opis |
-|---------|-----|--------------|------|
-| id | uuid | PRIMARY KEY, DEFAULT gen_random_uuid() | Unikalny identyfikator potwora |
-| name | text | NOT NULL | Nazwa potwora (wydzielone z jsonb) |
-| data | jsonb | NOT NULL | Wszystkie pozostałe dane potwora (CR, statystyki, akcje itp.) |
-| created_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data utworzenia |
+| Kolumna    | Typ                      | Ograniczenia                           | Opis                                                          |
+| ---------- | ------------------------ | -------------------------------------- | ------------------------------------------------------------- |
+| id         | uuid                     | PRIMARY KEY, DEFAULT gen_random_uuid() | Unikalny identyfikator potwora                                |
+| name       | text                     | NOT NULL                               | Nazwa potwora (wydzielone z jsonb)                            |
+| data       | jsonb                    | NOT NULL                               | Wszystkie pozostałe dane potwora (CR, statystyki, akcje itp.) |
+| created_at | timestamp with time zone | NOT NULL, DEFAULT now()                | Data utworzenia                                               |
 
 ### 1.4. spells
+
 Globalna biblioteka czarów (dane SRD).
 
-| Kolumna | Typ | Ograniczenia | Opis |
-|---------|-----|--------------|------|
-| id | uuid | PRIMARY KEY, DEFAULT gen_random_uuid() | Unikalny identyfikator czaru |
-| name | text | NOT NULL | Nazwa czaru (wydzielone z jsonb) |
-| data | jsonb | NOT NULL | Wszystkie pozostałe dane czaru (level, klasy, opis itp.) |
-| created_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data utworzenia |
+| Kolumna    | Typ                      | Ograniczenia                           | Opis                                                     |
+| ---------- | ------------------------ | -------------------------------------- | -------------------------------------------------------- |
+| id         | uuid                     | PRIMARY KEY, DEFAULT gen_random_uuid() | Unikalny identyfikator czaru                             |
+| name       | text                     | NOT NULL                               | Nazwa czaru (wydzielone z jsonb)                         |
+| data       | jsonb                    | NOT NULL                               | Wszystkie pozostałe dane czaru (level, klasy, opis itp.) |
+| created_at | timestamp with time zone | NOT NULL, DEFAULT now()                | Data utworzenia                                          |
 
 ### 1.5. combats
+
 Reprezentuje pojedynczą walkę w ramach kampanii.
 
-| Kolumna | Typ | Ograniczenia | Opis |
-|---------|-----|--------------|------|
-| id | uuid | PRIMARY KEY, DEFAULT gen_random_uuid() | Unikalny identyfikator walki |
-| campaign_id | uuid | NOT NULL, REFERENCES campaigns(id) ON DELETE CASCADE | Identyfikator kampanii |
-| name | text | NOT NULL | Nazwa walki (np. "Walka w karczmie") |
-| status | text | NOT NULL, DEFAULT 'active' | Status walki ('active', 'completed') |
-| current_round | smallint | NOT NULL, DEFAULT 1 | Numer aktualnej rundy |
-| state_snapshot | jsonb | | Snapshot stanu walki (uczestnicy, HP, inicjatywy, stany) |
-| created_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data utworzenia |
-| updated_at | timestamp with time zone | NOT NULL, DEFAULT now() | Data ostatniej modyfikacji |
+| Kolumna        | Typ                      | Ograniczenia                                         | Opis                                                     |
+| -------------- | ------------------------ | ---------------------------------------------------- | -------------------------------------------------------- |
+| id             | uuid                     | PRIMARY KEY, DEFAULT gen_random_uuid()               | Unikalny identyfikator walki                             |
+| campaign_id    | uuid                     | NOT NULL, REFERENCES campaigns(id) ON DELETE CASCADE | Identyfikator kampanii                                   |
+| name           | text                     | NOT NULL                                             | Nazwa walki (np. "Walka w karczmie")                     |
+| status         | text                     | NOT NULL, DEFAULT 'active'                           | Status walki ('active', 'completed')                     |
+| current_round  | smallint                 | NOT NULL, DEFAULT 1                                  | Numer aktualnej rundy                                    |
+| state_snapshot | jsonb                    |                                                      | Snapshot stanu walki (uczestnicy, HP, inicjatywy, stany) |
+| created_at     | timestamp with time zone | NOT NULL, DEFAULT now()                              | Data utworzenia                                          |
+| updated_at     | timestamp with time zone | NOT NULL, DEFAULT now()                              | Data ostatniej modyfikacji                               |
 
 ### 1.6. conditions
+
 Statyczna tabela definicji stanów D&D 5e (np. "Oślepiony", "Oszołomiony").
 
-| Kolumna | Typ | Ograniczenia | Opis |
-|---------|-----|--------------|------|
-| id | uuid | PRIMARY KEY, DEFAULT gen_random_uuid() | Unikalny identyfikator stanu |
-| name | text | NOT NULL, UNIQUE | Nazwa stanu (np. "Blinded", "Stunned") |
-| description | text | NOT NULL | Pełny opis zasad działania stanu |
+| Kolumna     | Typ  | Ograniczenia                           | Opis                                   |
+| ----------- | ---- | -------------------------------------- | -------------------------------------- |
+| id          | uuid | PRIMARY KEY, DEFAULT gen_random_uuid() | Unikalny identyfikator stanu           |
+| name        | text | NOT NULL, UNIQUE                       | Nazwa stanu (np. "Blinded", "Stunned") |
+| description | text | NOT NULL                               | Pełny opis zasad działania stanu       |
 
 ## 2. Relacje między tabelami
 
@@ -287,14 +293,17 @@ CREATE POLICY "Public read access to conditions" ON conditions
 ## 5. Dodatkowe uwagi i decyzje projektowe
 
 ### 5.1. Architektura Multi-Tenant
+
 Schemat wykorzystuje model multi-tenant oparty na użytkownikach Supabase Auth (`auth.users`). Bezpieczeństwo i izolacja danych zapewniona jest przez mechanizmy RLS na poziomie wiersza w PostgreSQL.
 
 ### 5.2. Wykorzystanie typu JSONB
+
 Decyzja o szerokim wykorzystaniu typu `jsonb` dla bibliotek (`monsters.data`, `spells.data`), akcji postaci graczy (`player_characters.actions`) oraz snapshotu stanu walki (`combats.state_snapshot`) wynika z priorytetu prostoty schematu w MVP.
 
 Kompromis polega na niższej wydajności filtrowania po zagnieżdżonych polach (np. `challenge_rating`, `level`) w zamian za elastyczność i szybkość implementacji. Indeksy GIN umożliwiają podstawowe filtrowanie po jsonb.
 
 **Format dla `player_characters.actions`:**
+
 ```json
 [
   {
@@ -317,13 +326,17 @@ Kompromis polega na niższej wydajności filtrowania po zagnieżdżonych polach 
   }
 ]
 ```
+
 Ten format jest spójny ze strukturą akcji w `monsters.data`, co upraszcza logikę renderowania w module walki.
 
 ### 5.3. Obliczenia po stronie klienta
+
 Modyfikator inicjatywy (na podstawie Zręczności) oraz pasywna percepcja (na podstawie Mądrości) nie są przechowywane w bazie danych. Są dynamicznie obliczane po stronie frontendu (React), co upraszcza schemat, ale przenosi odpowiedzialność za spójność obliczeń na aplikację kliencką.
 
 ### 5.4. Model snapshot-based dla walki
+
 Moduł walki wykorzystuje podejście hybrydowe optymalizujące wydajność dla aplikacji single-user (DM):
+
 - **Stan w trakcie walki** zarządzany jest przez Zustand w przeglądarce (zero latencji)
 - **Persystencja** realizowana przez kolumnę `state_snapshot` (jsonb) w tabeli `combats`
 - **Zapis snapshot** odbywa się:
@@ -332,6 +345,7 @@ Moduł walki wykorzystuje podejście hybrydowe optymalizujące wydajność dla a
   - Przy zamykaniu/kończeniu walki
 
 **Format `combats.state_snapshot`:**
+
 ```json
 {
   "participants": [
@@ -384,12 +398,15 @@ Moduł walki wykorzystuje podejście hybrydowe optymalizujące wydajność dla a
 ```
 
 Pole `source` określa pochodzenie uczestnika:
+
 - `"player_character"` - postać gracza (zawiera `player_character_id`)
 - `"monster"` - potwór z biblioteki (zawiera `monster_id`)
 - `"ad_hoc_npc"` - NPC stworzony ad-hoc (brak FK, wszystkie dane w snapshot)
 
 ### 5.5. Zarządzanie stanami (Conditions)
+
 Implementacja uproszczona dla MVP z wykorzystaniem JSONB:
+
 - Tabela `conditions` przechowuje globalne definicje stanów (nazwy i opisy) i służy jako referencyjne źródło danych dla UI
 - Aktywne stany uczestników walki przechowywane są w `state_snapshot` w tablicy `participants[].active_conditions`
 - Format JSON: `[{"condition_id": "uuid", "name": "Blessed", "duration_in_rounds": 3}]`
@@ -397,25 +414,32 @@ Implementacja uproszczona dla MVP z wykorzystaniem JSONB:
 - Pole `name` jest denormalizowane w snapshot dla szybszego dostępu (bez potrzeby JOIN)
 
 ### 5.6. Usuwanie kaskadowe
+
 Zastosowano reguły `ON DELETE CASCADE` dla zapewnienia integralności referencyjnej:
+
 - Usunięcie użytkownika (`auth.users`) → usuwa wszystkie jego kampanie
 - Usunięcie kampanii → usuwa wszystkie powiązane postaci graczy i walki (wraz z ich snapshots)
 - Usunięcie postaci gracza → snapshot pozostaje nienaruszony (zawiera kopię danych)
 - Usunięcie potwora z biblioteki → snapshot pozostaje nienaruszony (zawiera kopię danych)
 
 ### 5.7. Ograniczenia unikalności
+
 - `campaigns`: UNIQUE(user_id, name) - nazwa kampanii musi być unikalna w ramach konta użytkownika
 - `player_characters`: UNIQUE(campaign_id, name) - imię postaci musi być unikalne w ramach kampanii
 - `conditions`: UNIQUE(name) - nazwy stanów są unikalne globalnie
 
 ### 5.8. Typy danych dla statystyk
+
 Dla atrybutów postaci, punktów życia, klasy pancerza i podobnych wartości liczbowych zastosowano typ `smallint` (zakres -32,768 do 32,767), co jest wystarczające dla wartości w D&D 5e i oszczędza miejsce w porównaniu do `integer`.
 
 ### 5.9. Brak osobnej tabeli profilu użytkownika
+
 Dla MVP nie tworzona jest osobna, publiczna tabela profili użytkowników. Wszystkie dane powiązane są bezpośrednio z `user_id` z `auth.users` w Supabase. Jeśli w przyszłości będzie potrzeba przechowywania dodatkowych danych użytkownika (np. avatar, biografia), należy stworzyć tabelę `user_profiles` z relacją 1:1 do `auth.users`.
 
 ### 5.10. Potencjalne wąskie gardła wydajnościowe
+
 Zidentyfikowano i zaakceptowano potencjalne wąskie gardło związane z filtrowaniem bibliotek po atrybutach przechowywanych w jsonb (np. `challenge_rating` w `monsters.data`, `level` w `spells.data`). To obszar do monitorowania po wdrożeniu MVP. W razie problemów z wydajnością można rozważyć:
+
 - Wydzielenie często filtrowanych pól do osobnych kolumn
 - Użycie indeksów częściowych (partial indexes)
 - Wdrożenie cache'owania po stronie aplikacji

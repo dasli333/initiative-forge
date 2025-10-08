@@ -42,9 +42,11 @@ npm run format       # Format code with Prettier
 ### Import Aliases
 
 TypeScript path aliases configured in `tsconfig.json`:
+
 - `@/*` maps to `src/*`
 
 Shadcn component aliases from `components.json`:
+
 - `@/components` → components directory
 - `@/lib/utils` → utility functions
 - `@/components/ui` → UI components

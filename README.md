@@ -27,6 +27,7 @@ The goal is to make combat rounds faster and more fluid, allowing DMs to focus o
 ## Tech Stack
 
 ### Frontend
+
 - **[Astro 5](https://astro.build/)** - Modern web framework optimized for content-rich websites with SSR support
 - **[React 19](https://react.dev/)** - UI library for interactive components
 - **[TypeScript 5](https://www.typescriptlang.org/)** - Static type checking and enhanced IDE support
@@ -35,6 +36,7 @@ The goal is to make combat rounds faster and more fluid, allowing DMs to focus o
 - **[Zustand](https://zustand-demo.pmnd.rs/)** - Lightweight state management for combat encounters
 
 ### Backend
+
 - **[Supabase](https://supabase.com/)** - Open-source backend-as-a-service providing:
   - PostgreSQL database
   - Built-in authentication
@@ -42,6 +44,7 @@ The goal is to make combat rounds faster and more fluid, allowing DMs to focus o
   - RESTful API
 
 ### Development & Deployment
+
 - **[ESLint](https://eslint.org/)** + **[Prettier](https://prettier.io/)** - Code linting and formatting
 - **[Husky](https://typicode.github.io/husky/)** - Git hooks for automated checks
 - **GitHub Actions** - CI/CD pipeline automation
@@ -58,12 +61,14 @@ The goal is to make combat rounds faster and more fluid, allowing DMs to focus o
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd initiative-forge
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
@@ -71,12 +76,14 @@ The goal is to make combat rounds faster and more fluid, allowing DMs to focus o
 3. **Set up environment variables**
 
    Create a `.env` file in the project root with your Supabase credentials:
+
    ```env
    PUBLIC_SUPABASE_URL=your_supabase_url
    PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
 
 4. **Start the development server**
+
    ```bash
    npm run dev
    ```
@@ -97,10 +104,12 @@ The goal is to make combat rounds faster and more fluid, allowing DMs to focus o
 ### MVP Features (In Scope)
 
 **User Management**
+
 - Email and password authentication
 - Account creation and login
 
 **Campaign Management**
+
 - Create and manage campaigns
 - Add simplified player character cards with:
   - Name, HP, AC, Speed
@@ -108,10 +117,12 @@ The goal is to make combat rounds faster and more fluid, allowing DMs to focus o
   - Auto-calculated initiative modifier and passive perception
 
 **Global Libraries**
+
 - Monster library with search and CR filtering (SRD data)
 - Spell library with search, level, and class filtering (SRD data)
 
 **Combat Module**
+
 - Create encounters within campaigns
 - Add player characters, monsters (multiple instances), and NPCs
 - Automatic initiative rolling and sorting
@@ -135,6 +146,7 @@ The goal is to make combat rounds faster and more fluid, allowing DMs to focus o
 Initiative Forge is in active development. The MVP is being built to validate core functionality, focusing on delivering a seamless combat management experience for D&D 5e Game Masters.
 
 **Success Criteria**:
+
 - Complete combat scenarios can be conducted smoothly from start to finish
 - Average combat round duration (4 players + 3 monsters) takes less than 10 minutes
 
