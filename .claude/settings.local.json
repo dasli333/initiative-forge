@@ -1,6 +1,11 @@
 {
   "permissions": {
-    "allow": ["WebSearch", "Bash(npx tsx:*)"],
+    "allow": [
+      "WebSearch",
+      "Bash(npx tsx:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run lint:*)"
+    ],
     "deny": [],
     "ask": []
   }

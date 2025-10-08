@@ -2,11 +2,7 @@
 // Auto-generated based on database schema and API plan
 
 import type { Tables, TablesInsert, TablesUpdate } from "@/db/database.types";
-import type {
-  MonsterAction,
-  MonsterTrait,
-  LegendaryActions,
-} from "@/lib/schemas/monster.schema";
+import type { MonsterAction, MonsterTrait, LegendaryActions } from "@/lib/schemas/monster.schema";
 
 // ============================================================================
 // ENTITY TYPES (Direct mappings from database tables)

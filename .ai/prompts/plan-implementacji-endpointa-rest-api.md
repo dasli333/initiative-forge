@@ -4,101 +4,34 @@ Zanim zaczniemy, zapoznaj się z poniższymi informacjami:
 
 1. Route API specification:
 <route_api_specification>
-- **Method**: GET
-- **Path**: `/api/monsters`
-- **Description**: Returns filtered and paginated list of monsters from the global SRD library
-- **Query Parameters**:
-    - `name` (optional, string): Filter by monster name (case-insensitive partial match)
-    - `cr` (optional, string): Filter by exact Challenge Rating (e.g., "1", "1/2", "5")
-    - `cr_min` (optional, number): Filter by minimum CR
-    - `cr_max` (optional, number): Filter by maximum CR
-    - `limit` (optional, number): Maximum results (default: 20, max: 100)
-    - `offset` (optional, number): Offset for pagination (default: 0)
-- **Request Body**: N/A
-- **Response**: 200 OK
+- **Method**: POST
+- **Path**: `/api/campaigns`
+- **Description**: Creates a new campaign for the authenticated user
+- **Query Parameters**: N/A
+- **Request Body**:
 
 ```json
 {
-  "monsters": [
-    {
-      "id": "uuid",
-      "name": "Goblin",
-      "data": {
-        "name": {
-          "en": "Goblin",
-          "pl": "Goblin"
-        },
-        "size": "Small",
-        "type": "humanoid",
-        "category": "Goblin",
-        "alignment": "Neutral Evil",
-        "senses": ["Darkvision 60 ft.", "Passive Perception 9"],
-        "languages": ["Common", "Goblin"],
-        "abilityScores": {
-          "strength": { "score": 8, "modifier": -1, "save": -1 },
-          "dexterity": { "score": 14, "modifier": 2, "save": 2 },
-          "constitution": { "score": 10, "modifier": 0, "save": 0 },
-          "intelligence": { "score": 10, "modifier": 0, "save": 0 },
-          "wisdom": { "score": 8, "modifier": -1, "save": -1 },
-          "charisma": { "score": 8, "modifier": -1, "save": -1 }
-        },
-        "speed": ["30 ft."],
-        "hitPoints": {
-          "average": 7,
-          "formula": "2d6"
-        },
-        "armorClass": 15,
-        "challengeRating": {
-          "rating": "1/4",
-          "experiencePoints": 50,
-          "proficiencyBonus": 2
-        },
-        "skills": ["Stealth +6"],
-        "damageVulnerabilities": [],
-        "damageResistances": [],
-        "damageImmunities": [],
-        "conditionImmunities": [],
-        "gear": [],
-        "traits": [],
-        "actions": [
-          {
-            "name": "Scimitar",
-            "description": "Melee Attack Roll: +4, reach 5 ft. Hit: 5 (1d6 + 2) Slashing damage.",
-            "type": "melee",
-            "attackRoll": {
-              "type": "melee",
-              "bonus": 4
-            },
-            "damage": [
-              {
-                "average": 5,
-                "formula": "1d6 + 2",
-                "type": "Slashing"
-              }
-            ]
-          }
-        ],
-        "bonusActions": [],
-        "reactions": [],
-        "initiative": {
-          "modifier": 2,
-          "total": 12
-        },
-        "id": "goblin"
-      },
-      "created_at": "2025-01-10T00:00:00Z"
-    }
-  ],
-  "total": 1,
-  "limit": 20,
-  "offset": 0
+  "name": "Curse of Strahd"
+}
+```
+
+- **Response**: 201 Created
+
+```json
+{
+  "id": "uuid",
+  "user_id": "uuid",
+  "name": "Curse of Strahd",
+  "created_at": "2025-01-15T14:20:00Z",
+  "updated_at": "2025-01-15T14:20:00Z"
 }
 ```
 
 - **Error Responses**:
-    - 400 Bad Request: Invalid query parameters
-
-**Note**: Public read access (no authentication required per RLS policy)
+    - 400 Bad Request: Invalid input (missing name, empty name)
+    - 401 Unauthorized: Missing or invalid authentication
+    - 409 Conflict: Campaign name already exists for this user
 </route_api_specification>
 
 2. Related database resources:
@@ -202,7 +135,7 @@ Statyczna tabela definicji stanów D&D 5e (np. "Oślepiony", "Oszołomiony").
 
 3. Definicje typów:
 <type_definitions>
-   @src/@types.ts
+   @src/types.ts
 </type_definitions>
 
 3. Tech stack:

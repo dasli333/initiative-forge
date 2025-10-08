@@ -112,3 +112,35 @@ export const CombatSchema = z.object({
 });
 
 export type Combat = z.infer<typeof CombatSchema>;
+
+/**
+ * Create combat command - request body for POST /api/campaigns/:campaignId/combats
+ */
+export const CreateCombatCommandSchema = z.object({
+  name: z.string().min(1, "Combat name is required"),
+  initial_participants: z
+    .array(InitialParticipantSchema)
+    .min(1, "At least one participant is required")
+    .max(50, "Maximum 50 participants allowed"),
+});
+
+export type CreateCombatCommand = z.infer<typeof CreateCombatCommandSchema>;
+
+/**
+ * Update combat snapshot command - request body for PATCH /api/combats/:id/snapshot
+ */
+export const UpdateCombatSnapshotCommandSchema = z.object({
+  state_snapshot: CombatSnapshotSchema,
+  current_round: z.number().int().min(1),
+});
+
+export type UpdateCombatSnapshotCommand = z.infer<typeof UpdateCombatSnapshotCommandSchema>;
+
+/**
+ * Update combat status command - request body for PATCH /api/combats/:id/status
+ */
+export const UpdateCombatStatusCommandSchema = z.object({
+  status: z.enum(["active", "completed"]),
+});
+
+export type UpdateCombatStatusCommand = z.infer<typeof UpdateCombatStatusCommandSchema>;
