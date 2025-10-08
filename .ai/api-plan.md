@@ -1006,10 +1006,7 @@ For filtering global libraries by nested JSONB fields:
 
 ```typescript
 // Exact CR match (rating is nested in challengeRating object)
-supabase
-  .from("monsters")
-  .select("*")
-  .eq("data->challengeRating->>rating", "1/2");
+supabase.from("monsters").select("*").eq("data->challengeRating->>rating", "1/2");
 
 // CR range (requires casting to numeric, handle fractions)
 // Note: This requires custom logic to handle fractional CRs like "1/4", "1/2"
