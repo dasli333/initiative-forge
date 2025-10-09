@@ -26,6 +26,7 @@ export {
   HitPointsSchema,
   InitiativeSchema,
   LegendaryActionsSchema,
+  ListMonstersQuerySchema,
   MonsterActionSchema,
   MonsterDataSchema,
   MonsterSchema,
@@ -37,6 +38,7 @@ export {
   type HitPoints,
   type Initiative,
   type LegendaryActions,
+  type ListMonstersQuery,
   type Monster,
   type MonsterAction,
   type MonsterData,
@@ -80,3 +82,9 @@ export {
   type CombatStats,
   type InitialParticipant,
 } from "./combat.schema";
+
+// Player character schemas
+export {
+  CreatePlayerCharacterCommandSchema,
+  type CreatePlayerCharacterCommand,
+} from "./player-character.schema";

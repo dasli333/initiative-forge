@@ -182,3 +182,61 @@ export const MonsterSchema = z.object({
 });
 
 export type Monster = z.infer<typeof MonsterSchema>;
+
+/**
+ * Schema for validating query parameters in GET /api/monsters
+ * Supports filtering by name, CR, CR range, and pagination
+ */
+export const ListMonstersQuerySchema = z
+  .object({
+    name: z
+      .string()
+      .max(255, "Name must be 255 characters or less")
+      .trim()
+      .optional(),
+
+    cr: z
+      .string()
+      .regex(/^(\d+|\d+\/\d+)$/, "Invalid Challenge Rating format")
+      .optional(),
+
+    cr_min: z.coerce
+      .number()
+      .nonnegative("CR min must be non-negative")
+      .max(30, "CR min cannot exceed 30")
+      .optional(),
+
+    cr_max: z.coerce
+      .number()
+      .nonnegative("CR max must be non-negative")
+      .max(30, "CR max cannot exceed 30")
+      .optional(),
+
+    limit: z.coerce
+      .number()
+      .int()
+      .min(1, "Limit must be at least 1")
+      .max(100, "Limit cannot exceed 100")
+      .default(20),
+
+    offset: z.coerce
+      .number()
+      .int()
+      .nonnegative("Offset must be non-negative")
+      .default(0),
+  })
+  .refine(
+    (data) => {
+      // Validate cr_min <= cr_max if both provided
+      if (data.cr_min !== undefined && data.cr_max !== undefined) {
+        return data.cr_min <= data.cr_max;
+      }
+      return true;
+    },
+    {
+      message: "cr_max must be greater than or equal to cr_min",
+      path: ["cr_max"],
+    }
+  );
+
+export type ListMonstersQuery = z.infer<typeof ListMonstersQuerySchema>;

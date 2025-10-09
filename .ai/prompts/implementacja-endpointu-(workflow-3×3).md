@@ -3,7 +3,7 @@ Twoim zadaniem jest wdrożenie endpointa interfejsu API REST w oparciu o podany 
 Najpierw dokładnie przejrzyj dostarczony plan wdrożenia:
 
 <implementation_plan>
-@.ai/campaigns-implementation-plan.md
+@.ai/player-character-implementation-plan.md
 </implementation_plan>
 
 <types>
