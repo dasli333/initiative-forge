@@ -2,6 +2,7 @@ import type { APIContext } from "astro";
 import { createCampaign } from "@/lib/services/campaign.service";
 import { createCampaignSchema } from "@/lib/schemas/campaign.schema";
 import { ZodError } from "zod";
+import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
@@ -14,15 +15,23 @@ export const prerender = false;
  */
 export async function POST(context: APIContext) {
   const supabase = context.locals.supabase;
-  const user = context.locals.user;
 
+  // TODO: Authentication temporarily disabled - using default user
   // Check authentication
-  if (!user) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+  // const {
+  //   data: { user },
+  //   error: authError,
+  // } = await supabase.auth.getUser();
+
+  // if (authError || !user) {
+  //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
+  //     status: 401,
+  //     headers: { "Content-Type": "application/json" },
+  //   });
+  // }
+
+  // Using default user for now
+  const userId = DEFAULT_USER_ID;
 
   // Parse and validate request body
   let requestBody;
@@ -69,7 +78,7 @@ export async function POST(context: APIContext) {
   }
 
   // Create campaign via service layer
-  const result = await createCampaign(supabase, user.id, validatedData);
+  const result = await createCampaign(supabase, userId, validatedData);
 
   if (!result.success) {
     if (result.errorType === "conflict") {

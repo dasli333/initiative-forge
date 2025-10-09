@@ -1,6 +1,7 @@
 import type { APIContext } from "astro";
 import { CreateCombatCommandSchema } from "@/lib/schemas/combat.schema";
 import { createCombat } from "@/lib/services/combat.service";
+import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
@@ -9,18 +10,23 @@ export const prerender = false;
  * Creates a new combat encounter with initial participants
  */
 export async function POST(context: APIContext): Promise<Response> {
+  const supabase = context.locals.supabase;
+  // TODO: Authentication temporarily disabled - using default user
   // 1. Auth check
-  const {
-    data: { user },
-    error: authError,
-  } = await context.locals.supabase.auth.getUser();
+  // const {
+  //   data: { user },
+  //   error: authError,
+  // } = await context.locals.supabase.auth.getUser();
 
-  if (authError || !user) {
-    return new Response(JSON.stringify({ error: "Authentication required" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+  // if (authError || !user) {
+  //   return new Response(JSON.stringify({ error: "Authentication required" }), {
+  //     status: 401,
+  //     headers: { "Content-Type": "application/json" },
+  //   });
+  // }
+
+  // Using default user for now
+  const userId = DEFAULT_USER_ID;
 
   // 2. Extract campaignId from params
   const campaignId = context.params.campaignId;
@@ -58,7 +64,7 @@ export async function POST(context: APIContext): Promise<Response> {
 
   // 4. Execute service
   try {
-    const combat = await createCombat(context.locals.supabase, user.id, campaignId, validation.data);
+    const combat = await createCombat(context.locals.supabase, userId, campaignId, validation.data);
 
     return new Response(JSON.stringify(combat), {
       status: 201,
