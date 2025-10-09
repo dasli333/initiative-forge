@@ -1,54 +1,87 @@
 import type { APIContext } from "astro";
-import { createPlayerCharacter, listPlayerCharacters } from "@/lib/services/player-character.service";
-import { CreatePlayerCharacterCommandSchema } from "@/lib/schemas/player-character.schema";
+import { getPlayerCharacter, updatePlayerCharacter, deletePlayerCharacter } from "@/lib/services/player-character.service";
+import { UpdatePlayerCharacterCommandSchema } from "@/lib/schemas/player-character.schema";
 import { ZodError } from "zod";
 import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
 /**
- * POST /api/campaigns/:campaignId/characters
- * Creates a new player character in the specified campaign
- *
- * Body parameters:
- * - name: Character name (required, unique per campaign)
- * - max_hp: Maximum hit points (required, > 0)
- * - armor_class: Armor class (required, > 0)
- * - speed: Speed in feet (required, >= 0)
- * - strength, dexterity, constitution, intelligence, wisdom, charisma: Stats (required, 1-30)
- * - actions: Array of character actions (optional, max 20)
+ * GET /api/campaigns/:campaignId/characters/:id
+ * Returns a single player character
  *
  * @param context - Astro API context with locals.supabase and params
- * @returns JSON response with created character or error details
+ * @returns JSON response with character or error details
  */
-export async function POST(context: APIContext): Promise<Response> {
+export async function GET(context: APIContext): Promise<Response> {
   const supabase = context.locals.supabase;
 
   // TODO: Authentication temporarily disabled - using default user
-  // Check authentication
-  // const {
-  //   data: { user },
-  //   error: authError,
-  // } = await supabase.auth.getUser();
-
-  // if (authError || !user) {
-  //   return new Response(
-  //     JSON.stringify({ error: "Authentication required" }),
-  //     {
-  //       status: 401,
-  //       headers: { "Content-Type": "application/json" },
-  //     }
-  //   );
-  // }
-
-  // Using default user for now
   const userId = DEFAULT_USER_ID;
 
-  // Extract campaignId from URL params
+  // Extract campaignId and character ID from URL params
   const campaignId = context.params.campaignId;
-  if (!campaignId) {
+  const characterId = context.params.id;
+
+  if (!campaignId || !characterId) {
     return new Response(
-      JSON.stringify({ error: "Campaign ID is required" }),
+      JSON.stringify({ error: "Campaign ID and Character ID are required" }),
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+
+  // Execute service to get character
+  const result = await getPlayerCharacter(supabase, userId, campaignId, characterId);
+
+  if (!result.success) {
+    if (result.errorType === "not_found") {
+      return new Response(
+        JSON.stringify({ error: "Character or campaign not found" }),
+        {
+          status: 404,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ error: "Internal server error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+
+  return new Response(JSON.stringify(result.data), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+/**
+ * PATCH /api/campaigns/:campaignId/characters/:id
+ * Updates player character fields
+ *
+ * @param context - Astro API context with locals.supabase, params, and request body
+ * @returns JSON response with updated character or error details
+ */
+export async function PATCH(context: APIContext): Promise<Response> {
+  const supabase = context.locals.supabase;
+
+  // TODO: Authentication temporarily disabled - using default user
+  const userId = DEFAULT_USER_ID;
+
+  // Extract campaignId and character ID from URL params
+  const campaignId = context.params.campaignId;
+  const characterId = context.params.id;
+
+  if (!campaignId || !characterId) {
+    return new Response(
+      JSON.stringify({ error: "Campaign ID and Character ID are required" }),
       {
         status: 400,
         headers: { "Content-Type": "application/json" },
@@ -73,7 +106,7 @@ export async function POST(context: APIContext): Promise<Response> {
   // Validate with Zod schema
   let validatedData;
   try {
-    validatedData = CreatePlayerCharacterCommandSchema.parse(requestBody);
+    validatedData = UpdatePlayerCharacterCommandSchema.parse(requestBody);
   } catch (error) {
     if (error instanceof ZodError) {
       return new Response(
@@ -98,19 +131,19 @@ export async function POST(context: APIContext): Promise<Response> {
     );
   }
 
-  // Execute service to create character
-  const result = await createPlayerCharacter(
+  // Execute service to update character
+  const result = await updatePlayerCharacter(
     supabase,
     userId,
     campaignId,
+    characterId,
     validatedData
   );
 
   if (!result.success) {
-    // Handle campaign not found or not owned
     if (result.errorType === "not_found") {
       return new Response(
-        JSON.stringify({ error: "Campaign not found" }),
+        JSON.stringify({ error: "Character or campaign not found" }),
         {
           status: 404,
           headers: { "Content-Type": "application/json" },
@@ -118,7 +151,6 @@ export async function POST(context: APIContext): Promise<Response> {
       );
     }
 
-    // Handle name conflict
     if (result.errorType === "conflict") {
       return new Response(
         JSON.stringify({
@@ -133,7 +165,6 @@ export async function POST(context: APIContext): Promise<Response> {
       );
     }
 
-    // Handle internal errors
     return new Response(
       JSON.stringify({ error: "Internal server error" }),
       {
@@ -143,48 +174,32 @@ export async function POST(context: APIContext): Promise<Response> {
     );
   }
 
-  // Return created character with 201 status
   return new Response(JSON.stringify(result.data), {
-    status: 201,
+    status: 200,
     headers: { "Content-Type": "application/json" },
   });
 }
 
 /**
- * GET /api/campaigns/:campaignId/characters
- * Returns all player characters in a campaign
+ * DELETE /api/campaigns/:campaignId/characters/:id
+ * Deletes a player character
  *
  * @param context - Astro API context with locals.supabase and params
- * @returns JSON response with characters array or error details
+ * @returns 204 No Content on success or error details
  */
-export async function GET(context: APIContext): Promise<Response> {
+export async function DELETE(context: APIContext): Promise<Response> {
   const supabase = context.locals.supabase;
 
   // TODO: Authentication temporarily disabled - using default user
-  // Check authentication
-  // const {
-  //   data: { user },
-  //   error: authError,
-  // } = await supabase.auth.getUser();
-
-  // if (authError || !user) {
-  //   return new Response(
-  //     JSON.stringify({ error: "Authentication required" }),
-  //     {
-  //       status: 401,
-  //       headers: { "Content-Type": "application/json" },
-  //     }
-  //   );
-  // }
-
-  // Using default user for now
   const userId = DEFAULT_USER_ID;
 
-  // Extract campaignId from URL params
+  // Extract campaignId and character ID from URL params
   const campaignId = context.params.campaignId;
-  if (!campaignId) {
+  const characterId = context.params.id;
+
+  if (!campaignId || !characterId) {
     return new Response(
-      JSON.stringify({ error: "Campaign ID is required" }),
+      JSON.stringify({ error: "Campaign ID and Character ID are required" }),
       {
         status: 400,
         headers: { "Content-Type": "application/json" },
@@ -192,14 +207,13 @@ export async function GET(context: APIContext): Promise<Response> {
     );
   }
 
-  // Execute service to list characters
-  const result = await listPlayerCharacters(supabase, userId, campaignId);
+  // Execute service to delete character
+  const result = await deletePlayerCharacter(supabase, userId, campaignId, characterId);
 
   if (!result.success) {
-    // Handle campaign not found or not owned
     if (result.errorType === "not_found") {
       return new Response(
-        JSON.stringify({ error: "Campaign not found" }),
+        JSON.stringify({ error: "Character or campaign not found" }),
         {
           status: 404,
           headers: { "Content-Type": "application/json" },
@@ -207,7 +221,6 @@ export async function GET(context: APIContext): Promise<Response> {
       );
     }
 
-    // Handle internal errors
     return new Response(
       JSON.stringify({ error: "Internal server error" }),
       {
@@ -217,9 +230,7 @@ export async function GET(context: APIContext): Promise<Response> {
     );
   }
 
-  // Return characters list
-  return new Response(JSON.stringify(result.data), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
+  return new Response(null, {
+    status: 204,
   });
 }
