@@ -239,3 +239,137 @@ function buildInitialSnapshot(participants: CombatParticipantDTO[]): CombatSnaps
     active_participant_index: null, // Initiative not rolled yet
   };
 }
+
+/**
+ * Gets a single combat by ID
+ */
+export async function getCombat(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  combatId: string
+): Promise<CombatDTO> {
+  const { data, error } = await supabase
+    .from("combats")
+    .select("*, campaigns!inner(user_id)")
+    .eq("id", combatId)
+    .single();
+
+  if (error || !data) {
+    throw new Error("Combat not found");
+  }
+
+  // Type assertion needed due to join
+  const combat = data as unknown as CombatDTO & { campaigns: { user_id: string } };
+
+  // Verify ownership
+  if (combat.campaigns.user_id !== userId) {
+    throw new Error("Combat not found");
+  }
+
+  // Remove the campaigns field from the response
+  const { campaigns, ...combatData } = combat;
+  return combatData as CombatDTO;
+}
+
+/**
+ * Updates the combat state snapshot
+ */
+export async function updateCombatSnapshot(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  combatId: string,
+  stateSnapshot: CombatSnapshotDTO,
+  currentRound: number
+): Promise<CombatDTO> {
+  // First verify ownership
+  await verifyCombatOwnership(supabase, userId, combatId);
+
+  const { data, error } = await supabase
+    .from("combats")
+    .update({
+      state_snapshot: stateSnapshot as unknown as Database["public"]["Tables"]["combats"]["Update"]["state_snapshot"],
+      current_round: currentRound,
+    })
+    .eq("id", combatId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error updating combat snapshot:", error);
+    throw new Error("Failed to update combat snapshot");
+  }
+
+  return data as unknown as CombatDTO;
+}
+
+/**
+ * Updates the combat status
+ */
+export async function updateCombatStatus(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  combatId: string,
+  status: "active" | "completed"
+): Promise<CombatDTO> {
+  // First verify ownership
+  await verifyCombatOwnership(supabase, userId, combatId);
+
+  const { data, error } = await supabase
+    .from("combats")
+    .update({ status })
+    .eq("id", combatId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error updating combat status:", error);
+    throw new Error("Failed to update combat status");
+  }
+
+  return data as unknown as CombatDTO;
+}
+
+/**
+ * Deletes a combat
+ */
+export async function deleteCombat(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  combatId: string
+): Promise<void> {
+  // First verify ownership
+  await verifyCombatOwnership(supabase, userId, combatId);
+
+  const { error } = await supabase.from("combats").delete().eq("id", combatId);
+
+  if (error) {
+    console.error("Error deleting combat:", error);
+    throw new Error("Failed to delete combat");
+  }
+}
+
+/**
+ * Verifies that the combat exists and belongs to the user
+ */
+async function verifyCombatOwnership(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  combatId: string
+): Promise<void> {
+  const { data, error } = await supabase
+    .from("combats")
+    .select("id, campaigns!inner(user_id)")
+    .eq("id", combatId)
+    .single();
+
+  if (error || !data) {
+    throw new Error("Combat not found");
+  }
+
+  // Type assertion needed due to join
+  const combat = data as unknown as { id: string; campaigns: { user_id: string } };
+
+  if (combat.campaigns.user_id !== userId) {
+    throw new Error("Combat not found");
+  }
+}
