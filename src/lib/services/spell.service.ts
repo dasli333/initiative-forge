@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@/db/supabase.client";
-import type { ListMonstersResponseDTO, MonsterDTO, MonsterDataDTO } from "@/types";
-import type { ListMonstersQuery } from "@/lib/schemas/monster.schema";
+import type { ListSpellsResponseDTO, SpellDTO, SpellDataDTO } from "@/types";
+import type { ListSpellsQuery } from "@/lib/schemas/spell.schema";
 
 /**
  * Sanitizes LIKE pattern to prevent SQL injection
@@ -11,21 +11,21 @@ function sanitizeLikePattern(pattern: string): string {
 }
 
 /**
- * Fetches filtered and paginated list of monsters from the global SRD library
+ * Fetches filtered and paginated list of spells from the global SRD library
  *
  * @param supabase - Supabase client instance
- * @param filters - Query filters including name search, CR filters, and pagination
- * @returns Response with monsters array and pagination metadata
+ * @param filters - Query filters including name search, level, class, and pagination
+ * @returns Response with spells array and pagination metadata
  * @throws Error if database query fails
  */
-export async function listMonsters(
+export async function listSpells(
   supabase: SupabaseClient,
-  filters: ListMonstersQuery
-): Promise<ListMonstersResponseDTO> {
-  const { name, cr, cr_min, cr_max, limit, offset } = filters;
+  filters: ListSpellsQuery
+): Promise<ListSpellsResponseDTO> {
+  const { name, level, class: spellClass, limit, offset } = filters;
 
   // Build query with exact count for pagination
-  let query = supabase.from("monsters").select("*", { count: "exact" });
+  let query = supabase.from("spells").select("*", { count: "exact" });
 
   // Apply name filter (case-insensitive partial match)
   if (name) {
@@ -33,22 +33,19 @@ export async function listMonsters(
     query = query.ilike("name", `%${sanitized}%`);
   }
 
-  // Apply exact CR filter
-  if (cr) {
-    query = query.eq("data->challengeRating->>rating", cr);
+  // Apply level filter (exact match on data->level)
+  if (level !== undefined) {
+    query = query.eq("data->level", level);
   }
 
-  // Apply CR range filters (only if exact CR not specified)
-  // Note: This requires cr_numeric column (see migration in implementation plan)
-  if (cr_min !== undefined && !cr) {
-    query = query.gte("cr_numeric", cr_min);
-  }
-  if (cr_max !== undefined && !cr) {
-    query = query.lte("cr_numeric", cr_max);
+  // Apply class filter (array contains check - case sensitive)
+  if (spellClass) {
+    query = query.contains("data->classes", [spellClass]);
   }
 
-  // Apply pagination and sorting by name
+  // Apply pagination and sorting by level then name
   query = query
+    .order("data->level", { ascending: true })
     .order("name", { ascending: true })
     .range(offset, offset + limit - 1);
 
@@ -60,15 +57,15 @@ export async function listMonsters(
   }
 
   // Map database rows to DTOs with typed data field
-  const monsters: MonsterDTO[] = (data || []).map((row) => ({
+  const spells: SpellDTO[] = (data || []).map((row) => ({
     id: row.id,
     name: row.name,
-    data: row.data as MonsterDataDTO,
+    data: row.data as SpellDataDTO,
     created_at: row.created_at,
   }));
 
   return {
-    monsters,
+    spells,
     total: count ?? 0,
     limit,
     offset,
@@ -76,19 +73,19 @@ export async function listMonsters(
 }
 
 /**
- * Fetches a single monster by ID from the global SRD library
+ * Fetches a single spell by ID from the global SRD library
  *
  * @param supabase - Supabase client instance
- * @param id - UUID of the monster to retrieve
- * @returns Monster DTO or null if not found
+ * @param id - UUID of the spell to retrieve
+ * @returns Spell DTO or null if not found
  * @throws Error if database query fails
  */
-export async function getMonsterById(
+export async function getSpellById(
   supabase: SupabaseClient,
   id: string
-): Promise<MonsterDTO | null> {
+): Promise<SpellDTO | null> {
   const { data, error } = await supabase
-    .from("monsters")
+    .from("spells")
     .select("*")
     .eq("id", id)
     .single();
@@ -109,7 +106,7 @@ export async function getMonsterById(
   return {
     id: data.id,
     name: data.name,
-    data: data.data as MonsterDataDTO,
+    data: data.data as SpellDataDTO,
     created_at: data.created_at,
   };
 }
