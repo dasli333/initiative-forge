@@ -19,12 +19,141 @@ Najpierw przejrzyj następujące informacje:
 
 4. Endpoint Description:
 <endpoint_description>
+### 2.1. Campaigns
 
+#### List User's Campaigns
+
+- **Method**: GET
+- **Path**: `/api/campaigns`
+- **Description**: Returns all campaigns owned by the authenticated user
+- **Query Parameters**:
+    - `limit` (optional, number): Maximum number of results (default: 50)
+    - `offset` (optional, number): Offset for pagination (default: 0)
+- **Request Body**: N/A
+- **Response**: 200 OK
+
+```json
+{
+  "campaigns": [
+    {
+      "id": "uuid",
+      "user_id": "uuid",
+      "name": "Lost Mines of Phandelver",
+      "created_at": "2025-01-15T10:30:00Z",
+      "updated_at": "2025-01-15T10:30:00Z"
+    }
+  ],
+  "total": 1,
+  "limit": 50,
+  "offset": 0
+}
+```
+
+- **Error Responses**:
+    - 401 Unauthorized: Missing or invalid authentication
+
+#### Create Campaign
+
+- **Method**: POST
+- **Path**: `/api/campaigns`
+- **Description**: Creates a new campaign for the authenticated user
+- **Query Parameters**: N/A
+- **Request Body**:
+
+```json
+{
+  "name": "Curse of Strahd"
+}
+```
+
+- **Response**: 201 Created
+
+```json
+{
+  "id": "uuid",
+  "user_id": "uuid",
+  "name": "Curse of Strahd",
+  "created_at": "2025-01-15T14:20:00Z",
+  "updated_at": "2025-01-15T14:20:00Z"
+}
+```
+
+- **Error Responses**:
+    - 400 Bad Request: Invalid input (missing name, empty name)
+    - 401 Unauthorized: Missing or invalid authentication
+    - 409 Conflict: Campaign name already exists for this user
+
+#### Get Campaign
+
+- **Method**: GET
+- **Path**: `/api/campaigns/:id`
+- **Description**: Returns a single campaign by ID
+- **Query Parameters**: N/A
+- **Request Body**: N/A
+- **Response**: 200 OK
+
+```json
+{
+  "id": "uuid",
+  "user_id": "uuid",
+  "name": "Curse of Strahd",
+  "created_at": "2025-01-15T14:20:00Z",
+  "updated_at": "2025-01-15T14:20:00Z"
+}
+```
+
+- **Error Responses**:
+    - 401 Unauthorized: Missing or invalid authentication
+    - 404 Not Found: Campaign does not exist or user doesn't own it
+
+#### Update Campaign
+
+- **Method**: PATCH
+- **Path**: `/api/campaigns/:id`
+- **Description**: Updates campaign name
+- **Query Parameters**: N/A
+- **Request Body**:
+
+```json
+{
+  "name": "Curse of Strahd - Season 2"
+}
+```
+
+- **Response**: 200 OK
+
+```json
+{
+  "id": "uuid",
+  "user_id": "uuid",
+  "name": "Curse of Strahd - Season 2",
+  "created_at": "2025-01-15T14:20:00Z",
+  "updated_at": "2025-01-16T09:15:00Z"
+}
+```
+
+- **Error Responses**:
+    - 400 Bad Request: Invalid input
+    - 401 Unauthorized: Missing or invalid authentication
+    - 404 Not Found: Campaign does not exist or user doesn't own it
+    - 409 Conflict: New campaign name already exists for this user
+
+#### Delete Campaign
+
+- **Method**: DELETE
+- **Path**: `/api/campaigns/:id`
+- **Description**: Deletes a campaign and all associated player characters and combats (CASCADE)
+- **Query Parameters**: N/A
+- **Request Body**: N/A
+- **Response**: 204 No Content
+- **Error Responses**:
+    - 401 Unauthorized: Missing or invalid authentication
+    - 404 Not Found: Campaign does not exist or user doesn't own it
 </endpoint_description>
 
 5. Endpoint Implementation:
 <endpoint_implementation>
-
+   @src/pages/api/campaigns.ts @src/pages/api/campaigns/[id].ts
 </endpoint_implementation>
 
 6. Type Definitions:
@@ -130,4 +259,4 @@ Oto przykład tego, jak powinien wyglądać plik wyjściowy (treść jest do zas
 3. [...]
 ```
 
-Rozpocznij analizę i planowanie już teraz. Twój ostateczny wynik powinien składać się wyłącznie z planu wdrożenia w języku polskim w formacie markdown, który zapiszesz w pliku .ai/{view-name}-view-implementation-plan.md i nie powinien powielać ani powtarzać żadnej pracy wykonanej w podziale implementacji.
+Rozpocznij analizę i planowanie już teraz. Twój ostateczny wynik powinien składać się wyłącznie z planu wdrożenia w języku polskim w formacie markdown, który zapiszesz w pliku .ai/ui-plans/{view-name}-view-implementation-plan.md i nie powinien powielać ani powtarzać żadnej pracy wykonanej w podziale implementacji.
