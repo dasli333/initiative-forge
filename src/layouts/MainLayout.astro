@@ -3,6 +3,7 @@ import "../styles/global.css";
 import { SidebarWrapper } from "@/components/SidebarWrapper";
 import { SkipToContent } from "@/components/SkipToContent";
 import { Toaster } from "@/components/ui/sonner";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title?: string;
@@ -25,6 +26,7 @@ const { title = "Initiative Forge" } = Astro.props;
       rel="stylesheet"
     />
     <title>{title}</title>
+    <ClientRouter />
   </head>
   <body class="h-full overflow-hidden bg-slate-950">
     <!-- Skip to main content link for accessibility -->
