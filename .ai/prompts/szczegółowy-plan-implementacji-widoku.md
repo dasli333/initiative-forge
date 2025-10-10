@@ -8,12 +8,52 @@ Najpierw przejrzyj następujące informacje:
    </prd>
 
 2. Opis widoku:
-   <view_description>
+<view_description>
+### 2.3. My Campaigns View
 
+**Ścieżka**: `/campaigns`
+
+**Główny cel**: Wyświetlenie listy kampanii użytkownika i umożliwienie tworzenia nowych kampanii.
+
+**Kluczowe informacje do wyświetlenia**:
+
+- Grid campaign cards (nazwa, liczba postaci, liczba walk, status aktywnej walki, data ostatniej modyfikacji)
+- Możliwość edycji nazwy kampanii (inline)
+- Możliwość usunięcia kampanii
+- Tile do tworzenia nowej kampanii
+- Empty state dla nowych użytkowników
+
+**Kluczowe komponenty widoku**:
+
+- **Header Section**:
+    - H1: "My Campaigns"
+    - Metadata: "X campaigns" (muted text)
+- **Responsive Grid**:
+    - 3 kolumny (screen ≥ 1280px)
+    - 2 kolumny (1024px ≤ screen < 1280px)
+- **Campaign Card** (Shadcn Card):
+    - Header: Nazwa kampanii (edytowalna - click → inline input), Dropdown menu (Edit Name, Delete)
+    - Body: Icon 👤 + "X characters", Icon ⚔️ + "X combats", Status badge "Active combat" 🔴 (emerald, jeśli istnieje)
+    - Footer: "Last modified: [date]" (muted), Button "Select Campaign" (emerald, full width)
+- **Plus Tile**:
+    - Dashed border card, centered icon +, text "Create New Campaign"
+    - Hover: emerald glow
+    - Click → Modal z formularzem (input: campaign name)
+- **Empty State**:
+    - Icon: folder (duży, muted)
+    - Heading: "You don't have any campaigns yet"
+    - Subtext: "Create your first campaign to get started"
+    - Button: "Create Campaign" (emerald)
+
+**UX, dostępność i względy bezpieczeństwa**:
+
+- **UX**: Skeleton loading states podczas fetch, optimistic UI dla tworzenia kampanii, confirmation modal dla Delete ("This campaign has X active combats. Deleting it will also delete all characters and combats. Are you sure?"), toast notifications (success/error)
+- **Accessibility**: ARIA labels dla icon buttons, keyboard navigation dla dropdown menu, focus management w modalach
+- **Security**: RLS zapewnia, że user widzi tylko swoje kampanie, validation błędów duplikatów nazw
 </view_description>
 
 3. User Stories:
-   <user_stories>
+<user_stories>
 
 </user_stories>
 

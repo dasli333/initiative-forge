@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { Sidebar } from "@/components/Sidebar";
 import { SkipToContent } from "@/components/SkipToContent";
+import { Toaster } from "@/components/ui/sonner";
 
 interface Props {
   title?: string;
@@ -38,6 +39,9 @@ const { title = "Initiative Forge" } = Astro.props;
         <slot />
       </main>
     </div>
+
+    <!-- Toast notifications -->
+    <Toaster client:load />
   </body>
 </html>
 
