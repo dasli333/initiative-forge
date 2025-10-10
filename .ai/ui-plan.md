@@ -144,7 +144,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 
 - Nazwa kampanii (edytowalna inline)
 - Data utworzenia kampanii
-- Statystyki: liczba postaci, liczba completed combats, liczba active combats
+- Statystyki: liczba postaci (w przyszłości: zadania, sesje)
 - Quick actions: przyciski do zarządzania postaciami i rozpoczęcia walki
 
 **Kluczowe komponenty widoku**:
@@ -152,15 +152,13 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - **Breadcrumb Navigation**: "My Campaigns"
 - **Stats Overview Section**:
   - Header: H1 Nazwa kampanii (edytowalna inline - click → input), Metadata "Created on [date]" (muted)
-  - Stats Grid (3 kolumny):
-    - Card 1: "Player Characters" + liczba (duża, emerald)
-    - Card 2: "Completed Combats" + liczba
-    - Card 3: "Active Combats" + liczba (emerald badge jeśli > 0)
+  - Stats Grid (responsywny, przygotowany na przyszłe rozszerzenia):
+    - Card: "Player Characters" + liczba (duża, emerald)
 - **Quick Actions Section**:
   - H2: "Quick Actions"
   - Grid (2 kolumny):
     - Card "Player Characters": Icon + Description, Button "Manage Characters" → /campaigns/:id/characters
-    - Card "Combats": Icon + Description, Button group: "View Combat History" (secondary), "Start New Combat" (emerald) → /campaigns/:id/combats/new
+    - Card "Combats": Icon + Description, Button "Start New Combat" (emerald) → /campaigns/:id/combats/new
 
 **UX, dostępność i względy bezpieczeństwa**:
 
@@ -870,7 +868,6 @@ Używany w widokach zagnieżdżonych:
 
 - **GET** `/api/campaigns/:id` → Szczegóły kampanii
 - **GET** `/api/campaigns/:campaignId/characters` → Liczba postaci
-- **GET** `/api/campaigns/:campaignId/combats` (MISSING - trzeba dodać do API plan)
 
 ### Player Characters View
 
