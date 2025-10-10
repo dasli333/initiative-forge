@@ -1,6 +1,6 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
-import { CampaignDashboardContent } from "@/components/campaign-dashboard/CampaignDashboardContent";
+import { CampaignDashboardWrapper } from "@/components/campaign-dashboard/CampaignDashboardWrapper";
 import type { CampaignDTO, ListPlayerCharactersResponseDTO } from "@/types";
 
 export const prerender = false;
@@ -91,7 +91,7 @@ const pageTitle = campaign ? campaign.name : "Campaign Not Found";
         </div>
       </div>
     ) : (
-      <CampaignDashboardContent initialCampaign={campaign} initialCharactersCount={charactersCount} />
+      <CampaignDashboardWrapper initialCampaign={campaign} initialCharactersCount={charactersCount} />
     )
   }
 </MainLayout>
