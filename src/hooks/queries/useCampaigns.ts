@@ -1,10 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type {
-  ListCampaignsResponseDTO,
-  CreateCampaignCommand,
-  UpdateCampaignCommand,
-  CampaignDTO,
-} from "@/types";
+import type { ListCampaignsResponseDTO, CreateCampaignCommand, UpdateCampaignCommand, CampaignDTO } from "@/types";
 import type { CampaignViewModel } from "@/types/campaigns";
 import { toast } from "sonner";
 import { useCampaignStore } from "@/stores/campaignStore";
@@ -276,9 +271,6 @@ export function useDeleteCampaignMutation() {
       const previousSelectedId = selectedCampaignId;
       if (selectedCampaignId === id) {
         setSelectedCampaignId(null);
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("selectedCampaignId");
-        }
       }
 
       // Return context with snapshots
@@ -293,9 +285,6 @@ export function useDeleteCampaignMutation() {
       // Rollback selected campaign ID
       if (context?.previousSelectedId === id) {
         setSelectedCampaignId(id);
-        if (typeof window !== "undefined") {
-          localStorage.setItem("selectedCampaignId", id);
-        }
       }
 
       const errorMessage =
