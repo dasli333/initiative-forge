@@ -39,11 +39,7 @@ export function Sidebar() {
       {/* Navigation - flex-1 for spacing */}
       <nav className="flex-1 overflow-y-auto py-4">
         <GlobalNav currentPath={currentPath} />
-        <CampaignNav
-          selectedCampaignId={selectedCampaignId}
-          activeCombat={activeCombat}
-          currentPath={currentPath}
-        />
+        <CampaignNav selectedCampaignId={selectedCampaignId} activeCombat={activeCombat} currentPath={currentPath} />
       </nav>
 
       {/* Bottom Section - User Menu */}

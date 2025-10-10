@@ -48,12 +48,7 @@ export async function PATCH(context: APIContext): Promise<Response> {
   }
 
   try {
-    const combat = await updateCombatStatus(
-      context.locals.supabase,
-      userId,
-      combatId,
-      validation.data.status
-    );
+    const combat = await updateCombatStatus(context.locals.supabase, userId, combatId, validation.data.status);
 
     return new Response(JSON.stringify(combat), {
       status: 200,

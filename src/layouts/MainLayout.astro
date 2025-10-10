@@ -7,9 +7,7 @@ interface Props {
   title?: string;
 }
 
-const {
-  title = "Initiative Forge"
-} = Astro.props;
+const { title = "Initiative Forge" } = Astro.props;
 ---
 
 <!doctype html>
@@ -36,11 +34,7 @@ const {
       <Sidebar client:load />
 
       <!-- Main Content Area -->
-      <main
-        id="main-content"
-        tabindex="-1"
-        class="flex-1 ml-60 bg-slate-950 min-h-screen p-4 md:p-8 overflow-auto"
-      >
+      <main id="main-content" tabindex="-1" class="flex-1 ml-60 bg-slate-950 min-h-screen p-4 md:p-8 overflow-auto">
         <slot />
       </main>
     </div>

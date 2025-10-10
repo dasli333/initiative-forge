@@ -16,15 +16,11 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-export const supabaseBrowserClient = createClient<Database>(
-  supabaseUrl,
-  supabaseAnonKey,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-    },
-  }
-);
+export const supabaseBrowserClient = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+  },
+});
 
 export type SupabaseBrowserClient = typeof supabaseBrowserClient;

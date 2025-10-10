@@ -3,7 +3,8 @@ Jesteś doświadczonym architektem oprogramowania, którego zadaniem jest stworz
 Zanim zaczniemy, zapoznaj się z poniższymi informacjami:
 
 1. Route API specification:
-<route_api_specification>
+   <route_api_specification>
+
 - **Method**: POST
 - **Path**: `/api/campaigns`
 - **Description**: Creates a new campaign for the authenticated user
@@ -28,14 +29,12 @@ Zanim zaczniemy, zapoznaj się z poniższymi informacjami:
 }
 ```
 
-- **Error Responses**:
-    - 400 Bad Request: Invalid input (missing name, empty name)
-    - 401 Unauthorized: Missing or invalid authentication
-    - 409 Conflict: Campaign name already exists for this user
-</route_api_specification>
+- **Error Responses**: - 400 Bad Request: Invalid input (missing name, empty name) - 401 Unauthorized: Missing or invalid authentication - 409 Conflict: Campaign name already exists for this user
+  </route_api_specification>
 
 2. Related database resources:
-<related_db_resources>
+   <related_db_resources>
+
 ## 1. Tabele
 
 ### 1.1. campaigns
@@ -131,22 +130,22 @@ Statyczna tabela definicji stanów D&D 5e (np. "Oślepiony", "Oszołomiony").
 
 - **campaigns → combats** (1:N)
   Jedna kampania może mieć wiele walk. Klucz obcy: `combats.campaign_id` → `campaigns.id` (ON DELETE CASCADE)
-</related_db_resources>
+  </related_db_resources>
 
 3. Definicje typów:
-<type_definitions>
+   <type_definitions>
    @src/types.ts
-</type_definitions>
+   </type_definitions>
 
-3. Tech stack:
-<tech_stack>
+4. Tech stack:
+   <tech_stack>
    @.ai/tech-stack.md
-</tech_stack>
+   </tech_stack>
 
-4. Implementation rules:
-<implementation_rules>
-@.cursor/rules/shared.mdc, @.cursor/rules/backend.mdc, @.cursor/rules/astro.mdc
-</implementation_rules>
+5. Implementation rules:
+   <implementation_rules>
+   @.cursor/rules/shared.mdc, @.cursor/rules/backend.mdc, @.cursor/rules/astro.mdc
+   </implementation_rules>
 
 Twoim zadaniem jest stworzenie kompleksowego planu wdrożenia endpointu interfejsu API REST. Przed dostarczeniem ostatecznego planu użyj znaczników <analysis>, aby przeanalizować informacje i nakreślić swoje podejście. W tej analizie upewnij się, że:
 
@@ -171,6 +170,7 @@ Po przeprowadzeniu analizy utwórz szczegółowy plan wdrożenia w formacie mark
 8. Kroki implementacji
 
 W całym planie upewnij się, że
+
 - Używać prawidłowych kodów stanu API:
   - 200 dla pomyślnego odczytu
   - 201 dla pomyślnego utworzenia
@@ -184,12 +184,15 @@ W całym planie upewnij się, że
 Końcowym wynikiem powinien być dobrze zorganizowany plan wdrożenia w formacie markdown. Oto przykład tego, jak powinny wyglądać dane wyjściowe:
 
 ``markdown
+
 # API Endpoint Implementation Plan: [Nazwa punktu końcowego]
 
 ## 1. Przegląd punktu końcowego
+
 [Krótki opis celu i funkcjonalności punktu końcowego]
 
 ## 2. Szczegóły żądania
+
 - Metoda HTTP: [GET/POST/PUT/DELETE]
 - Struktura URL: [wzorzec URL]
 - Parametry:
@@ -198,30 +201,39 @@ Końcowym wynikiem powinien być dobrze zorganizowany plan wdrożenia w formacie
 - Request Body: [Struktura treści żądania, jeśli dotyczy]
 
 ## 3. Wykorzystywane typy
+
 [DTOs i Command Modele niezbędne do implementacji]
 
 ## 3. Szczegóły odpowiedzi
+
 [Oczekiwana struktura odpowiedzi i kody statusu]
 
 ## 4. Przepływ danych
+
 [Opis przepływu danych, w tym interakcji z zewnętrznymi usługami lub bazami danych]
 
 ## 5. Względy bezpieczeństwa
+
 [Szczegóły uwierzytelniania, autoryzacji i walidacji danych]
 
 ## 6. Obsługa błędów
+
 [Lista potencjalnych błędów i sposób ich obsługi]
 
 ## 7. Rozważania dotyczące wydajności
+
 [Potencjalne wąskie gardła i strategie optymalizacji]
 
 ## 8. Etapy wdrożenia
+
 1. [Krok 1]
 2. [Krok 2]
 3. [Krok 3]
-...
+   ...
+
 ```
 
 Końcowe wyniki powinny składać się wyłącznie z planu wdrożenia w formacie markdown i nie powinny powielać ani powtarzać żadnej pracy wykonanej w sekcji analizy.
 
 Pamiętaj, aby zapisać swój plan wdrożenia jako .ai/view-implementation-plan.md. Upewnij się, że plan jest szczegółowy, przejrzysty i zapewnia kompleksowe wskazówki dla zespołu programistów.
+```

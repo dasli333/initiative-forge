@@ -90,11 +90,7 @@ export type Spell = z.infer<typeof SpellSchema>;
  * Supports filtering by name, level, class, and pagination
  */
 export const ListSpellsQuerySchema = z.object({
-  name: z
-    .string()
-    .max(255, "Name must be 255 characters or less")
-    .trim()
-    .optional(),
+  name: z.string().max(255, "Name must be 255 characters or less").trim().optional(),
 
   level: z.coerce
     .number()
@@ -103,24 +99,11 @@ export const ListSpellsQuerySchema = z.object({
     .max(9, "Level must be between 0 and 9")
     .optional(),
 
-  class: z
-    .string()
-    .max(100, "Class name must be 100 characters or less")
-    .trim()
-    .optional(),
+  class: z.string().max(100, "Class name must be 100 characters or less").trim().optional(),
 
-  limit: z.coerce
-    .number()
-    .int()
-    .min(1, "Limit must be at least 1")
-    .max(100, "Limit cannot exceed 100")
-    .default(20),
+  limit: z.coerce.number().int().min(1, "Limit must be at least 1").max(100, "Limit cannot exceed 100").default(20),
 
-  offset: z.coerce
-    .number()
-    .int()
-    .nonnegative("Offset must be non-negative")
-    .default(0),
+  offset: z.coerce.number().int().nonnegative("Offset must be non-negative").default(0),
 });
 
 export type ListSpellsQuery = z.infer<typeof ListSpellsQuerySchema>;

@@ -48,9 +48,7 @@ export async function listMonsters(
   }
 
   // Apply pagination and sorting by name
-  query = query
-    .order("name", { ascending: true })
-    .range(offset, offset + limit - 1);
+  query = query.order("name", { ascending: true }).range(offset, offset + limit - 1);
 
   // Execute query
   const { data, error, count } = await query;
@@ -83,15 +81,8 @@ export async function listMonsters(
  * @returns Monster DTO or null if not found
  * @throws Error if database query fails
  */
-export async function getMonsterById(
-  supabase: SupabaseClient,
-  id: string
-): Promise<MonsterDTO | null> {
-  const { data, error } = await supabase
-    .from("monsters")
-    .select("*")
-    .eq("id", id)
-    .single();
+export async function getMonsterById(supabase: SupabaseClient, id: string): Promise<MonsterDTO | null> {
+  const { data, error } = await supabase.from("monsters").select("*").eq("id", id).single();
 
   if (error) {
     // Handle not found case separately

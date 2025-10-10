@@ -84,7 +84,4 @@ export {
 } from "./combat.schema";
 
 // Player character schemas
-export {
-  CreatePlayerCharacterCommandSchema,
-  type CreatePlayerCharacterCommand,
-} from "./player-character.schema";
+export { CreatePlayerCharacterCommandSchema, type CreatePlayerCharacterCommand } from "./player-character.schema";

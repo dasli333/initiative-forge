@@ -314,12 +314,7 @@ export async function updateCombatStatus(
   // First verify ownership
   await verifyCombatOwnership(supabase, userId, combatId);
 
-  const { data, error } = await supabase
-    .from("combats")
-    .update({ status })
-    .eq("id", combatId)
-    .select()
-    .single();
+  const { data, error } = await supabase.from("combats").update({ status }).eq("id", combatId).select().single();
 
   if (error) {
     console.error("Error updating combat status:", error);

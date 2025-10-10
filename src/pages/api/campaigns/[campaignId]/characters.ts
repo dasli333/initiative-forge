@@ -47,13 +47,10 @@ export async function POST(context: APIContext): Promise<Response> {
   // Extract campaignId from URL params
   const campaignId = context.params.campaignId;
   if (!campaignId) {
-    return new Response(
-      JSON.stringify({ error: "Campaign ID is required" }),
-      {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Campaign ID is required" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   // Parse request body
@@ -61,13 +58,10 @@ export async function POST(context: APIContext): Promise<Response> {
   try {
     requestBody = await context.request.json();
   } catch {
-    return new Response(
-      JSON.stringify({ error: "Invalid JSON in request body" }),
-      {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Invalid JSON in request body" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   // Validate with Zod schema
@@ -99,23 +93,15 @@ export async function POST(context: APIContext): Promise<Response> {
   }
 
   // Execute service to create character
-  const result = await createPlayerCharacter(
-    supabase,
-    userId,
-    campaignId,
-    validatedData
-  );
+  const result = await createPlayerCharacter(supabase, userId, campaignId, validatedData);
 
   if (!result.success) {
     // Handle campaign not found or not owned
     if (result.errorType === "not_found") {
-      return new Response(
-        JSON.stringify({ error: "Campaign not found" }),
-        {
-          status: 404,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return new Response(JSON.stringify({ error: "Campaign not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     // Handle name conflict
@@ -134,13 +120,10 @@ export async function POST(context: APIContext): Promise<Response> {
     }
 
     // Handle internal errors
-    return new Response(
-      JSON.stringify({ error: "Internal server error" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   // Return created character with 201 status
@@ -183,13 +166,10 @@ export async function GET(context: APIContext): Promise<Response> {
   // Extract campaignId from URL params
   const campaignId = context.params.campaignId;
   if (!campaignId) {
-    return new Response(
-      JSON.stringify({ error: "Campaign ID is required" }),
-      {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Campaign ID is required" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   // Execute service to list characters
@@ -198,23 +178,17 @@ export async function GET(context: APIContext): Promise<Response> {
   if (!result.success) {
     // Handle campaign not found or not owned
     if (result.errorType === "not_found") {
-      return new Response(
-        JSON.stringify({ error: "Campaign not found" }),
-        {
-          status: 404,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return new Response(JSON.stringify({ error: "Campaign not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     // Handle internal errors
-    return new Response(
-      JSON.stringify({ error: "Internal server error" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   // Return characters list

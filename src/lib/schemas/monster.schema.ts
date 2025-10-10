@@ -189,41 +189,20 @@ export type Monster = z.infer<typeof MonsterSchema>;
  */
 export const ListMonstersQuerySchema = z
   .object({
-    name: z
-      .string()
-      .max(255, "Name must be 255 characters or less")
-      .trim()
-      .optional(),
+    name: z.string().max(255, "Name must be 255 characters or less").trim().optional(),
 
     cr: z
       .string()
       .regex(/^(\d+|\d+\/\d+)$/, "Invalid Challenge Rating format")
       .optional(),
 
-    cr_min: z.coerce
-      .number()
-      .nonnegative("CR min must be non-negative")
-      .max(30, "CR min cannot exceed 30")
-      .optional(),
+    cr_min: z.coerce.number().nonnegative("CR min must be non-negative").max(30, "CR min cannot exceed 30").optional(),
 
-    cr_max: z.coerce
-      .number()
-      .nonnegative("CR max must be non-negative")
-      .max(30, "CR max cannot exceed 30")
-      .optional(),
+    cr_max: z.coerce.number().nonnegative("CR max must be non-negative").max(30, "CR max cannot exceed 30").optional(),
 
-    limit: z.coerce
-      .number()
-      .int()
-      .min(1, "Limit must be at least 1")
-      .max(100, "Limit cannot exceed 100")
-      .default(20),
+    limit: z.coerce.number().int().min(1, "Limit must be at least 1").max(100, "Limit cannot exceed 100").default(20),
 
-    offset: z.coerce
-      .number()
-      .int()
-      .nonnegative("Offset must be non-negative")
-      .default(0),
+    offset: z.coerce.number().int().nonnegative("Offset must be non-negative").default(0),
   })
   .refine(
     (data) => {

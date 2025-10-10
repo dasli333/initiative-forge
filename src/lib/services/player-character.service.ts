@@ -1,5 +1,10 @@
 import type { SupabaseClient } from "@/db/supabase.client";
-import type { CreatePlayerCharacterCommand, UpdatePlayerCharacterCommand, PlayerCharacterDTO, ListPlayerCharactersResponseDTO } from "@/types";
+import type {
+  CreatePlayerCharacterCommand,
+  UpdatePlayerCharacterCommand,
+  PlayerCharacterDTO,
+  ListPlayerCharactersResponseDTO,
+} from "@/types";
 
 /**
  * Result type for player character creation
@@ -32,9 +37,7 @@ type UpdatePlayerCharacterResult =
 /**
  * Result type for deleting a player character
  */
-type DeletePlayerCharacterResult =
-  | { success: true }
-  | { success: false; errorType: "not_found" | "internal" };
+type DeletePlayerCharacterResult = { success: true } | { success: false; errorType: "not_found" | "internal" };
 
 /**
  * Creates a new player character in the specified campaign

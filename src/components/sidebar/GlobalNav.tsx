@@ -8,9 +8,7 @@ interface GlobalNavProps {
 export function GlobalNav({ currentPath }: GlobalNavProps) {
   return (
     <div className="space-y-1">
-      <h2 className="px-4 text-xs uppercase text-slate-500 mb-2 font-semibold tracking-wider">
-        Global
-      </h2>
+      <h2 className="px-4 text-xs uppercase text-slate-500 mb-2 font-semibold tracking-wider">Global</h2>
       <ul role="list" className="space-y-1">
         <NavItem
           icon={Folder}

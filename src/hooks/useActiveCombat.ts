@@ -26,10 +26,9 @@ export function useActiveCombat(selectedCampaignId: string | null): UseActiveCom
       setError(null);
 
       try {
-        const response = await fetch(
-          `/api/combats?campaign_id=${selectedCampaignId}&status=active`,
-          { signal: controller.signal }
-        );
+        const response = await fetch(`/api/combats?campaign_id=${selectedCampaignId}&status=active`, {
+          signal: controller.signal,
+        });
 
         if (response.status === 404) {
           // Normal case - no active combat

@@ -62,12 +62,9 @@ export async function GET(context: APIContext): Promise<Response> {
     });
   } catch (error) {
     console.error("Error fetching spell:", error);
-    return new Response(
-      JSON.stringify({ error: "Internal server error" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }

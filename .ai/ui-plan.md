@@ -5,11 +5,13 @@
 Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w stacku **Astro 5 + React 19 + TypeScript + Tailwind CSS 4 + Shadcn/ui** z backendem **Supabase**. Architektura UI opiera się na hybrydowym podejściu renderowania, gdzie **Astro components** służą do layoutów i treści statycznych, a **React islands** zapewniają interaktywność client-side.
 
 ### Strategia renderowania
+
 - **Astro SSR** dla initial data fetching (kampanie, postacie graczy)
 - **React client-side** dla real-time combat state management (Zustand)
 - **Supabase Auth** dla sesji użytkownika (HTTP-only cookies)
 
 ### Design System
+
 - **Dark mode only** z motywem emerald-green (emerald-500 jako primary accent)
 - **Paleta kolorów**: slate-950/900 backgrounds, slate-50 text, emerald-500/700 accents
 - **Typografia**: Inter (sans-serif) + JetBrains Mono (monospace dla liczb)
@@ -17,6 +19,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - **Minimum screen width**: 1024px (komunikat ostrzegawczy dla mniejszych ekranów)
 
 ### Accessibility Baseline
+
 - Pełna nawigacja klawiaturą (tab order, focus states z emerald ring)
 - ARIA labels dla icon buttons, live regions dla dynamicznych aktualizacji
 - WCAG AA contrast compliance
@@ -31,11 +34,13 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Główny cel**: Umożliwienie zalogowania się zarejestrowanym użytkownikom do aplikacji.
 
 **Kluczowe informacje do wyświetlenia**:
+
 - Formularz logowania (email, hasło)
 - Link do rejestracji
 - Komunikaty błędów walidacji
 
 **Kluczowe komponenty widoku**:
+
 - **Layout**: Centered card (max-width: 400px) na dark background (slate-950)
 - **Logo/Title**: "Initiative Forge" (emerald accent)
 - **Form Component**:
@@ -46,6 +51,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - **Link**: "Don't have an account? Sign up" (emerald-500)
 
 **UX, dostępność i względy bezpieczeństwa**:
+
 - **UX**: Disabled button podczas submissiona z loading spinner, auto-focus na email field
 - **Accessibility**: ARIA labels dla form fields, error messages w aria-live region, focus visible states (emerald ring)
 - **Security**: Password field z opcjonalnym toggle visibility, rate limiting na backend (zabezpieczenie przed brute force), HTTPS only
@@ -59,12 +65,14 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Główny cel**: Umożliwienie rejestracji nowych użytkowników z automatycznym logowaniem po sukcesie.
 
 **Kluczowe informacje do wyświetlenia**:
+
 - Formularz rejestracji (email, hasło, potwierdzenie hasła)
 - Wymagania dotyczące hasła
 - Link do logowania
 - Komunikaty błędów (format email, hasła się nie zgadzają, email zajęty)
 
 **Kluczowe komponenty widoku**:
+
 - **Layout**: Identyczny do login (centered card)
 - **Form Component**:
   - Input: Email
@@ -75,6 +83,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - **Link**: "Already have an account? Sign in"
 
 **UX, dostępność i względy bezpieczeństwa**:
+
 - **UX**: Real-time validation (email format, password match), auto-login po rejestracji → redirect do /campaigns, success toast notification
 - **Accessibility**: ARIA describedby dla password requirements, focus management po błędach
 - **Security**: Client-side validation + server-side validation, instant signup bez email confirmation (zgodnie z PRD), Supabase Auth SDK
@@ -88,6 +97,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Główny cel**: Wyświetlenie listy kampanii użytkownika i umożliwienie tworzenia nowych kampanii.
 
 **Kluczowe informacje do wyświetlenia**:
+
 - Grid campaign cards (nazwa, liczba postaci, liczba walk, status aktywnej walki, data ostatniej modyfikacji)
 - Możliwość edycji nazwy kampanii (inline)
 - Możliwość usunięcia kampanii
@@ -95,6 +105,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - Empty state dla nowych użytkowników
 
 **Kluczowe komponenty widoku**:
+
 - **Header Section**:
   - H1: "My Campaigns"
   - Metadata: "X campaigns" (muted text)
@@ -116,6 +127,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
   - Button: "Create Campaign" (emerald)
 
 **UX, dostępność i względy bezpieczeństwa**:
+
 - **UX**: Skeleton loading states podczas fetch, optimistic UI dla tworzenia kampanii, confirmation modal dla Delete ("This campaign has X active combats. Deleting it will also delete all characters and combats. Are you sure?"), toast notifications (success/error)
 - **Accessibility**: ARIA labels dla icon buttons, keyboard navigation dla dropdown menu, focus management w modalach
 - **Security**: RLS zapewnia, że user widzi tylko swoje kampanie, validation błędów duplikatów nazw
@@ -129,12 +141,14 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Główny cel**: Przegląd wybranej kampanii i szybki dostęp do głównych funkcji (zarządzanie postaciami, rozpoczęcie walki).
 
 **Kluczowe informacje do wyświetlenia**:
+
 - Nazwa kampanii (edytowalna inline)
 - Data utworzenia kampanii
 - Statystyki: liczba postaci, liczba completed combats, liczba active combats
 - Quick actions: przyciski do zarządzania postaciami i rozpoczęcia walki
 
 **Kluczowe komponenty widoku**:
+
 - **Breadcrumb Navigation**: "My Campaigns"
 - **Stats Overview Section**:
   - Header: H1 Nazwa kampanii (edytowalna inline - click → input), Metadata "Created on [date]" (muted)
@@ -149,6 +163,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
     - Card "Combats": Icon + Description, Button group: "View Combat History" (secondary), "Start New Combat" (emerald) → /campaigns/:id/combats/new
 
 **UX, dostępność i względy bezpieczeństwa**:
+
 - **UX**: Loading state (skeleton), error state (jeśli kampania nie istnieje → 404), focus na główny heading po load, inline editing z auto-save
 - **Accessibility**: Focus na H1 po załadowaniu strony, keyboard navigation dla button groups
 - **Security**: RLS zapewnia dostęp tylko dla właściciela kampanii, 404 jeśli kampania nie należy do usera
@@ -162,11 +177,13 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Główny cel**: Zarządzanie postaciami graczy w kampanii (dodawanie, edycja, usuwanie).
 
 **Kluczowe informacje do wyświetlenia**:
+
 - Lista postaci graczy z podstawowymi statystykami (Name, HP, AC, Initiative Modifier, Passive Perception)
 - Formularz tworzenia/edycji postaci z automatycznymi obliczeniami
 - Empty state jeśli brak postaci
 
 **Kluczowe komponenty widoku**:
+
 - **Header**:
   - Breadcrumb: "My Campaigns > [Campaign Name] > Characters"
   - H1: "Player Characters"
@@ -191,6 +208,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
   - Footer: "Cancel" (secondary), "Create Character"/"Save Changes" (emerald, disabled jeśli validation fails)
 
 **UX, dostępność i względy bezpieczeństwa**:
+
 - **UX**: Real-time validation z inline errors, auto-focus na first input po otwarciu modalu, optimistic UI update po save, toast dla błędów API (np. character name already exists)
 - **Accessibility**: Focus trap w modalu, Escape zamyka modal (z confirmation jeśli są changes), ARIA labels dla wszystkich inputs, real-time announcements dla auto-calculated values
 - **Security**: Validation character name uniqueness w kampanii, RLS zapewnia dostęp tylko do postaci z własnych kampanii
@@ -204,6 +222,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Główny cel**: Utworzenie nowej walki poprzez 5-stopniowy wizard (nazwa, wybór PCs, dodanie potworów, dodanie NPCs, podsumowanie).
 
 **Kluczowe informacje do wyświetlenia**:
+
 - Progress indicator (5 kroków)
 - Step 1: Combat name input
 - Step 2: Checkboxes postaci graczy (domyślnie wszystkie zaznaczone)
@@ -212,6 +231,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - Step 5: Podsumowanie wszystkich uczestników
 
 **Kluczowe komponenty widoku**:
+
 - **Progress Indicator** (Shadcn Stepper lub custom):
   - 5 steps: "Combat Name", "Select PCs", "Add Monsters", "Add NPCs", "Summary"
   - Current step highlighted (emerald), completed steps: checkmark icon
@@ -254,6 +274,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
   - Buttons: "Back", "Start Combat" (emerald, duży)
 
 **UX, dostępność i względy bezpieczeństwa**:
+
 - **UX**: Keyboard navigation przez steps, focus management przy przechodzeniu między steps, validation każdego stepu przed "Next", progress saved w local state, confirmation modal przy Escape ("Discard combat?"), brak postaci w kampanii → warning banner w Step 2 z linkiem do character creation
 - **Accessibility**: ARIA live announcements przy zmianie kroków, focus na heading każdego stepu, keyboard support dla monster search i selection
 - **Security**: Validation uczestników (przynajmniej 1), RLS dla dostępu do campaign characters, public read dla monsters
@@ -267,6 +288,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Główny cel**: Prowadzenie walki w czasie rzeczywistym z 3-kolumnowym interfejsem (initiative list, active character sheet, reference search).
 
 **Kluczowe informacje do wyświetlenia**:
+
 - **Left column (30%)**: Posortowana lista inicjatywy z HP controls, condition badges, round counter
 - **Middle column (50%)**: Karta aktywnej postaci z statystykami, akcjami, roll controls, roll log
 - **Right column (20%)**: Reference search (conditions/spells/monsters tabs)
@@ -276,6 +298,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Kluczowe komponenty widoku**:
 
 **LEFT COLUMN (30%) - Interactive Initiative List:**
+
 - **Header**:
   - Round counter: "Round X" (emerald badge)
   - Button: "Roll Initiative" (tylko jeśli nie rozpoczęto - initial load)
@@ -297,6 +320,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - Footer: "Combat started [time ago]"
 
 **MIDDLE COLUMN (50%) - Active Character Sheet:**
+
 - **Header Section**:
   - Nazwa postaci (H2, emerald)
   - **HP Bar**: Visual progress bar (emerald fill, gray background), numbers overlay "X / Y HP"
@@ -322,6 +346,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
   - Empty state: "No rolls yet"
 
 **RIGHT COLUMN (20%) - Reference Search:**
+
 - **Header**: Search bar "Search conditions, spells, monsters..." (debounce 300ms, clear button X)
 - **Tabs** (Shadcn Tabs): [Conditions] [Spells] [Monsters]
   - **Conditions Tab**:
@@ -334,12 +359,14 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - Scroll Area dla każdej zakładki, loading states (skeleton)
 
 **Floating Action Button (FAB):**
+
 - Position: fixed bottom-right
 - Button (large, emerald, circular): Icon arrow right, Text "Next Turn", Subtext "(Space)"
 - Keyboard shortcut: Spacebar
 - Animacja: pulsująca
 
 **Turn Transition Animation Sequence:**
+
 1. Fade out emerald glow poprzedniej postaci (0.2s)
 2. Smooth scroll lista inicjatywy do następnej (0.3s)
 3. Emerald glow następnej postaci (0.3s fade in)
@@ -348,18 +375,21 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 6. **End of round**: Toast "Round X begins" (emerald, auto-dismiss 3s), auto-save state snapshot
 
 **Combat Exit Warning:**
+
 - User klika inny link w nawigacji
 - Jeśli `isDirty === true`:
   - Modal (Shadcn Alert Dialog): "Unsaved Changes", "You have unsaved changes. Save before leaving?"
   - Actions: "Save & Leave" (emerald), "Leave without saving" (destructive), "Cancel" (secondary)
 
 **UX, dostępność i względy bezpieczeństwa**:
+
 - **UX**: Zustand dla real-time state (zero latency), debounced auto-save (co 30s jeśli isDirty), optimistic UI dla wszystkich operacji, smooth animations, toast notifications dla błędów
 - **Accessibility**: ARIA live region dla roll results ("You rolled 18 to hit"), ARIA live dla turn changes ("It's Aragorn's turn"), focus management (po "Next Turn" → focus na active character name), keyboard shortcuts (Spacebar: Next Turn, D: damage input, H: heal input, Escape: clear focus/close modals)
 - **Security**: RLS dla dostępu do combat (tylko owner kampanii), validation HP values (clamp do 0-max), state snapshot encryption (opcjonalnie)
 - **Performance**: Virtualized lists jeśli >20 participants, debounced search, skeleton loading states
 
 **Error Cases**:
+
 - Combat nie istnieje → 404 page
 - State snapshot corrupted → error state "Failed to load combat state" z "Retry"/"Reset Combat"
 - API save error → toast "Failed to save. Changes may be lost." z retry button
@@ -373,12 +403,14 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Główny cel**: Przeglądanie i wyszukiwanie globalnej biblioteki potworów z SRD.
 
 **Kluczowe informacje do wyświetlenia**:
+
 - Search bar z filtrem CR
 - Grid monster cards (Name, CR badge, Type, Size)
 - Slideover z pełnymi statystykami potwora
 - Infinite scroll dla paginacji
 
 **Kluczowe komponenty widoku**:
+
 - **Header**:
   - H1: "Monsters Library"
   - Search bar: "Search monsters..." (debounce 300ms, full width)
@@ -400,6 +432,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
     - **Bonus Actions, Reactions**: Accordion (jeśli istnieją)
 
 **UX, dostępność i względy bezpieczeństwa**:
+
 - **UX**: Debounced search (300ms), paginated API calls, skeleton loading, smooth slideover animation
 - **Accessibility**: Focus trap w slideover, Escape zamyka slideover, ARIA labels dla filter controls, search input aria-describedby="search-hint"
 - **Security**: Public read access (no auth required), rate limiting dla API
@@ -413,12 +446,14 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Główny cel**: Przeglądanie i wyszukiwanie globalnej biblioteki czarów z SRD.
 
 **Kluczowe informacje do wyświetlenia**:
+
 - Search bar z filtrami Level i Class
 - Grid spell cards (Name, Level badge, School, Casting Time)
 - Slideover z pełnym opisem czaru
 - Infinite scroll dla paginacji
 
 **Kluczowe komponenty widoku**:
+
 - **Header**:
   - H1: "Spells Library"
   - Search bar: "Search spells..." (debounce 300ms)
@@ -443,6 +478,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
     - **Available Classes**: Lista badges (Wizard, Sorcerer, ...)
 
 **UX, dostępność i względy bezpieczeństwa**:
+
 - **UX**: Debounced search, multi-select filters z keyboard navigation (arrow keys, space), smooth animations
 - **Accessibility**: Focus trap w slideover, Escape zamyka, ARIA labels dla filters, multi-select keyboard accessible
 - **Security**: Public read access, rate limiting
@@ -456,12 +492,14 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Główny cel**: Globalna nawigacja i dostęp do głównych modułów aplikacji.
 
 **Kluczowe informacje do wyświetlenia**:
+
 - Campaign selector (dropdown, localStorage persistence)
 - Global modules (My Campaigns, Monsters Library, Spells Library)
 - Campaign modules (Combat, Player Characters - aktywne tylko po wybraniu kampanii)
 - User menu (logout)
 
 **Kluczowe komponenty widoku**:
+
 - **Sidebar** (fixed left, width 240px, background slate-900, border-right slate-800):
   - **Top Section**:
     - Logo + App Name: "Initiative Forge" (emerald accent), click → /campaigns
@@ -483,6 +521,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
     - Label: "Campaign" (muted, uppercase, small)
     - Conditional rendering: tylko jeśli kampania wybrana
     - Nav List:
+      - "Campaign Home" (icon: home, link: /campaigns/:selectedId) - dashboard wybranej kampanii
       - "Combat" (icon: swords, link: /combats/:id jeśli active, else disabled), Badge "Active" (emerald, pulsing) jeśli active combat
       - "Player Characters" (icon: users, link: /campaigns/:selectedId/characters)
     - Disabled state: opacity 0.5, cursor not-allowed
@@ -491,6 +530,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - **Main Content Area**: Background slate-950, padding responsive (4-8), max-width: none
 
 **UX, dostępność i względy bezpieczeństwa**:
+
 - **UX**: Campaign selector zapamiętuje wybór w localStorage, smooth transitions między widokami, active link highlighting
 - **Accessibility**: Sidebar role="navigation", skip to main content link (visually hidden, focused on tab), active links aria-current="page", keyboard navigation (Tab przez nav items, Enter to activate), focus visible (emerald ring)
 - **Security**: Supabase signOut przy logout → redirect /login, RLS zapewnia dostęp tylko do własnych kampanii w dropdownie
@@ -504,6 +544,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Główny cel**: Obsługa błędów i edge cases.
 
 **Kluczowe komponenty**:
+
 - **404 Page**:
   - Centered layout, Icon (question mark/broken link), Heading "Page Not Found", Subtext "The page you're looking for doesn't exist.", Button "Go to My Campaigns" (emerald)
 - **401 Unauthorized**:
@@ -522,17 +563,20 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 ### Główny przypadek użycia: "DM prowadzi walkę z goblinami"
 
 #### Krok 1: Onboarding
+
 - User odwiedza `/register`
 - Wpisuje email i hasło, klika "Sign Up"
 - System automatycznie loguje i przekierowuje do `/campaigns`
 
 #### Krok 2: Konfiguracja kampanii
+
 - User widzi empty state: "You don't have any campaigns yet"
 - Klika "+ Create New Campaign"
 - Wpisuje nazwę "Lost Mines of Phandelver", klika "Create"
 - System przekierowuje do `/campaigns/:id` (Campaign Dashboard)
 
 #### Krok 3: Dodawanie postaci graczy
+
 - User klika "Manage Characters"
 - Przekierowanie do `/campaigns/:id/characters`
 - User klika "Add Player Character", modal się otwiera
@@ -545,17 +589,21 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - User powtarza dla 3 innych postaci
 
 #### Krok 4: Rozpoczęcie walki
+
 - User wraca do Campaign Dashboard (breadcrumb lub sidebar)
 - Klika "Start New Combat"
 - Przekierowanie do `/campaigns/:id/combats/new`
 
 **Wizard - Step 1:**
+
 - User wpisuje nazwę: "Goblin Ambush", klika "Next"
 
 **Wizard - Step 2:**
+
 - User widzi checkboxy z 4 postaciami (wszystkie zaznaczone), klika "Next"
 
 **Wizard - Step 3:**
+
 - User wpisuje "goblin" w search bar
 - Widzi wyniki: Goblin (CR 1/4)
 - Klika "+ Add" obok Goblin
@@ -563,9 +611,11 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - User klika "x1", zmienia na "x3", klika "Next"
 
 **Wizard - Step 4:**
+
 - User pomija (nie dodaje NPCs), klika "Next"
 
 **Wizard - Step 5:**
+
 - User widzi podsumowanie: 4 PCs + 3 gobliny
 - Klika "Start Combat"
 - System wykonuje rzuty inicjatywy (client-side)
@@ -574,6 +624,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 #### Krok 5: Prowadzenie walki
 
 **Tura 1 - Aragorn (initiative 18):**
+
 - User widzi:
   - Left column: posortowaną listę, Aragorn na górze z emerald glow
   - Middle column: kartę Aragorn z akcjami
@@ -585,6 +636,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - User klika FAB "Next Turn" (lub Spacebar)
 
 **Tura 2 - Legolas (initiative 16):**
+
 - System smooth scroll do Legolas, emerald glow przesuwa się
 - Middle column załadowuje kartę Legolas
 - User klika "Longbow Attack", wybiera "Advantage"
@@ -592,14 +644,17 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - User zadaje 9 damage Goblin #2 (7 → 0), klika "Next Turn"
 
 **Tura 3 - Goblin #3 (initiative 12):**
+
 - User widzi kartę Goblin #3
 - Klika "Scimitar", system rzuca: d20 (8) + 4 = 12
 - User sprawdza AC Aragorn (16) - miss, klika "Next Turn"
 
 **Koniec rundy:**
+
 - Po ostatniej turze, toast: "Round 2 begins", auto-save state snapshot
 
 **Koniec walki:**
+
 - Wszystkie gobliny 0 HP
 - User klika "My Campaigns" w sidebar
 - Modal: "You have unsaved changes. Save before leaving?"
@@ -608,6 +663,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 ### Alternatywne ścieżki
 
 **Ścieżka A: Przeglądanie biblioteki potworów**
+
 - User klika "Monsters Library" w sidebar
 - Przekierowanie do `/monsters`
 - User wpisuje "dragon", filtruje CR: 10-20
@@ -615,12 +671,14 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 - User przegląda, zamyka slideover
 
 **Ścieżka B: Sprawdzanie czaru podczas walki**
+
 - User w `/combats/:id`, klika tab "Spells" w right column
 - Wpisuje "fireball", klika na "Fireball"
 - Accordion rozwija opis z damage formula (8d6 fire)
 - User czyta, nie opuszcza combat view
 
 **Ścieżka C: Dodawanie stanu do postaci**
+
 - User w `/combats/:id` widzi, że Aragorn został oślepiony
 - Klika "+ Add Condition" przy Aragorn
 - Combobox otwiera się, wybiera "Blinded"
@@ -647,19 +705,24 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 ### Sidebar Navigation (Main Layout)
 
 **Top Section:**
+
 - Logo + App Name: "Initiative Forge" → click redirects to `/campaigns`
 - Campaign selector dropdown (pokazuje wybraną kampanię lub "Select a campaign", saved w localStorage)
 
 **Global Modules Section:**
+
 - My Campaigns (ikona folder + label) → `/campaigns`
 - Monsters Library (ikona dragon + label) → `/monsters`
 - Spells Library (ikona sparkles + label) → `/spells`
 
 **Campaign Modules Section** (tylko jeśli kampania wybrana):
+
+- Campaign Home (ikona home + label) → `/campaigns/:selectedId` - dashboard wybranej kampanii
 - Combat (ikona swords + label, podświetlone jeśli active combat) → `/combats/:id`
 - Player Characters (ikona users + label) → `/campaigns/:selectedId/characters`
 
 **Bottom Section:**
+
 - User menu (avatar + email) → Dropdown: Logout
 
 ### Breadcrumb Navigation
@@ -685,36 +748,42 @@ Używany w widokach zagnieżdżonych:
 ### 5.1. Komponenty współdzielone (reusable)
 
 #### CampaignCard
+
 **Wykorzystanie**: My Campaigns View
 **Struktur**: Card z header (nazwa edytowalna, dropdown menu), body (badges: postaci, walki, status), footer (data modyfikacji, button "Select Campaign")
 **Props**: campaign object, onSelect, onEdit, onDelete
 **Accessibility**: ARIA labels dla icon buttons, keyboard navigation w dropdown
 
 #### CharacterStatBadge
+
 **Wykorzystanie**: Player Characters View, Combat View
 **Struktura**: Badge z ikoną i wartością (np. shield icon + AC value)
 **Props**: type (hp/ac/init/perception), value
 **Accessibility**: aria-label opisuje typ i wartość
 
 #### InitiativeItem
+
 **Wykorzystanie**: Combat View (left column)
 **Struktura**: Card z display name, initiative badge, HP controls, AC badge, condition badges, "+ Add Condition"
 **Props**: participant object, isActive (boolean), onDamage, onHeal, onAddCondition
 **Accessibility**: ARIA live dla HP changes, focus trap w HP controls
 
 #### RollResult
+
 **Wykorzystanie**: Combat View (roll log)
 **Struktura**: Mała karta z icon, typ rzutu, wynik, formula, timestamp
 **Props**: roll object (type, result, formula, modifiers, timestamp)
 **Accessibility**: aria-label z pełnym opisem rzutu
 
 #### MonsterCard
+
 **Wykorzystanie**: Monsters Library, Combat Creation Wizard
 **Struktura**: Card z name, CR badge, type+size, click → accordion/slideover
 **Props**: monster object, variant (compact/full), onClick
 **Accessibility**: Keyboard accessible (Enter to expand), focus management
 
 #### SpellCard
+
 **Wykorzystanie**: Spells Library, Combat View (reference search)
 **Struktura**: Card z name, level badge, school+casting time, click → accordion/slideover
 **Props**: spell object, variant (compact/full), onClick
@@ -723,17 +792,20 @@ Używany w widokach zagnieżdżonych:
 ### 5.2. Layout komponenty
 
 #### MainLayout
+
 **Wykorzystanie**: Wszystkie widoki po zalogowaniu
 **Struktura**: Sidebar (240px) + Main content area (flex-1)
 **Accessibility**: Skip to main content link, ARIA landmarks (navigation, main)
 
 #### WizardLayout
+
 **Wykorzystanie**: Combat Creation Wizard
 **Struktura**: Progress indicator + Step content + Navigation buttons (Back, Next)
 **Props**: steps array, currentStep, onNext, onBack
 **Accessibility**: ARIA live announcements przy zmianie kroków, focus management
 
 #### ThreeColumnLayout
+
 **Wykorzystanie**: Combat View
 **Struktura**: Grid 30% / 50% / 20% (responsive collapse right column <1280px)
 **Accessibility**: ARIA labels dla każdej kolumny (Initiative, Character, Reference)
@@ -770,12 +842,14 @@ Używany w widokach zagnieżdżonych:
 ### 5.6. State management komponenty
 
 #### CombatStateProvider
+
 **Wykorzystanie**: Combat View
 **Technologia**: Zustand store
 **Odpowiedzialność**: Zarządzanie real-time combat state (participants, current turn, round, HP updates, conditions), auto-save do API
 **Accessibility**: Exposes state dla ARIA live announcements
 
 #### FormProvider
+
 **Wykorzystanie**: Wszystkie formularze
 **Technologia**: React Hook Form + Zod
 **Odpowiedzialność**: Validation, submission, error handling
@@ -786,28 +860,33 @@ Używany w widokach zagnieżdżonych:
 ## 6. Mapowanie API do widoków
 
 ### My Campaigns View
+
 - **GET** `/api/campaigns` → Lista kampanii
 - **POST** `/api/campaigns` → Tworzenie kampanii
 - **PATCH** `/api/campaigns/:id` → Edycja nazwy
 - **DELETE** `/api/campaigns/:id` → Usunięcie
 
 ### Campaign Dashboard
+
 - **GET** `/api/campaigns/:id` → Szczegóły kampanii
 - **GET** `/api/campaigns/:campaignId/characters` → Liczba postaci
 - **GET** `/api/campaigns/:campaignId/combats` (MISSING - trzeba dodać do API plan)
 
 ### Player Characters View
+
 - **GET** `/api/campaigns/:campaignId/characters` → Lista
 - **POST** `/api/campaigns/:campaignId/characters` → Tworzenie
 - **PATCH** `/api/campaigns/:campaignId/characters/:id` → Edycja
 - **DELETE** `/api/campaigns/:campaignId/characters/:id` → Usunięcie
 
 ### Combat Creation Wizard
+
 - **GET** `/api/campaigns/:campaignId/characters` → Step 2
 - **GET** `/api/monsters?name=...&cr=...` → Step 3
 - **POST** `/api/campaigns/:campaignId/combats` → Step 5
 
 ### Combat View
+
 - **GET** `/api/combats/:id` → Initial load
 - **PATCH** `/api/combats/:id/snapshot` → Auto-save
 - **PATCH** `/api/combats/:id/status` → Completion
@@ -816,6 +895,7 @@ Używany w widokach zagnieżdżonych:
 - **GET** `/api/monsters?...` → Reference search
 
 ### Monsters/Spells Libraries
+
 - **GET** `/api/monsters?...` → Search/filter/pagination
 - **GET** `/api/spells?...` → Search/filter/pagination
 
@@ -824,26 +904,31 @@ Używany w widokach zagnieżdżonych:
 ## 7. Przypadki brzegowe i stany błędów
 
 ### Authentication
+
 - **Niezalogowany user → protected route**: Middleware redirect do `/login`, toast "Please log in to continue"
 - **Session expired**: Supabase auto-refresh tokena (transparentne), jeśli fails → redirect `/login` + toast
 - **Błąd rejestracji (email zajęty)**: Inline validation error, focus na email field
 
 ### Campaigns
+
 - **User bez kampanii**: Empty state w `/campaigns` z prompt do tworzenia
 - **Duplikat nazwy**: Validation error z sugestią dodania suffixu
 - **Usunięcie kampanii z walkami**: Confirmation modal ostrzegający o cascade delete
 
 ### Player Characters
+
 - **Kampania bez postaci**: Empty state
 - **Duplikat nazwy w kampanii**: Validation error
 - **Nieprawidłowe ability scores**: Inline validation (1-30)
 
 ### Combat Creation
+
 - **Brak postaci w kampanii**: Warning banner w Step 2, link do character creation
 - **Brak uczestników**: Disable "Start Combat", validation message
 - **Monster library error**: Error state z retry button
 
 ### Combat View
+
 - **Combat nie istnieje**: 404 page
 - **State snapshot corrupted**: Error state z "Retry"/"Reset Combat"
 - **Damage/heal nieprawidłowa wartość**: Inline validation
@@ -852,11 +937,13 @@ Używany w widokach zagnieżdżonych:
 - **Auto-save fails**: Toast z retry button, isDirty flag → exit warning
 
 ### Libraries
+
 - **No results**: Empty state z sugestią zmiany filtrów
 - **API timeout**: Error state z retry
 - **Malformed data w slideover**: Error state "Failed to load details"
 
 ### Layout
+
 - **Screen <1024px**: Full-screen blocking overlay
 - **Campaign nie wybrana**: Campaign modules disabled w sidebar z tooltipami
 

@@ -1,11 +1,4 @@
-import { Check } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Campaign } from "@/types";
 
 interface CampaignSelectorProps {
@@ -36,10 +29,7 @@ export function CampaignSelector({
         <div className="text-destructive text-sm">
           <p>Failed to load campaigns.</p>
           {onRetry && (
-            <button
-              onClick={onRetry}
-              className="mt-1 text-emerald-500 hover:text-emerald-400 underline"
-            >
+            <button onClick={onRetry} className="mt-1 text-emerald-500 hover:text-emerald-400 underline">
               Retry
             </button>
           )}
@@ -82,30 +72,20 @@ export function CampaignSelector({
       </label>
       <Select value={selectedCampaignId || undefined} onValueChange={onSelectionChange}>
         <SelectTrigger className="w-full bg-slate-800 border-slate-700 text-slate-200">
-          <SelectValue placeholder="Select a campaign">
-            {selectedCampaign?.name || "Select a campaign"}
-          </SelectValue>
+          <SelectValue placeholder="Select a campaign" />
         </SelectTrigger>
-        <SelectContent className="max-h-[300px] overflow-y-auto bg-slate-800 border-slate-700">
+        <SelectContent className="max-h-[300px] overflow-y-auto bg-slate-800 border-slate-700 w-full">
           {campaigns.map((campaign) => (
             <SelectItem
               key={campaign.id}
               value={campaign.id}
               className="text-slate-200 focus:bg-slate-700 focus:text-slate-100"
             >
-              <div className="flex items-center justify-between w-full">
-                <span>{campaign.name}</span>
-                {campaign.id === selectedCampaignId && (
-                  <Check className="h-4 w-4 text-emerald-500 ml-2" />
-                )}
-              </div>
+              {campaign.name}
             </SelectItem>
           ))}
           <div className="sticky bottom-0 border-t border-slate-700 bg-slate-800 p-2">
-            <a
-              href="/campaigns"
-              className="block text-center text-sm text-emerald-500 hover:text-emerald-400 py-1"
-            >
+            <a href="/campaigns" className="block text-center text-sm text-emerald-500 hover:text-emerald-400 py-1">
               Manage Campaigns
             </a>
           </div>

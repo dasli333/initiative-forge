@@ -9,14 +9,9 @@ import type { ListConditionsResponseDTO, ConditionDTO } from "@/types";
  * @returns Response with conditions array
  * @throws Error if database query fails
  */
-export async function listConditions(
-  supabase: SupabaseClient
-): Promise<ListConditionsResponseDTO> {
+export async function listConditions(supabase: SupabaseClient): Promise<ListConditionsResponseDTO> {
   // Fetch all conditions, sorted alphabetically by name
-  const { data, error } = await supabase
-    .from("conditions")
-    .select("*")
-    .order("name", { ascending: true });
+  const { data, error } = await supabase.from("conditions").select("*").order("name", { ascending: true });
 
   if (error) {
     throw new Error(`Database error: ${error.message}`);
@@ -42,15 +37,8 @@ export async function listConditions(
  * @returns Condition DTO or null if not found
  * @throws Error if database query fails
  */
-export async function getConditionById(
-  supabase: SupabaseClient,
-  id: string
-): Promise<ConditionDTO | null> {
-  const { data, error } = await supabase
-    .from("conditions")
-    .select("*")
-    .eq("id", id)
-    .single();
+export async function getConditionById(supabase: SupabaseClient, id: string): Promise<ConditionDTO | null> {
+  const { data, error } = await supabase.from("conditions").select("*").eq("id", id).single();
 
   if (error) {
     // Handle not found case separately

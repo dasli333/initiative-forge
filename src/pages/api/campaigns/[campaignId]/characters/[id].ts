@@ -1,5 +1,9 @@
 import type { APIContext } from "astro";
-import { getPlayerCharacter, updatePlayerCharacter, deletePlayerCharacter } from "@/lib/services/player-character.service";
+import {
+  getPlayerCharacter,
+  updatePlayerCharacter,
+  deletePlayerCharacter,
+} from "@/lib/services/player-character.service";
 import { UpdatePlayerCharacterCommandSchema } from "@/lib/schemas/player-character.schema";
 import { ZodError } from "zod";
 import { DEFAULT_USER_ID } from "@/db/supabase.client";
@@ -24,13 +28,10 @@ export async function GET(context: APIContext): Promise<Response> {
   const characterId = context.params.id;
 
   if (!campaignId || !characterId) {
-    return new Response(
-      JSON.stringify({ error: "Campaign ID and Character ID are required" }),
-      {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Campaign ID and Character ID are required" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   // Execute service to get character
@@ -38,22 +39,16 @@ export async function GET(context: APIContext): Promise<Response> {
 
   if (!result.success) {
     if (result.errorType === "not_found") {
-      return new Response(
-        JSON.stringify({ error: "Character or campaign not found" }),
-        {
-          status: 404,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return new Response(JSON.stringify({ error: "Character or campaign not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
-    return new Response(
-      JSON.stringify({ error: "Internal server error" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   return new Response(JSON.stringify(result.data), {
@@ -80,13 +75,10 @@ export async function PATCH(context: APIContext): Promise<Response> {
   const characterId = context.params.id;
 
   if (!campaignId || !characterId) {
-    return new Response(
-      JSON.stringify({ error: "Campaign ID and Character ID are required" }),
-      {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Campaign ID and Character ID are required" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   // Parse request body
@@ -94,13 +86,10 @@ export async function PATCH(context: APIContext): Promise<Response> {
   try {
     requestBody = await context.request.json();
   } catch {
-    return new Response(
-      JSON.stringify({ error: "Invalid JSON in request body" }),
-      {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Invalid JSON in request body" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   // Validate with Zod schema
@@ -132,23 +121,14 @@ export async function PATCH(context: APIContext): Promise<Response> {
   }
 
   // Execute service to update character
-  const result = await updatePlayerCharacter(
-    supabase,
-    userId,
-    campaignId,
-    characterId,
-    validatedData
-  );
+  const result = await updatePlayerCharacter(supabase, userId, campaignId, characterId, validatedData);
 
   if (!result.success) {
     if (result.errorType === "not_found") {
-      return new Response(
-        JSON.stringify({ error: "Character or campaign not found" }),
-        {
-          status: 404,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return new Response(JSON.stringify({ error: "Character or campaign not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     if (result.errorType === "conflict") {
@@ -165,13 +145,10 @@ export async function PATCH(context: APIContext): Promise<Response> {
       );
     }
 
-    return new Response(
-      JSON.stringify({ error: "Internal server error" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   return new Response(JSON.stringify(result.data), {
@@ -198,13 +175,10 @@ export async function DELETE(context: APIContext): Promise<Response> {
   const characterId = context.params.id;
 
   if (!campaignId || !characterId) {
-    return new Response(
-      JSON.stringify({ error: "Campaign ID and Character ID are required" }),
-      {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Campaign ID and Character ID are required" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   // Execute service to delete character
@@ -212,22 +186,16 @@ export async function DELETE(context: APIContext): Promise<Response> {
 
   if (!result.success) {
     if (result.errorType === "not_found") {
-      return new Response(
-        JSON.stringify({ error: "Character or campaign not found" }),
-        {
-          status: 404,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return new Response(JSON.stringify({ error: "Character or campaign not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
-    return new Response(
-      JSON.stringify({ error: "Internal server error" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   return new Response(null, {

@@ -3,66 +3,23 @@ Jako starszy programista frontendu Twoim zadaniem jest stworzenie szczegółoweg
 Najpierw przejrzyj następujące informacje:
 
 1. Product Requirements Document (PRD):
-<prd>
+   <prd>
    @.ai/prd.md
-</prd>
+   </prd>
 
 2. Opis widoku:
-<view_description>
-### 2.10. Main Layout (Sidebar Navigation)
+   <view_description>
 
-**Ścieżka**: N/A (obecny na wszystkich widokach po zalogowaniu)
-
-**Główny cel**: Globalna nawigacja i dostęp do głównych modułów aplikacji.
-
-**Kluczowe informacje do wyświetlenia**:
-- Campaign selector (dropdown, localStorage persistence)
-- Global modules (My Campaigns, Monsters Library, Spells Library)
-- Campaign modules (Combat, Player Characters - aktywne tylko po wybraniu kampanii)
-- User menu (logout)
-
-**Kluczowe komponenty widoku**:
-- **Sidebar** (fixed left, width 240px, background slate-900, border-right slate-800):
-    - **Top Section**:
-        - Logo + App Name: "Initiative Forge" (emerald accent), click → /campaigns
-    - **Campaign Selector**:
-        - Label: "Current Campaign" (muted, small)
-        - Dropdown (Shadcn Select):
-            - Trigger: "[Selected Campaign Name]" lub "Select a campaign" (muted)
-            - Content: Lista kampanii (scrollable jeśli >10), Campaign Item (Name + metadata), Selected: checkmark icon
-            - Footer: "Manage Campaigns" link → /campaigns
-        - Persistence: localStorage ("selectedCampaignId")
-    - **Global Modules Section**:
-        - Label: "Global" (muted, uppercase, small)
-        - Nav List:
-            - "My Campaigns" (icon: folder, link: /campaigns)
-            - "Monsters Library" (icon: dragon, link: /monsters)
-            - "Spells Library" (icon: sparkles, link: /spells)
-        - Active link: emerald left border + emerald text
-    - **Campaign Modules Section**:
-        - Label: "Campaign" (muted, uppercase, small)
-        - Conditional rendering: tylko jeśli kampania wybrana
-        - Nav List:
-            - "Combat" (icon: swords, link: /combats/:id jeśli active, else disabled), Badge "Active" (emerald, pulsing) jeśli active combat
-            - "Player Characters" (icon: users, link: /campaigns/:selectedId/characters)
-        - Disabled state: opacity 0.5, cursor not-allowed
-    - **Bottom Section**:
-        - User Menu (Dropdown): Trigger (Avatar + Email truncated), Content (User info, "Logout" - icon log-out, destructive text)
-- **Main Content Area**: Background slate-950, padding responsive (4-8), max-width: none
-
-**UX, dostępność i względy bezpieczeństwa**:
-- **UX**: Campaign selector zapamiętuje wybór w localStorage, smooth transitions między widokami, active link highlighting
-- **Accessibility**: Sidebar role="navigation", skip to main content link (visually hidden, focused on tab), active links aria-current="page", keyboard navigation (Tab przez nav items, Enter to activate), focus visible (emerald ring)
-- **Security**: Supabase signOut przy logout → redirect /login, RLS zapewnia dostęp tylko do własnych kampanii w dropdownie
 </view_description>
 
 3. User Stories:
-<user_stories>
+   <user_stories>
 
 </user_stories>
 
 4. Endpoint Description:
-<endpoint_description>
+   <endpoint_description>
+
 ### 2.1. Campaigns
 
 #### List User's Campaigns
@@ -71,8 +28,8 @@ Najpierw przejrzyj następujące informacje:
 - **Path**: `/api/campaigns`
 - **Description**: Returns all campaigns owned by the authenticated user
 - **Query Parameters**:
-    - `limit` (optional, number): Maximum number of results (default: 50)
-    - `offset` (optional, number): Offset for pagination (default: 0)
+  - `limit` (optional, number): Maximum number of results (default: 50)
+  - `offset` (optional, number): Offset for pagination (default: 0)
 - **Request Body**: N/A
 - **Response**: 200 OK
 
@@ -94,7 +51,7 @@ Najpierw przejrzyj następujące informacje:
 ```
 
 - **Error Responses**:
-    - 401 Unauthorized: Missing or invalid authentication
+  - 401 Unauthorized: Missing or invalid authentication
 
 #### Create Campaign
 
@@ -123,9 +80,9 @@ Najpierw przejrzyj następujące informacje:
 ```
 
 - **Error Responses**:
-    - 400 Bad Request: Invalid input (missing name, empty name)
-    - 401 Unauthorized: Missing or invalid authentication
-    - 409 Conflict: Campaign name already exists for this user
+  - 400 Bad Request: Invalid input (missing name, empty name)
+  - 401 Unauthorized: Missing or invalid authentication
+  - 409 Conflict: Campaign name already exists for this user
 
 #### Get Campaign
 
@@ -147,8 +104,8 @@ Najpierw przejrzyj następujące informacje:
 ```
 
 - **Error Responses**:
-    - 401 Unauthorized: Missing or invalid authentication
-    - 404 Not Found: Campaign does not exist or user doesn't own it
+  - 401 Unauthorized: Missing or invalid authentication
+  - 404 Not Found: Campaign does not exist or user doesn't own it
 
 #### Update Campaign
 
@@ -177,10 +134,10 @@ Najpierw przejrzyj następujące informacje:
 ```
 
 - **Error Responses**:
-    - 400 Bad Request: Invalid input
-    - 401 Unauthorized: Missing or invalid authentication
-    - 404 Not Found: Campaign does not exist or user doesn't own it
-    - 409 Conflict: New campaign name already exists for this user
+  - 400 Bad Request: Invalid input
+  - 401 Unauthorized: Missing or invalid authentication
+  - 404 Not Found: Campaign does not exist or user doesn't own it
+  - 409 Conflict: New campaign name already exists for this user
 
 #### Delete Campaign
 
@@ -190,33 +147,34 @@ Najpierw przejrzyj następujące informacje:
 - **Query Parameters**: N/A
 - **Request Body**: N/A
 - **Response**: 204 No Content
-- **Error Responses**:
-    - 401 Unauthorized: Missing or invalid authentication
-    - 404 Not Found: Campaign does not exist or user doesn't own it
-</endpoint_description>
+- **Error Responses**: - 401 Unauthorized: Missing or invalid authentication - 404 Not Found: Campaign does not exist or user doesn't own it
+  </endpoint_description>
 
 5. Endpoint Implementation:
-<endpoint_implementation>
+   <endpoint_implementation>
    @src/pages/api/campaigns.ts @src/pages/api/campaigns/[id].ts
-</endpoint_implementation>
+   </endpoint_implementation>
 
 6. Type Definitions:
-<type_definitions>
+   <type_definitions>
    @src/types.ts
-</type_definitions>
+   </type_definitions>
 
 7. Tech Stack:
-<tech_stack>
-@.ai/tech-stack.md
-</tech_stack>
+   <tech_stack>
+   @.ai/tech-stack.md
+   </tech_stack>
 
 Przed utworzeniem ostatecznego planu wdrożenia przeprowadź analizę i planowanie wewnątrz tagów <implementation_breakdown> w swoim bloku myślenia. Ta sekcja może być dość długa, ponieważ ważne jest, aby być dokładnym.
 
 W swoim podziale implementacji wykonaj następujące kroki:
+
 1. Dla każdej sekcji wejściowej (PRD, User Stories, Endpoint Description, Endpoint Implementation, Type Definitions, Tech Stack):
-  - Podsumuj kluczowe punkty
- - Wymień wszelkie wymagania lub ograniczenia
- - Zwróć uwagę na wszelkie potencjalne wyzwania lub ważne kwestie
+
+- Podsumuj kluczowe punkty
+- Wymień wszelkie wymagania lub ograniczenia
+- Zwróć uwagę na wszelkie potencjalne wyzwania lub ważne kwestie
+
 2. Wyodrębnienie i wypisanie kluczowych wymagań z PRD
 3. Wypisanie wszystkich potrzebnych głównych komponentów, wraz z krótkim opisem ich opisu, potrzebnych typów, obsługiwanych zdarzeń i warunków walidacji
 4. Stworzenie wysokopoziomowego diagramu drzewa komponentów
@@ -235,12 +193,14 @@ Po przeprowadzeniu analizy dostarcz plan wdrożenia w formacie Markdown z nastę
 2. Routing widoku: Określenie ścieżki, na której widok powinien być dostępny.
 3. Struktura komponentów: Zarys głównych komponentów i ich hierarchii.
 4. Szczegóły komponentu: Dla każdego komponentu należy opisać:
- - Opis komponentu, jego przeznaczenie i z czego się składa
- - Główne elementy HTML i komponenty dzieci, które budują komponent
- - Obsługiwane zdarzenia
- - Warunki walidacji (szczegółowe warunki, zgodnie z API)
- - Typy (DTO i ViewModel) wymagane przez komponent
- - Propsy, które komponent przyjmuje od rodzica (interfejs komponentu)
+
+- Opis komponentu, jego przeznaczenie i z czego się składa
+- Główne elementy HTML i komponenty dzieci, które budują komponent
+- Obsługiwane zdarzenia
+- Warunki walidacji (szczegółowe warunki, zgodnie z API)
+- Typy (DTO i ViewModel) wymagane przez komponent
+- Propsy, które komponent przyjmuje od rodzica (interfejs komponentu)
+
 5. Typy: Szczegółowy opis typów wymaganych do implementacji widoku, w tym dokładny podział wszelkich nowych typów lub modeli widoku według pól i typów.
 6. Zarządzanie stanem: Szczegółowy opis sposobu zarządzania stanem w widoku, określenie, czy wymagany jest customowy hook.
 7. Integracja API: Wyjaśnienie sposobu integracji z dostarczonym punktem końcowym. Precyzyjnie wskazuje typy żądania i odpowiedzi.
@@ -259,16 +219,21 @@ Oto przykład tego, jak powinien wyglądać plik wyjściowy (treść jest do zas
 # Plan implementacji widoku [Nazwa widoku]
 
 ## 1. Przegląd
+
 [Krótki opis widoku i jego celu]
 
 ## 2. Routing widoku
+
 [Ścieżka, na której widok powinien być dostępny]
 
 ## 3. Struktura komponentów
+
 [Zarys głównych komponentów i ich hierarchii]
 
 ## 4. Szczegóły komponentów
+
 ### [Nazwa komponentu 1]
+
 - Opis komponentu [opis]
 - Główne elementy: [opis]
 - Obsługiwane interakcje: [lista]
@@ -277,27 +242,35 @@ Oto przykład tego, jak powinien wyglądać plik wyjściowy (treść jest do zas
 - Propsy: [lista]
 
 ### [Nazwa komponentu 2]
+
 [...]
 
 ## 5. Typy
+
 [Szczegółowy opis wymaganych typów]
 
 ## 6. Zarządzanie stanem
+
 [Opis zarządzania stanem w widoku]
 
 ## 7. Integracja API
+
 [Wyjaśnienie integracji z dostarczonym endpointem, wskazanie typów żądania i odpowiedzi]
 
 ## 8. Interakcje użytkownika
+
 [Szczegółowy opis interakcji użytkownika]
 
 ## 9. Warunki i walidacja
+
 [Szczegółowy opis warunków i ich walidacji]
 
 ## 10. Obsługa błędów
+
 [Opis obsługi potencjalnych błędów]
 
 ## 11. Kroki implementacji
+
 1. [Krok 1]
 2. [Krok 2]
 3. [...]

@@ -14,6 +14,7 @@ Głównym celem jest zapewnienie spójnej, dostępnej i intuicyjnej nawigacji w 
 ## 2. Routing widoku
 
 Layout nie ma własnej ścieżki - jest opakowaniem dla wszystkich widoków po zalogowaniu. Będzie używany w:
+
 - `/campaigns` - lista kampanii
 - `/campaigns/:id/characters` - lista postaci kampanii
 - `/monsters` - biblioteka potworów
@@ -53,6 +54,7 @@ MainLayout (.astro)
 Główny layout owijający wszystkie widoki po zalogowaniu. Odpowiada za strukturę strony z fixed sidebar i scrollable main content area.
 
 **Główne elementy:**
+
 - `<SkipToContent />` - link dla screen readerów (skip to main content)
 - `div.layout-container` - flex container dla sidebar + main
 - `<Sidebar client:load />` - interaktywny sidebar (React)
@@ -65,9 +67,11 @@ Brak (statyczny layout)
 Brak walidacji (layout nie przyjmuje danych wejściowych)
 
 **Typy:**
+
 - Props: `{ title?: string }` (opcjonalny tytuł strony dla SEO)
 
 **Propsy:**
+
 ```typescript
 interface Props {
   title?: string; // Używany w <title> tagu
@@ -82,9 +86,11 @@ interface Props {
 Ukryty wizualnie link, który staje się widoczny po focus (Tab). Pozwala użytkownikom screen readerów pominąć nawigację i przejść bezpośrednio do głównej treści.
 
 **Główne elementy:**
+
 - `<a href="#main-content">` z klasami sr-only + focus:visible
 
 **Obsługiwane zdarzenia:**
+
 - onClick: smooth scroll do #main-content
 
 **Walidacja:**
@@ -104,6 +110,7 @@ Brak
 Fixed sidebar (240px szerokości) zawierający wszystkie sekcje nawigacyjne. Renderowany z `client:load` directive w Astro. Zarządza stanem kampanii i aktywnej walki.
 
 **Główne elementy:**
+
 - `<aside role="navigation">` - semantic HTML5
 - `AppHeader` - logo i nazwa aplikacji
 - `CampaignSelector` - dropdown wyboru kampanii
@@ -119,6 +126,7 @@ Wszystkie zdarzenia delegowane do komponentów potomnych
 Brak (delegowana do dzieci)
 
 **Typy:**
+
 - `Campaign` (z types.ts)
 - `UserViewModel`
 - `ActiveCombatViewModel`
@@ -134,11 +142,13 @@ Brak - sidebar pobiera dane client-side przez custom hooks
 Header sidebara zawierający logo i nazwę aplikacji "Initiative Forge" z linkiem do strony z listą kampanii.
 
 **Główne elementy:**
+
 - `<a href="/campaigns">` - wrapper jako link
 - Logo icon (Lucide Sword icon lub custom SVG)
 - `<span>` - "Initiative Forge" z emerald accent (text-emerald-500)
 
 **Obsługiwane zdarzenia:**
+
 - onClick: nawigacja do `/campaigns` (natywny link)
 
 **Walidacja:**
@@ -158,6 +168,7 @@ Brak
 Dropdown (Shadcn Select) pozwalający wybrać aktywną kampanię. Wybrana kampania jest zapisywana w localStorage i używana do warunkowego renderowania CampaignNav oraz budowania linków.
 
 **Główne elementy:**
+
 - `<div>` container z padding i spacing
 - `<label>` - "Current Campaign" (text-slate-400, text-xs, uppercase)
 - `<Select>` (Shadcn/ui)
@@ -167,17 +178,21 @@ Dropdown (Shadcn Select) pozwalający wybrać aktywną kampanię. Wybrana kampan
   - Custom footer div - "Manage Campaigns" link
 
 **Obsługiwane zdarzenia:**
+
 - `onValueChange(campaignId: string)`: zapis do localStorage, update stanu
 
 **Walidacja:**
+
 - Walidacja czy selectedCampaignId istnieje w liście campaigns (może być usunięta)
 - Jeśli nie - clear selection
 
 **Typy:**
+
 - `Campaign[]` - lista kampanii
 - `selectedCampaignId: string | null`
 
 **Propsy:**
+
 ```typescript
 interface CampaignSelectorProps {
   campaigns: Campaign[];
@@ -196,6 +211,7 @@ interface CampaignSelectorProps {
 Sekcja nawigacji do modułów globalnych, dostępnych niezależnie od wybranej kampanii.
 
 **Główne elementy:**
+
 - `<div>` wrapper
 - `<h2>` - "Global" label (text-slate-500, text-xs, uppercase, mb-2)
 - `<ul role="list">` - lista NavItem
@@ -210,9 +226,11 @@ Delegowane do NavItem
 Brak
 
 **Typy:**
+
 - `currentPath: string` - dla active link highlighting
 
 **Propsy:**
+
 ```typescript
 interface GlobalNavProps {
   currentPath: string;
@@ -227,6 +245,7 @@ interface GlobalNavProps {
 Sekcja nawigacji do modułów związanych z wybraną kampanią. Renderowana warunkowo tylko gdy użytkownik wybrał kampanię. NavItem "Combat" jest aktywny tylko jeśli istnieje aktywna walka.
 
 **Główne elementy:**
+
 - Conditional rendering wrapper (return null jeśli !selectedCampaignId)
 - `<div>` wrapper
 - `<h2>` - "Campaign" label (text-slate-500, text-xs, uppercase, mb-2)
@@ -240,15 +259,18 @@ Sekcja nawigacji do modułów związanych z wybraną kampanią. Renderowana waru
 Delegowane do NavItem
 
 **Walidacja:**
+
 - Renderowanie tylko gdy selectedCampaignId !== null
 - Combat disabled state gdy !activeCombat
 
 **Typy:**
+
 - `selectedCampaignId: string | null`
 - `activeCombat: ActiveCombatViewModel | null`
 - `currentPath: string`
 
 **Propsy:**
+
 ```typescript
 interface CampaignNavProps {
   selectedCampaignId: string | null;
@@ -265,6 +287,7 @@ interface CampaignNavProps {
 Reużywalny element nawigacji z ikoną, tekstem i opcjonalnym badge. Obsługuje stan aktywny (current page) i disabled.
 
 **Główne elementy:**
+
 - `<li>` wrapper
 - `<a>` lub `<span>` (jeśli disabled)
   - Lucide Icon (przekazany jako prop)
@@ -272,12 +295,15 @@ Reużywalny element nawigacji z ikoną, tekstem i opcjonalnym badge. Obsługuje 
   - Optional Badge component (np. "Active")
 
 **Obsługiwane zdarzenia:**
+
 - onClick: nawigacja (jeśli !disabled)
 
 **Walidacja:**
+
 - Disabled state: prevent navigation, show cursor-not-allowed
 
 **Typy:**
+
 - `icon: LucideIcon` - component ikony
 - `label: string`
 - `href: string`
@@ -286,6 +312,7 @@ Reużywalny element nawigacji z ikoną, tekstem i opcjonalnym badge. Obsługuje 
 - `badge?: { text: string; variant: 'active' | 'default'; animate?: boolean }`
 
 **Propsy:**
+
 ```typescript
 interface NavItemProps {
   icon: LucideIcon;
@@ -295,13 +322,14 @@ interface NavItemProps {
   isDisabled?: boolean;
   badge?: {
     text: string;
-    variant: 'active' | 'default';
+    variant: "active" | "default";
     animate?: boolean;
   };
 }
 ```
 
 **Styling:**
+
 - Default: `text-slate-300 hover:text-slate-100 hover:bg-slate-800`
 - Active: `text-emerald-500 border-l-2 border-emerald-500 bg-slate-800/50`
 - Disabled: `opacity-50 cursor-not-allowed pointer-events-none`
@@ -315,6 +343,7 @@ interface NavItemProps {
 Dropdown menu (Shadcn DropdownMenu) z informacjami o użytkowniku i opcją wylogowania. Znajduje się na dole sidebara.
 
 **Główne elementy:**
+
 - `<DropdownMenu>` (Shadcn/ui)
   - `<DropdownMenuTrigger>` - button z avatar + email
     - Avatar component (lub fallback z inicjałami)
@@ -327,18 +356,22 @@ Dropdown menu (Shadcn DropdownMenu) z informacjami o użytkowniku i opcją wylog
       - "Logout" text (text-destructive)
 
 **Obsługiwane zdarzenia:**
+
 - onClick Logout: wywołanie `logout()` z useAuth hook
   - Supabase signOut()
   - Clear localStorage
   - Redirect do /login
 
 **Walidacja:**
+
 - Komponent renderowany tylko gdy user !== null
 
 **Typy:**
+
 - `UserViewModel`
 
 **Propsy:**
+
 ```typescript
 interface UserMenuProps {
   user: UserViewModel;
@@ -354,6 +387,7 @@ interface UserMenuProps {
 Komponent badge z Shadcn/ui używany dla "Active" wskaźnika przy Combat nav item.
 
 **Główne elementy:**
+
 - `<span>` z odpowiednimi klasami Tailwind
 
 **Obsługiwane zdarzenia:**
@@ -363,14 +397,16 @@ Brak (czysto wizualny)
 Brak
 
 **Typy:**
+
 - `variant?: 'default' | 'active' | 'destructive'`
 - `animate?: boolean` - dla pulsing animation
 
 **Propsy:**
+
 ```typescript
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'default' | 'active' | 'destructive';
+  variant?: "default" | "active" | "destructive";
   animate?: boolean;
   className?: string;
 }
@@ -417,7 +453,7 @@ export interface UserViewModel {
 export interface ActiveCombatViewModel {
   combat_id: string;
   campaign_id: string;
-  status: 'active';
+  status: "active";
 }
 
 /**
@@ -466,6 +502,7 @@ Stan zarządzany przez custom hooks:
 **Cel:** Pobranie listy kampanii użytkownika z API i zarządzanie loading/error state.
 
 **Zwraca:**
+
 ```typescript
 interface UseCampaignsReturn {
   campaigns: Campaign[];
@@ -476,6 +513,7 @@ interface UseCampaignsReturn {
 ```
 
 **Implementacja:**
+
 - useEffect z fetch do GET /api/campaigns (limit=100, offset=0)
 - Error handling z try/catch
 - Retry mechanism (refetch)
@@ -489,6 +527,7 @@ interface UseCampaignsReturn {
 **Cel:** Zarządzanie wybraną kampanią z synchronizacją do localStorage. Nasłuchuje również na storage events (zmiany w innych tabletach).
 
 **Zwraca:**
+
 ```typescript
 interface UseSelectedCampaignReturn {
   selectedCampaignId: string | null;
@@ -497,6 +536,7 @@ interface UseSelectedCampaignReturn {
 ```
 
 **Implementacja:**
+
 - useState inicjalizowany wartością z localStorage("selectedCampaignId")
 - useEffect dla synchronizacji state → localStorage
 - useEffect dla storage event listener (cross-tab sync)
@@ -511,6 +551,7 @@ interface UseSelectedCampaignReturn {
 **Cel:** Sprawdzenie czy dla wybranej kampanii istnieje aktywna walka.
 
 **Zwraca:**
+
 ```typescript
 interface UseActiveCombatReturn {
   activeCombat: ActiveCombatViewModel | null;
@@ -520,6 +561,7 @@ interface UseActiveCombatReturn {
 ```
 
 **Implementacja:**
+
 - useEffect z dependency na selectedCampaignId
 - Jeśli selectedCampaignId === null, return { activeCombat: null, isLoading: false }
 - Fetch do GET /api/combats?campaign_id={selectedCampaignId}&status=active
@@ -535,6 +577,7 @@ interface UseActiveCombatReturn {
 **Cel:** Dostęp do danych zalogowanego użytkownika i funkcji logout.
 
 **Zwraca:**
+
 ```typescript
 interface UseAuthReturn {
   user: UserViewModel | null;
@@ -545,6 +588,7 @@ interface UseAuthReturn {
 ```
 
 **Implementacja:**
+
 - useEffect z supabase.auth.getUser()
 - Map Supabase User do UserViewModel
 - logout():
@@ -559,20 +603,23 @@ interface UseAuthReturn {
 **Endpoint:** `/api/campaigns`
 
 **Query Parameters:**
+
 - `limit` (optional, default: 50) - dla sidebara użyjemy limit=100 żeby pobrać wszystkie
 - `offset` (optional, default: 0)
 
 **Request:**
+
 ```typescript
-fetch('/api/campaigns?limit=100&offset=0', {
-  method: 'GET',
+fetch("/api/campaigns?limit=100&offset=0", {
+  method: "GET",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
-})
+});
 ```
 
 **Response Type:** `ListCampaignsResponseDTO`
+
 ```typescript
 {
   campaigns: Campaign[];
@@ -583,6 +630,7 @@ fetch('/api/campaigns?limit=100&offset=0', {
 ```
 
 **Obsługa błędów:**
+
 - 401 Unauthorized: Redirect do /login
 - 500 Internal Server Error: Pokazanie error state w UI
 - Network error: Pokazanie error state z retry button
@@ -596,20 +644,23 @@ fetch('/api/campaigns?limit=100&offset=0', {
 **Endpoint:** `/api/combats?campaign_id={id}&status=active`
 
 **Query Parameters:**
+
 - `campaign_id` (required) - UUID kampanii
 - `status` (optional) - filter po statusie ("active" lub "completed")
 
 **Request:**
+
 ```typescript
 fetch(`/api/combats?campaign_id=${selectedCampaignId}&status=active`, {
-  method: 'GET',
+  method: "GET",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
-})
+});
 ```
 
 **Response Type:** `{ combats: CombatDTO[] }`
+
 ```typescript
 {
   combats: [
@@ -628,6 +679,7 @@ fetch(`/api/combats?campaign_id=${selectedCampaignId}&status=active`, {
 ```
 
 **Obsługa błędów:**
+
 - 401 Unauthorized: Redirect do /login
 - 404 Not Found: activeCombat = null (normalny case)
 - 500 Internal Server Error: activeCombat = null, log error
@@ -646,11 +698,15 @@ fetch(`/api/combats?campaign_id=${selectedCampaignId}&status=active`, {
 Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 
 **Response:**
+
 ```typescript
-{ error: AuthError | null }
+{
+  error: AuthError | null;
+}
 ```
 
 **Obsługa błędów:**
+
 - Nawet jeśli signOut zwróci error, wykonujemy clear localStorage i redirect (force logout UX)
 
 **Użycie:** Hook `useAuth().logout()`
@@ -662,12 +718,15 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Trigger:** onClick na `<a>` w AppHeader
 
 **Akcja:**
+
 - Nawigacja do `/campaigns` (natywny link, no client-side routing)
 
 **Rezultat:**
+
 - Przekierowanie na stronę z listą kampanii
 
 **Feedback wizualny:**
+
 - Hover: `hover:text-emerald-400` na tekście
 
 ---
@@ -677,16 +736,19 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Trigger:** onValueChange w Shadcn Select
 
 **Akcja:**
+
 1. `setSelectedCampaignId(campaignId)`
 2. Zapis do `localStorage.setItem('selectedCampaignId', campaignId)`
 3. Trigger useActiveCombat hook (re-fetch active combat)
 
 **Rezultat:**
+
 - CampaignNav staje się widoczna (jeśli była ukryta)
 - Link "Player Characters" aktualizowany do `/campaigns/{selectedId}/characters`
 - NavItem "Combat" aktualizowany based on active combat
 
 **Feedback wizualny:**
+
 - Dropdown SelectItem pokazuje checkmark przy wybranej kampanii
 - Trigger wyświetla nazwę wybranej kampanii
 
@@ -697,12 +759,15 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Trigger:** onClick na linku w footer dropdown
 
 **Akcja:**
+
 - Nawigacja do `/campaigns`
 
 **Rezultat:**
+
 - Przekierowanie na stronę z listą kampanii (gdzie można dodać/edytować/usunąć)
 
 **Feedback wizualny:**
+
 - Hover: `hover:text-emerald-400`
 
 ---
@@ -712,13 +777,16 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Trigger:** onClick na NavItem (My Campaigns, Monsters Library, Spells Library)
 
 **Akcja:**
+
 - Nawigacja do odpowiedniego route (natywny link)
 
 **Rezultat:**
+
 - Zmiana widoku
 - Active link highlighting (emerald border + text)
 
 **Feedback wizualny:**
+
 - Hover: `hover:bg-slate-800 hover:text-slate-100`
 - Active: `border-l-2 border-emerald-500 text-emerald-500 bg-slate-800/50`
 - Focus: `focus-visible:ring-2 focus-visible:ring-emerald-500`
@@ -730,12 +798,15 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Trigger:** onClick na NavItem "Combat" (jeśli activeCombat !== null)
 
 **Akcja:**
+
 - Nawigacja do `/combats/{activeCombat.combat_id}`
 
 **Rezultat:**
+
 - Przekierowanie do widoku aktywnej walki
 
 **Feedback wizualny:**
+
 - Badge "Active" (emerald, pulsing) przy label
 - Active link highlighting (jeśli już jesteśmy w combat view)
 
@@ -746,14 +817,17 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Trigger:** hover na NavItem "Combat" (jeśli activeCombat === null)
 
 **Akcja:**
+
 - Brak (disabled state, pointer-events-none)
 - Opcjonalnie: tooltip "No active combat. Start a new combat from Campaigns page."
 
 **Rezultat:**
+
 - Cursor: not-allowed
 - Brak nawigacji
 
 **Feedback wizualny:**
+
 - Opacity: 0.5
 - Cursor: not-allowed
 - Opcjonalny tooltip z wyjaśnieniem
@@ -765,12 +839,15 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Trigger:** onClick na NavItem "Player Characters"
 
 **Akcja:**
+
 - Nawigacja do `/campaigns/{selectedCampaignId}/characters`
 
 **Rezultat:**
+
 - Przekierowanie do widoku z listą postaci kampanii
 
 **Feedback wizualny:**
+
 - Standard NavItem hover/active states
 
 ---
@@ -780,17 +857,20 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Trigger:** onClick na DropdownMenuItem "Logout"
 
 **Akcja:**
+
 1. Wywołanie `useAuth().logout()`
 2. await supabase.auth.signOut()
 3. localStorage.clear()
 4. window.location.href = '/login'
 
 **Rezultat:**
+
 - Wylogowanie użytkownika
 - Przekierowanie na stronę logowania
 - Clear wszystkich localStorage data (w tym selectedCampaignId)
 
 **Feedback wizualny:**
+
 - Loading state podczas signOut (opcjonalnie)
 - Destructive color (text-destructive) na "Logout" text
 - LogOutIcon (Lucide)
@@ -802,6 +882,7 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Trigger:** Użytkownik naciska Tab
 
 **Akcja:**
+
 - Focus przechodzi przez wszystkie focusable elements:
   1. Skip to main content link (jeśli pierwszy Tab po load strony)
   2. AppHeader link
@@ -811,9 +892,11 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
   6. UserMenu trigger (DropdownMenu)
 
 **Rezultat:**
+
 - Focused element ma widoczny emerald focus ring
 
 **Feedback wizualny:**
+
 - `focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2`
 
 ---
@@ -823,12 +906,15 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Trigger:** Użytkownik naciska Enter na focused NavItem
 
 **Akcja:**
+
 - Nawigacja (jak onClick)
 
 **Rezultat:**
+
 - Zmiana widoku (jeśli !disabled)
 
 **Feedback wizualny:**
+
 - Standard link behavior
 
 ---
@@ -838,14 +924,17 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Trigger:** Tab po załadowaniu strony + Enter na focused link
 
 **Akcja:**
+
 - Smooth scroll do `#main-content`
 - Focus przeniesiony do main element
 
 **Rezultat:**
+
 - Viewport scrolluje do main content
 - Skip navigation dla screen reader users
 
 **Feedback wizualny:**
+
 - Link staje się widoczny po focus (z position absolute -top-40 do top-0)
 
 ## 9. Warunki i walidacja
@@ -857,6 +946,7 @@ Wywołanie SDK Supabase (nie bezpośredni HTTP request)
 **Komponent:** CampaignNav
 
 **Weryfikacja:**
+
 ```typescript
 if (!selectedCampaignId) {
   return null; // Nie renderuj sekcji Campaign
@@ -864,6 +954,7 @@ if (!selectedCampaignId) {
 ```
 
 **Wpływ na UI:**
+
 - Sekcja "Campaign" ukryta jeśli brak wybranej kampanii
 - NavItems "Combat" i "Player Characters" niedostępne
 
@@ -876,6 +967,7 @@ if (!selectedCampaignId) {
 **Komponent:** NavItem (Combat)
 
 **Weryfikacja:**
+
 ```typescript
 <NavItem
   isDisabled={activeCombat === null}
@@ -884,6 +976,7 @@ if (!selectedCampaignId) {
 ```
 
 **Wpływ na UI:**
+
 - Opacity: 0.5
 - Cursor: not-allowed
 - pointer-events: none (brak nawigacji)
@@ -898,6 +991,7 @@ if (!selectedCampaignId) {
 **Komponent:** NavItem (Combat)
 
 **Weryfikacja:**
+
 ```typescript
 <NavItem
   badge={activeCombat ? {
@@ -910,6 +1004,7 @@ if (!selectedCampaignId) {
 ```
 
 **Wpływ na UI:**
+
 - Badge "Active" widoczny obok "Combat" label
 - Emerald color + pulsing animation
 
@@ -922,12 +1017,13 @@ if (!selectedCampaignId) {
 **Komponent:** NavItem
 
 **Weryfikacja:**
+
 ```typescript
-const isActive = window.location.pathname === href ||
-                 window.location.pathname.startsWith(href + '/');
+const isActive = window.location.pathname === href || window.location.pathname.startsWith(href + "/");
 ```
 
 **Wpływ na UI:**
+
 - Emerald left border (border-l-2 border-emerald-500)
 - Emerald text color (text-emerald-500)
 - Subtle background (bg-slate-800/50)
@@ -942,19 +1038,21 @@ const isActive = window.location.pathname === href ||
 **Komponent:** useSelectedCampaign hook
 
 **Weryfikacja:**
+
 ```typescript
 useEffect(() => {
   if (selectedCampaignId && campaigns.length > 0) {
-    const exists = campaigns.some(c => c.id === selectedCampaignId);
+    const exists = campaigns.some((c) => c.id === selectedCampaignId);
     if (!exists) {
       setSelectedCampaignId(null);
-      localStorage.removeItem('selectedCampaignId');
+      localStorage.removeItem("selectedCampaignId");
     }
   }
 }, [selectedCampaignId, campaigns]);
 ```
 
 **Wpływ na UI:**
+
 - Jeśli wybrana kampania została usunięta, selection zostaje cleared
 - Dropdown pokazuje "Select a campaign" jako placeholder
 
@@ -967,11 +1065,13 @@ useEffect(() => {
 **Komponent:** Sidebar
 
 **Weryfikacja:**
+
 ```typescript
 {user && <UserMenu user={user} onLogout={logout} />}
 ```
 
 **Wpływ na UI:**
+
 - UserMenu nie renderuje się jeśli brak zalogowanego użytkownika (edge case, nie powinno się zdarzyć)
 
 ---
@@ -983,6 +1083,7 @@ useEffect(() => {
 **Komponent:** CampaignSelector
 
 **Weryfikacja:**
+
 ```typescript
 {isLoadingCampaigns ? (
   <SelectTrigger disabled>Loading campaigns...</SelectTrigger>
@@ -992,6 +1093,7 @@ useEffect(() => {
 ```
 
 **Wpływ na UI:**
+
 - Dropdown disabled podczas ładowania
 - Trigger pokazuje "Loading campaigns..." jako placeholder
 
@@ -1004,6 +1106,7 @@ useEffect(() => {
 **Komponent:** CampaignSelector
 
 **Weryfikacja:**
+
 ```typescript
 {campaignsError && (
   <div className="text-destructive text-sm">
@@ -1013,6 +1116,7 @@ useEffect(() => {
 ```
 
 **Wpływ na UI:**
+
 - Error message z retry button
 - Dropdown może być disabled lub pokazywać cached data
 
@@ -1025,6 +1129,7 @@ useEffect(() => {
 **Komponent:** CampaignSelector
 
 **Weryfikacja:**
+
 ```typescript
 {campaigns.length === 0 ? (
   <SelectContent>
@@ -1040,6 +1145,7 @@ useEffect(() => {
 ```
 
 **Wpływ na UI:**
+
 - Dropdown pokazuje "No campaigns yet."
 - Footer "Create your first campaign" może zastąpić "Manage Campaigns"
 
@@ -1048,35 +1154,38 @@ useEffect(() => {
 ### 1. Błąd podczas ładowania kampanii (GET /api/campaigns)
 
 **Przyczyna:**
+
 - Network error (brak połączenia)
 - 500 Internal Server Error
 - 401 Unauthorized (brak auth)
 
 **Obsługa:**
+
 ```typescript
 // W useCampaigns hook
 try {
-  const response = await fetch('/api/campaigns?limit=100');
+  const response = await fetch("/api/campaigns?limit=100");
 
   if (response.status === 401) {
     // Redirect do login (może być handled przez middleware)
-    window.location.href = '/login';
+    window.location.href = "/login";
     return;
   }
 
   if (!response.ok) {
-    throw new Error('Failed to fetch campaigns');
+    throw new Error("Failed to fetch campaigns");
   }
 
   const data = await response.json();
   setCampaigns(data.campaigns);
 } catch (error) {
   setError(error);
-  console.error('Error loading campaigns:', error);
+  console.error("Error loading campaigns:", error);
 }
 ```
 
 **UI feedback:**
+
 - Error message w CampaignSelector: "Failed to load campaigns."
 - Retry button dla manual refetch
 - CampaignSelector dropdown disabled
@@ -1087,9 +1196,11 @@ try {
 ### 2. Brak kampanii (pusta lista)
 
 **Przyczyna:**
+
 - Nowy użytkownik bez żadnych kampanii
 
 **Obsługa:**
+
 ```typescript
 {campaigns.length === 0 && !isLoadingCampaigns && (
   <SelectContent>
@@ -1104,6 +1215,7 @@ try {
 ```
 
 **UI feedback:**
+
 - Dropdown pokazuje helpful message z linkiem do /campaigns
 - CampaignNav ukryta (selectedCampaignId === null)
 
@@ -1112,17 +1224,17 @@ try {
 ### 3. Błąd podczas sprawdzania aktywnej walki (GET /api/combats)
 
 **Przyczyna:**
+
 - Network error
 - 500 Internal Server Error
 - 404 Not Found (normalny case - brak aktywnej walki)
 
 **Obsługa:**
+
 ```typescript
 // W useActiveCombat hook
 try {
-  const response = await fetch(
-    `/api/combats?campaign_id=${selectedCampaignId}&status=active`
-  );
+  const response = await fetch(`/api/combats?campaign_id=${selectedCampaignId}&status=active`);
 
   if (response.status === 404) {
     // Normalny case - brak aktywnej walki
@@ -1131,7 +1243,7 @@ try {
   }
 
   if (!response.ok) {
-    throw new Error('Failed to fetch active combat');
+    throw new Error("Failed to fetch active combat");
   }
 
   const data = await response.json();
@@ -1139,11 +1251,12 @@ try {
 } catch (error) {
   // Silent fail - pokazujemy disabled state dla Combat nav item
   setActiveCombat(null);
-  console.error('Error loading active combat:', error);
+  console.error("Error loading active combat:", error);
 }
 ```
 
 **UI feedback:**
+
 - Silent fail (brak error message dla użytkownika)
 - Combat NavItem pokazuje disabled state
 - Log error w console dla debugging
@@ -1155,10 +1268,12 @@ try {
 ### 4. Błąd podczas logout (Supabase signOut)
 
 **Przyczyna:**
+
 - Network error
 - Supabase API error
 
 **Obsługa:**
+
 ```typescript
 // W useAuth hook
 async logout() {
@@ -1178,6 +1293,7 @@ async logout() {
 ```
 
 **UI feedback:**
+
 - Toast error message (opcjonalnie)
 - Redirect do /login (nawet jeśli signOut failed)
 - localStorage.clear() (force logout)
@@ -1189,26 +1305,29 @@ async logout() {
 ### 5. localStorage corruption (nieprawidłowy selectedCampaignId)
 
 **Przyczyna:**
+
 - Kampania została usunięta, ale ID wciąż w localStorage
 - Manual edit localStorage przez użytkownika
 - Data corruption
 
 **Obsługa:**
+
 ```typescript
 // W useSelectedCampaign hook
 useEffect(() => {
   if (selectedCampaignId && campaigns.length > 0) {
-    const exists = campaigns.some(c => c.id === selectedCampaignId);
+    const exists = campaigns.some((c) => c.id === selectedCampaignId);
     if (!exists) {
       // Clear invalid selection
       setSelectedCampaignId(null);
-      localStorage.removeItem('selectedCampaignId');
+      localStorage.removeItem("selectedCampaignId");
     }
   }
 }, [selectedCampaignId, campaigns]);
 ```
 
 **UI feedback:**
+
 - Dropdown automatycznie resetuje do "Select a campaign"
 - CampaignNav ukrywa się
 - Brak error message (silent fix)
@@ -1218,10 +1337,12 @@ useEffect(() => {
 ### 6. User nie załadowany (useAuth loading)
 
 **Przyczyna:**
+
 - Inicjalizacja Supabase auth trwa
 - Slow network
 
 **Obsługa:**
+
 ```typescript
 // W Sidebar component
 {isLoadingUser ? (
@@ -1232,6 +1353,7 @@ useEffect(() => {
 ```
 
 **UI feedback:**
+
 - Skeleton loader dla UserMenu (bottom section sidebar)
 - Rest of sidebar może się renderować normalnie
 
@@ -1240,24 +1362,26 @@ useEffect(() => {
 ### 7. Długi czas ładowania kampanii (slow API response)
 
 **Przyczyna:**
+
 - Slow network
 - Supabase performance issues
 
 **Obsługa:**
+
 ```typescript
 // Opcjonalny timeout dla fetch
 const controller = new AbortController();
 const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
 try {
-  const response = await fetch('/api/campaigns?limit=100', {
-    signal: controller.signal
+  const response = await fetch("/api/campaigns?limit=100", {
+    signal: controller.signal,
   });
   clearTimeout(timeoutId);
   // ... rest
 } catch (error) {
-  if (error.name === 'AbortError') {
-    setError(new Error('Request timeout - please try again'));
+  if (error.name === "AbortError") {
+    setError(new Error("Request timeout - please try again"));
   } else {
     setError(error);
   }
@@ -1265,6 +1389,7 @@ try {
 ```
 
 **UI feedback:**
+
 - Loading spinner w CampaignSelector (max 10s)
 - Po timeout: error message "Request timeout" + retry button
 
@@ -1273,10 +1398,12 @@ try {
 ### 8. Zbyt długa lista kampanii (>100 items)
 
 **Przyczyna:**
+
 - Power user z bardzo wieloma kampaniami
 - Performance issues w dropdown
 
 **Obsługa:**
+
 ```typescript
 // Opcjonalnie: search input w dropdown
 <SelectContent className="max-h-[400px]">
@@ -1296,6 +1423,7 @@ try {
 ```
 
 **UI feedback:**
+
 - Search input na top dropdown
 - Scrollable lista (max-h-[400px])
 - Virtualization (opcjonalnie, jeśli performance problem)
@@ -1305,10 +1433,12 @@ try {
 ### 9. Race condition przy zmianie kampanii (szybkie przełączanie)
 
 **Przyczyna:**
+
 - Użytkownik szybko zmienia wybraną kampanię
 - Request dla poprzedniej kampanii (useActiveCombat) jeszcze pending
 
 **Obsługa:**
+
 ```typescript
 // W useActiveCombat hook
 useEffect(() => {
@@ -1321,13 +1451,12 @@ useEffect(() => {
 
   async function fetchActiveCombat() {
     try {
-      const response = await fetch(
-        `/api/combats?campaign_id=${selectedCampaignId}&status=active`,
-        { signal: controller.signal }
-      );
+      const response = await fetch(`/api/combats?campaign_id=${selectedCampaignId}&status=active`, {
+        signal: controller.signal,
+      });
       // ... rest
     } catch (error) {
-      if (error.name === 'AbortError') {
+      if (error.name === "AbortError") {
         // Request cancelled (zmiana kampanii) - ignore
         return;
       }
@@ -1344,6 +1473,7 @@ useEffect(() => {
 ```
 
 **UI feedback:**
+
 - Brak - transparentne dla użytkownika
 - Pokazuje się stan dla ostatnio wybranej kampanii
 
@@ -1352,6 +1482,7 @@ useEffect(() => {
 ### Krok 1: Setup projektu i instalacja zależności
 
 **Zadania:**
+
 1. Sprawdzenie czy Shadcn/ui jest zainstalowany (powinien być zgodnie z CLAUDE.md)
 2. Dodanie brakujących komponentów Shadcn:
    ```bash
@@ -1372,6 +1503,7 @@ useEffect(() => {
 ### Krok 2: Definicja nowych typów
 
 **Zadania:**
+
 1. Otworzyć `src/types.ts`
 2. Dodać nowe interfejsy:
    - `UserViewModel`
@@ -1393,6 +1525,7 @@ useEffect(() => {
 **Plik:** `src/hooks/useAuth.ts`
 
 **Implementacja:**
+
 - useState dla user, isLoading, error
 - useEffect z supabase.auth.getUser()
 - logout function z signOut + redirect
@@ -1407,6 +1540,7 @@ useEffect(() => {
 **Plik:** `src/hooks/useCampaigns.ts`
 
 **Implementacja:**
+
 - useState dla campaigns, isLoading, error
 - useEffect z fetch GET /api/campaigns
 - refetch function
@@ -1422,6 +1556,7 @@ useEffect(() => {
 **Plik:** `src/hooks/useSelectedCampaign.ts`
 
 **Implementacja:**
+
 - useState inicjalizowany z localStorage.getItem('selectedCampaignId')
 - useEffect dla zapisu do localStorage przy zmianie state
 - useEffect dla storage event listener (cross-tab sync)
@@ -1437,6 +1572,7 @@ useEffect(() => {
 **Plik:** `src/hooks/useActiveCombat.ts`
 
 **Implementacja:**
+
 - useState dla activeCombat, isLoading, error
 - useEffect z dependency na selectedCampaignId
 - Conditional fetch (tylko jeśli selectedCampaignId !== null)
@@ -1447,6 +1583,7 @@ useEffect(() => {
 **Test:** Console.log activeCombat po wybraniu kampanii
 
 **Uwaga:** Ten hook wymaga GET /api/combats endpoint, który nie jest jeszcze zaimplementowany. Możemy:
+
 - Zastąpić mock data na czas developmentu
 - Lub zaimplementować endpoint równolegle (out of scope dla tego planu)
 
@@ -1459,13 +1596,16 @@ useEffect(() => {
 **Plik:** `src/components/SkipToContent.tsx`
 
 **Implementacja:**
+
 - Prosty `<a href="#main-content">` z Tailwind classes
 - sr-only + focus:visible styles
 - onClick smooth scroll (opcjonalnie)
 
 **Styling:**
+
 ```tsx
-className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-emerald-500 focus:text-white focus:rounded"
+className =
+  "sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-emerald-500 focus:text-white focus:rounded";
 ```
 
 **Test:** Tab po załadowaniu strony → link powinien się pojawić
@@ -1479,6 +1619,7 @@ className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 foc
 **Opcja 2:** Custom component w `src/components/ui/badge.tsx`
 
 **Implementacja:**
+
 - Dodanie variant 'active' (emerald color)
 - Dodanie prop animate (dla pulsing)
 - Tailwind animation w config (jeśli brak):
@@ -1494,8 +1635,9 @@ className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 foc
   ```
 
 **Styling dla active badge:**
+
 ```tsx
-className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 animate-pulse-slow"
+className = "bg-emerald-500/10 text-emerald-500 border-emerald-500/20 animate-pulse-slow";
 ```
 
 **Test:** Render badge z różnymi variant i animate props
@@ -1507,14 +1649,16 @@ className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 animate-puls
 **Plik:** `src/components/sidebar/AppHeader.tsx`
 
 **Implementacja:**
+
 - `<a href="/campaigns">` wrapper
 - Lucide Icon (Sword lub Flame)
 - `<span>Initiative Forge</span>`
 - Tailwind styling (emerald accent, hover effects)
 
 **Styling:**
+
 ```tsx
-className="flex items-center gap-3 px-4 py-6 text-slate-100 hover:text-emerald-400 transition-colors"
+className = "flex items-center gap-3 px-4 py-6 text-slate-100 hover:text-emerald-400 transition-colors";
 ```
 
 **Test:** Render + hover + click (should navigate)
@@ -1526,6 +1670,7 @@ className="flex items-center gap-3 px-4 py-6 text-slate-100 hover:text-emerald-4
 **Plik:** `src/components/sidebar/NavItem.tsx`
 
 **Implementacja:**
+
 - Props: icon, label, href, isActive, isDisabled, badge
 - Conditional rendering `<a>` vs `<span>` (based on isDisabled)
 - Icon component (Lucide)
@@ -1535,21 +1680,26 @@ className="flex items-center gap-3 px-4 py-6 text-slate-100 hover:text-emerald-4
 - Tailwind styling (variants for active/disabled/hover/focus)
 
 **Styling:**
+
 ```tsx
 // Base
-className="flex items-center gap-3 px-4 py-2 text-sm transition-colors relative"
+className = "flex items-center gap-3 px-4 py-2 text-sm transition-colors relative";
 
 // Active
-{isActive && "border-l-2 border-emerald-500 text-emerald-500 bg-slate-800/50"}
+{
+  isActive && "border-l-2 border-emerald-500 text-emerald-500 bg-slate-800/50";
+}
 
 // Disabled
-{isDisabled && "opacity-50 cursor-not-allowed pointer-events-none"}
+{
+  isDisabled && "opacity-50 cursor-not-allowed pointer-events-none";
+}
 
 // Hover (jeśli !isActive && !isDisabled)
-"hover:bg-slate-800 hover:text-slate-100"
+("hover:bg-slate-800 hover:text-slate-100");
 
 // Focus
-"focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+("focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900");
 ```
 
 **Test:** Render NavItem ze wszystkimi możliwymi kombinacjami props
@@ -1563,12 +1713,14 @@ className="flex items-center gap-3 px-4 py-2 text-sm transition-colors relative"
 **Plik:** `src/components/sidebar/GlobalNav.tsx`
 
 **Implementacja:**
+
 - Props: currentPath
 - Section label "Global"
 - `<ul role="list">` z 3x NavItem
 - Określenie isActive dla każdego item (based on currentPath)
 
 **Nav items:**
+
 1. My Campaigns - icon: Folder, href: /campaigns
 2. Monsters Library - icon: Dragon, href: /monsters
 3. Spells Library - icon: Sparkles, href: /spells
@@ -1582,12 +1734,14 @@ className="flex items-center gap-3 px-4 py-2 text-sm transition-colors relative"
 **Plik:** `src/components/sidebar/CampaignNav.tsx`
 
 **Implementacja:**
+
 - Props: selectedCampaignId, activeCombat, currentPath
 - Conditional rendering (return null jeśli !selectedCampaignId)
 - Section label "Campaign"
 - `<ul role="list">` z 2x NavItem
 
 **Nav items:**
+
 1. Combat
    - icon: Swords
    - href: activeCombat ? `/combats/${activeCombat.combat_id}` : '#'
@@ -1606,6 +1760,7 @@ className="flex items-center gap-3 px-4 py-2 text-sm transition-colors relative"
 **Plik:** `src/components/sidebar/UserMenu.tsx`
 
 **Implementacja:**
+
 - Props: user, onLogout
 - Shadcn DropdownMenu
 - DropdownMenuTrigger: Avatar + Email (truncated)
@@ -1616,16 +1771,18 @@ className="flex items-center gap-3 px-4 py-2 text-sm transition-colors relative"
 - onClick handler dla logout
 
 **Avatar:**
+
 - Jeśli user.avatar → `<img src={user.avatar} />`
 - Fallback: inicjały w colored circle
 
 **Styling:**
+
 ```tsx
 // Trigger
-className="flex items-center gap-3 px-4 py-3 hover:bg-slate-800 transition-colors w-full"
+className = "flex items-center gap-3 px-4 py-3 hover:bg-slate-800 transition-colors w-full";
 
 // Logout MenuItem
-className="text-destructive focus:text-destructive"
+className = "text-destructive focus:text-destructive";
 ```
 
 **Test:** Render + click logout (should call onLogout)
@@ -1637,6 +1794,7 @@ className="text-destructive focus:text-destructive"
 **Plik:** `src/components/sidebar/CampaignSelector.tsx`
 
 **Implementacja:**
+
 - Props: campaigns, selectedCampaignId, onSelectionChange, isLoading, error
 - Label "Current Campaign"
 - Shadcn Select
@@ -1649,18 +1807,19 @@ className="text-destructive focus:text-destructive"
   - Custom footer: "Manage Campaigns" link
 
 **Styling:**
+
 ```tsx
 // Container
-className="px-4 py-3 border-b border-slate-800"
+className = "px-4 py-3 border-b border-slate-800";
 
 // Label
-className="text-xs uppercase text-slate-400 mb-2"
+className = "text-xs uppercase text-slate-400 mb-2";
 
 // SelectContent
-className="max-h-[300px] overflow-y-auto"
+className = "max-h-[300px] overflow-y-auto";
 
 // Footer
-className="sticky bottom-0 border-t border-slate-800 bg-slate-900 p-2"
+className = "sticky bottom-0 border-t border-slate-800 bg-slate-900 p-2";
 ```
 
 **Test:** Wszystkie stany (loading, error, empty, populated, selection)
@@ -1672,6 +1831,7 @@ className="sticky bottom-0 border-t border-slate-800 bg-slate-900 p-2"
 **Plik:** `src/components/Sidebar.tsx`
 
 **Implementacja:**
+
 - Brak props (standalone component, pobiera dane przez hooks)
 - Użycie wszystkich custom hooks:
   - `const { user, isLoading: isLoadingUser, logout } = useAuth()`
@@ -1682,8 +1842,12 @@ className="sticky bottom-0 border-t border-slate-800 bg-slate-900 p-2"
 - Composition wszystkich sub-components
 
 **Struktura:**
+
 ```tsx
-<aside role="navigation" className="fixed left-0 top-0 h-screen w-60 bg-slate-900 border-r border-slate-800 flex flex-col">
+<aside
+  role="navigation"
+  className="fixed left-0 top-0 h-screen w-60 bg-slate-900 border-r border-slate-800 flex flex-col"
+>
   {/* Top Section */}
   <AppHeader />
 
@@ -1699,11 +1863,7 @@ className="sticky bottom-0 border-t border-slate-800 bg-slate-900 p-2"
   {/* Navigation - flex-1 for spacing */}
   <nav className="flex-1 overflow-y-auto py-4">
     <GlobalNav currentPath={currentPath} />
-    <CampaignNav
-      selectedCampaignId={selectedCampaignId}
-      activeCombat={activeCombat}
-      currentPath={currentPath}
-    />
+    <CampaignNav selectedCampaignId={selectedCampaignId} activeCombat={activeCombat} currentPath={currentPath} />
   </nav>
 
   {/* Bottom Section */}
@@ -1724,6 +1884,7 @@ className="sticky bottom-0 border-t border-slate-800 bg-slate-900 p-2"
 **Plik:** `src/layouts/MainLayout.astro`
 
 **Implementacja:**
+
 - Props: title (optional)
 - HTML structure:
   - `<html>` + `<head>` (title, meta tags)
@@ -1739,19 +1900,20 @@ className="sticky bottom-0 border-t border-slate-800 bg-slate-900 p-2"
 - Importy React komponentów z client:load directive
 
 **Struktur:**
+
 ```astro
 ---
-import Sidebar from '@/components/Sidebar';
-import SkipToContent from '@/components/SkipToContent';
+import Sidebar from "@/components/Sidebar";
+import SkipToContent from "@/components/SkipToContent";
 
 interface Props {
   title?: string;
 }
 
-const { title = 'Initiative Forge' } = Astro.props;
+const { title = "Initiative Forge" } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -1764,10 +1926,7 @@ const { title = 'Initiative Forge' } = Astro.props;
     <div class="flex">
       <Sidebar client:load />
 
-      <main
-        id="main-content"
-        class="flex-1 ml-60 bg-slate-950 min-h-screen p-4 md:p-8"
-      >
+      <main id="main-content" class="flex-1 ml-60 bg-slate-950 min-h-screen p-4 md:p-8">
         <slot />
       </main>
     </div>

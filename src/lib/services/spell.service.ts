@@ -18,10 +18,7 @@ function sanitizeLikePattern(pattern: string): string {
  * @returns Response with spells array and pagination metadata
  * @throws Error if database query fails
  */
-export async function listSpells(
-  supabase: SupabaseClient,
-  filters: ListSpellsQuery
-): Promise<ListSpellsResponseDTO> {
+export async function listSpells(supabase: SupabaseClient, filters: ListSpellsQuery): Promise<ListSpellsResponseDTO> {
   const { name, level, class: spellClass, limit, offset } = filters;
 
   // Build query with exact count for pagination
@@ -80,15 +77,8 @@ export async function listSpells(
  * @returns Spell DTO or null if not found
  * @throws Error if database query fails
  */
-export async function getSpellById(
-  supabase: SupabaseClient,
-  id: string
-): Promise<SpellDTO | null> {
-  const { data, error } = await supabase
-    .from("spells")
-    .select("*")
-    .eq("id", id)
-    .single();
+export async function getSpellById(supabase: SupabaseClient, id: string): Promise<SpellDTO | null> {
+  const { data, error } = await supabase.from("spells").select("*").eq("id", id).single();
 
   if (error) {
     // Handle not found case separately

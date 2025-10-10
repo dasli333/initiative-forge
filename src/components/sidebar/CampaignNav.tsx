@@ -1,4 +1,4 @@
-import { Swords, Users } from "lucide-react";
+import { Home, Swords, Users } from "lucide-react";
 import { NavItem } from "./NavItem";
 import type { ActiveCombatViewModel } from "@/types";
 
@@ -8,24 +8,25 @@ interface CampaignNavProps {
   currentPath: string;
 }
 
-export function CampaignNav({
-  selectedCampaignId,
-  activeCombat,
-  currentPath,
-}: CampaignNavProps) {
+export function CampaignNav({ selectedCampaignId, activeCombat, currentPath }: CampaignNavProps) {
   if (!selectedCampaignId) {
     return null;
   }
 
+  const campaignHomeHref = `/campaigns/${selectedCampaignId}`;
   const combatHref = activeCombat ? `/combats/${activeCombat.combat_id}` : "#";
   const charactersHref = `/campaigns/${selectedCampaignId}/characters`;
 
   return (
     <div className="mt-6 space-y-1">
-      <h2 className="px-4 text-xs uppercase text-slate-500 mb-2 font-semibold tracking-wider">
-        Campaign
-      </h2>
+      <h2 className="px-4 text-xs uppercase text-slate-500 mb-2 font-semibold tracking-wider">Campaign</h2>
       <ul role="list" className="space-y-1">
+        <NavItem
+          icon={Home}
+          label="Campaign Home"
+          href={campaignHomeHref}
+          isActive={currentPath === campaignHomeHref}
+        />
         <NavItem
           icon={Swords}
           label="Combat"

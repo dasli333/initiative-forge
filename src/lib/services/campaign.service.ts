@@ -18,16 +18,12 @@ type UpdateCampaignResult =
 /**
  * Result type for campaign retrieval
  */
-type GetCampaignResult =
-  | { success: true; data: CampaignDTO }
-  | { success: false; errorType: "not_found" | "internal" };
+type GetCampaignResult = { success: true; data: CampaignDTO } | { success: false; errorType: "not_found" | "internal" };
 
 /**
  * Result type for campaign deletion
  */
-type DeleteCampaignResult =
-  | { success: true }
-  | { success: false; errorType: "not_found" | "internal" };
+type DeleteCampaignResult = { success: true } | { success: false; errorType: "not_found" | "internal" };
 
 /**
  * Result type for listing campaigns
@@ -217,11 +213,7 @@ export async function deleteCampaign(
   campaignId: string
 ): Promise<DeleteCampaignResult> {
   try {
-    const { error } = await supabase
-      .from("campaigns")
-      .delete()
-      .eq("id", campaignId)
-      .eq("user_id", userId);
+    const { error } = await supabase.from("campaigns").delete().eq("id", campaignId).eq("user_id", userId);
 
     if (error) {
       throw error;

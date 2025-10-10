@@ -35,8 +35,7 @@ export function NavItem({ icon: Icon, label, href, isActive, isDisabled, badge }
         <Badge
           variant={badge.variant}
           className={cn({
-            "bg-emerald-500/10 text-emerald-500 border-emerald-500/20":
-              badge.variant === "default",
+            "bg-emerald-500/10 text-emerald-500 border-emerald-500/20": badge.variant === "default",
             "animate-pulse": badge.animate,
           })}
         >
@@ -58,11 +57,7 @@ export function NavItem({ icon: Icon, label, href, isActive, isDisabled, badge }
 
   return (
     <li>
-      <a
-        href={href}
-        className={cn(baseClasses, stateClasses)}
-        aria-current={isActive ? "page" : undefined}
-      >
+      <a href={href} className={cn(baseClasses, stateClasses)} aria-current={isActive ? "page" : undefined}>
         {content}
       </a>
     </li>
