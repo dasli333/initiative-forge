@@ -9,47 +9,37 @@ Najpierw przejrzyj następujące informacje:
 
 2. Opis widoku:
 <view_description>
-### 2.3. My Campaigns View
+### 2.4. Campaign Dashboard
 
-**Ścieżka**: `/campaigns`
+**Ścieżka**: `/campaigns/:id`
 
-**Główny cel**: Wyświetlenie listy kampanii użytkownika i umożliwienie tworzenia nowych kampanii.
+**Główny cel**: Przegląd wybranej kampanii i szybki dostęp do głównych funkcji (zarządzanie postaciami, rozpoczęcie walki).
 
 **Kluczowe informacje do wyświetlenia**:
 
-- Grid campaign cards (nazwa, liczba postaci, liczba walk, status aktywnej walki, data ostatniej modyfikacji)
-- Możliwość edycji nazwy kampanii (inline)
-- Możliwość usunięcia kampanii
-- Tile do tworzenia nowej kampanii
-- Empty state dla nowych użytkowników
+- Nazwa kampanii (edytowalna inline)
+- Data utworzenia kampanii
+- Statystyki: liczba postaci (w przyszłości: zadania, sesje)
+- Quick actions: przyciski do zarządzania postaciami i rozpoczęcia walki
 
 **Kluczowe komponenty widoku**:
 
-- **Header Section**:
-    - H1: "My Campaigns"
-    - Metadata: "X campaigns" (muted text)
-- **Responsive Grid**:
-    - 3 kolumny (screen ≥ 1280px)
-    - 2 kolumny (1024px ≤ screen < 1280px)
-- **Campaign Card** (Shadcn Card):
-    - Header: Nazwa kampanii (edytowalna - click → inline input), Dropdown menu (Edit Name, Delete)
-    - Body: Icon 👤 + "X characters", Icon ⚔️ + "X combats", Status badge "Active combat" 🔴 (emerald, jeśli istnieje)
-    - Footer: "Last modified: [date]" (muted), Button "Select Campaign" (emerald, full width)
-- **Plus Tile**:
-    - Dashed border card, centered icon +, text "Create New Campaign"
-    - Hover: emerald glow
-    - Click → Modal z formularzem (input: campaign name)
-- **Empty State**:
-    - Icon: folder (duży, muted)
-    - Heading: "You don't have any campaigns yet"
-    - Subtext: "Create your first campaign to get started"
-    - Button: "Create Campaign" (emerald)
+- **Breadcrumb Navigation**: "My Campaigns"
+- **Stats Overview Section**:
+    - Header: H1 Nazwa kampanii (edytowalna inline - click → input), Metadata "Created on [date]" (muted)
+    - Stats Grid (responsywny, przygotowany na przyszłe rozszerzenia):
+        - Card: "Player Characters" + liczba (duża, emerald)
+- **Quick Actions Section**:
+    - H2: "Quick Actions"
+    - Grid (2 kolumny):
+        - Card "Player Characters": Icon + Description, Button "Manage Characters" → /campaigns/:id/characters
+        - Card "Combats": Icon + Description, Button "Start New Combat" (emerald) → /campaigns/:id/combats/new
 
 **UX, dostępność i względy bezpieczeństwa**:
 
-- **UX**: Skeleton loading states podczas fetch, optimistic UI dla tworzenia kampanii, confirmation modal dla Delete ("This campaign has X active combats. Deleting it will also delete all characters and combats. Are you sure?"), toast notifications (success/error)
-- **Accessibility**: ARIA labels dla icon buttons, keyboard navigation dla dropdown menu, focus management w modalach
-- **Security**: RLS zapewnia, że user widzi tylko swoje kampanie, validation błędów duplikatów nazw
+- **UX**: Loading state (skeleton), error state (jeśli kampania nie istnieje → 404), focus na główny heading po load, inline editing z auto-save
+- **Accessibility**: Focus na H1 po załadowaniu strony, keyboard navigation dla button groups
+- **Security**: RLS zapewnia dostęp tylko dla właściciela kampanii, 404 jeśli kampania nie należy do usera
 </view_description>
 
 3. User Stories:
@@ -61,68 +51,6 @@ Najpierw przejrzyj następujące informacje:
    <endpoint_description>
 
 ### 2.1. Campaigns
-
-#### List User's Campaigns
-
-- **Method**: GET
-- **Path**: `/api/campaigns`
-- **Description**: Returns all campaigns owned by the authenticated user
-- **Query Parameters**:
-  - `limit` (optional, number): Maximum number of results (default: 50)
-  - `offset` (optional, number): Offset for pagination (default: 0)
-- **Request Body**: N/A
-- **Response**: 200 OK
-
-```json
-{
-  "campaigns": [
-    {
-      "id": "uuid",
-      "user_id": "uuid",
-      "name": "Lost Mines of Phandelver",
-      "created_at": "2025-01-15T10:30:00Z",
-      "updated_at": "2025-01-15T10:30:00Z"
-    }
-  ],
-  "total": 1,
-  "limit": 50,
-  "offset": 0
-}
-```
-
-- **Error Responses**:
-  - 401 Unauthorized: Missing or invalid authentication
-
-#### Create Campaign
-
-- **Method**: POST
-- **Path**: `/api/campaigns`
-- **Description**: Creates a new campaign for the authenticated user
-- **Query Parameters**: N/A
-- **Request Body**:
-
-```json
-{
-  "name": "Curse of Strahd"
-}
-```
-
-- **Response**: 201 Created
-
-```json
-{
-  "id": "uuid",
-  "user_id": "uuid",
-  "name": "Curse of Strahd",
-  "created_at": "2025-01-15T14:20:00Z",
-  "updated_at": "2025-01-15T14:20:00Z"
-}
-```
-
-- **Error Responses**:
-  - 400 Bad Request: Invalid input (missing name, empty name)
-  - 401 Unauthorized: Missing or invalid authentication
-  - 409 Conflict: Campaign name already exists for this user
 
 #### Get Campaign
 
@@ -179,20 +107,58 @@ Najpierw przejrzyj następujące informacje:
   - 404 Not Found: Campaign does not exist or user doesn't own it
   - 409 Conflict: New campaign name already exists for this user
 
-#### Delete Campaign
 
-- **Method**: DELETE
-- **Path**: `/api/campaigns/:id`
-- **Description**: Deletes a campaign and all associated player characters and combats (CASCADE)
+- **Method**: GET
+- **Path**: `/api/campaigns/:campaignId/characters`
+- **Description**: Returns all player characters in a campaign
 - **Query Parameters**: N/A
 - **Request Body**: N/A
-- **Response**: 204 No Content
-- **Error Responses**: - 401 Unauthorized: Missing or invalid authentication - 404 Not Found: Campaign does not exist or user doesn't own it
+- **Response**: 200 OK
+
+```json
+{
+  "characters": [
+    {
+      "id": "uuid",
+      "campaign_id": "uuid",
+      "name": "Aragorn",
+      "max_hp": 45,
+      "armor_class": 16,
+      "speed": 30,
+      "strength": 16,
+      "dexterity": 14,
+      "constitution": 14,
+      "intelligence": 10,
+      "wisdom": 12,
+      "charisma": 14,
+      "actions": [
+        {
+          "name": "Longsword Attack",
+          "type": "melee_weapon_attack",
+          "attack_bonus": 5,
+          "reach": "5 ft",
+          "damage_dice": "1d8",
+          "damage_bonus": 3,
+          "damage_type": "slashing"
+        }
+      ],
+      "created_at": "2025-01-15T14:30:00Z",
+      "updated_at": "2025-01-15T14:30:00Z"
+    }
+  ]
+}
+```
+
+- **Error Responses**:
+    - 401 Unauthorized: Missing or invalid authentication
+    - 404 Not Found: Campaign does not exist or user doesn't own it
+
+
   </endpoint_description>
 
 5. Endpoint Implementation:
    <endpoint_implementation>
-   @src/pages/api/campaigns.ts @src/pages/api/campaigns/[id].ts
+   @src/pages/api/campaigns/[id].ts @src/pages/api/campaigns/[campaignId]/characters.ts @src/pages/api/campaigns/[campaignId]/combats.ts
    </endpoint_implementation>
 
 6. Type Definitions:

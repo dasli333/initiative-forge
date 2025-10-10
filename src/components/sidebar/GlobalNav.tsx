@@ -14,7 +14,7 @@ export function GlobalNav({ currentPath }: GlobalNavProps) {
           icon={Folder}
           label="My Campaigns"
           href="/campaigns"
-          isActive={currentPath === "/campaigns" || currentPath.startsWith("/campaigns/")}
+          isActive={currentPath === "/campaigns"}
         />
         <NavItem
           icon={BookOpen}
