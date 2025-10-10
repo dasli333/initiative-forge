@@ -491,37 +491,36 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 
 **Kluczowe informacje do wyświetlenia**:
 
-- Campaign selector (dropdown, localStorage persistence)
+- Current campaign display (nazwa z localStorage, persystuje przez całą sesję)
 - Global modules (My Campaigns, Monsters Library, Spells Library)
-- Campaign modules (Combat, Player Characters - aktywne tylko po wybraniu kampanii)
+- Campaign modules (Combat, Player Characters - aktywne tylko gdy kampania wybrana)
 - User menu (logout)
 
 **Kluczowe komponenty widoku**:
 
-- **Sidebar** (fixed left, width 240px, background slate-900, border-right slate-800):
+- **Sidebar** (fixed left, width 240px, background slate-900, border-right slate-800, client:only="react"):
   - **Top Section**:
     - Logo + App Name: "Initiative Forge" (emerald accent), click → /campaigns
-  - **Campaign Selector**:
+  - **Current Campaign Display**:
     - Label: "Current Campaign" (muted, small)
-    - Dropdown (Shadcn Select):
-      - Trigger: "[Selected Campaign Name]" lub "Select a campaign" (muted)
-      - Content: Lista kampanii (scrollable jeśli >10), Campaign Item (Name + metadata), Selected: checkmark icon
-      - Footer: "Manage Campaigns" link → /campaigns
-    - Persistence: localStorage ("selectedCampaignId")
+    - Nazwa kampanii (z localStorage, persystuje niezależnie od URL)
+    - Gdy brak kampanii: link "Select a campaign" → /campaigns
+    - Źródło prawdy: localStorage (`selectedCampaignId`)
+    - Hook: `useSelectedCampaign` - zarządzanie localStorage + walidacja
   - **Global Modules Section**:
     - Label: "Global" (muted, uppercase, small)
     - Nav List:
-      - "My Campaigns" (icon: folder, link: /campaigns)
+      - "My Campaigns" (icon: folder, link: /campaigns) - prowadzi do listy kampanii
       - "Monsters Library" (icon: dragon, link: /monsters)
       - "Spells Library" (icon: sparkles, link: /spells)
     - Active link: emerald left border + emerald text
   - **Campaign Modules Section**:
     - Label: "Campaign" (muted, uppercase, small)
-    - Conditional rendering: tylko jeśli kampania wybrana
+    - Conditional rendering: tylko jeśli `selectedCampaignId !== null`
     - Nav List:
-      - "Campaign Home" (icon: home, link: /campaigns/:selectedId) - dashboard wybranej kampanii
+      - "Campaign Home" (icon: home, link: /campaigns/:selectedCampaignId) - dashboard wybranej kampanii
       - "Combat" (icon: swords, link: /combats/:id jeśli active, else disabled), Badge "Active" (emerald, pulsing) jeśli active combat
-      - "Player Characters" (icon: users, link: /campaigns/:selectedId/characters)
+      - "Player Characters" (icon: users, link: /campaigns/:selectedCampaignId/characters)
     - Disabled state: opacity 0.5, cursor not-allowed
   - **Bottom Section**:
     - User Menu (Dropdown): Trigger (Avatar + Email truncated), Content (User info, "Logout" - icon log-out, destructive text)
@@ -529,9 +528,10 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 
 **UX, dostępność i względy bezpieczeństwa**:
 
-- **UX**: Campaign selector zapamiętuje wybór w localStorage, smooth transitions między widokami, active link highlighting
+- **UX**: Campaign context z localStorage (persystuje przez sesję), aktywna kampania widoczna zawsze (nawet na /campaigns, /monsters), smooth transitions między widokami, active link highlighting, zmiana kampanii przez kliknięcie w kartę na /campaigns
 - **Accessibility**: Sidebar role="navigation", skip to main content link (visually hidden, focused on tab), active links aria-current="page", keyboard navigation (Tab przez nav items, Enter to activate), focus visible (emerald ring)
-- **Security**: Supabase signOut przy logout → redirect /login, RLS zapewnia dostęp tylko do własnych kampanii w dropdownie
+- **Security**: Supabase signOut przy logout → redirect /login, RLS zapewnia dostęp tylko do własnych kampanii, localStorage validation (usuwanie nieprawidłowych ID)
+- **SSR**: Sidebar renderowany client:only="react" - eliminuje problemy z localStorage podczas SSR, brak hydration mismatch
 
 ---
 

@@ -1,0 +1,97 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import { CampaignDashboardContent } from "@/components/campaign-dashboard/CampaignDashboardContent";
+import type { CampaignDTO, ListPlayerCharactersResponseDTO } from "@/types";
+
+export const prerender = false;
+
+// Get campaign ID from URL params
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect("/campaigns");
+}
+
+// Fetch campaign data
+let campaign: CampaignDTO | null = null;
+let charactersCount = 0;
+let notFound = false;
+let error: string | null = null;
+
+try {
+  const campaignResponse = await fetch(`${Astro.url.origin}/api/campaigns/${id}`, {
+    headers: {
+      Cookie: Astro.request.headers.get("Cookie") || "",
+    },
+  });
+
+  if (campaignResponse.status === 404) {
+    notFound = true;
+  } else if (campaignResponse.status === 401) {
+    return Astro.redirect("/login");
+  } else if (!campaignResponse.ok) {
+    error = "Failed to load campaign";
+  } else {
+    campaign = await campaignResponse.json();
+  }
+} catch (err) {
+  error = "Failed to load campaign";
+  console.error("Error fetching campaign:", err);
+}
+
+// Fetch characters count (only if campaign loaded successfully)
+if (campaign) {
+  try {
+    const charactersResponse = await fetch(`${Astro.url.origin}/api/campaigns/${id}/characters`, {
+      headers: {
+        Cookie: Astro.request.headers.get("Cookie") || "",
+      },
+    });
+
+    if (charactersResponse.ok) {
+      const data: ListPlayerCharactersResponseDTO = await charactersResponse.json();
+      charactersCount = data.characters.length;
+    }
+    // Silently fail - fallback to 0 characters
+  } catch (err) {
+    console.error("Error fetching characters:", err);
+    // Silently fail - fallback to 0 characters
+  }
+}
+
+const pageTitle = campaign ? campaign.name : "Campaign Not Found";
+---
+
+<MainLayout title={pageTitle}>
+  {
+    notFound || !campaign ? (
+      <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <div class="text-center py-12">
+          <h1 class="text-3xl font-bold mb-2">Campaign not found</h1>
+          <p class="text-muted-foreground mb-6">This campaign doesn't exist or you don't have access to it.</p>
+          <a
+            href="/campaigns"
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+          >
+            Back to My Campaigns
+          </a>
+        </div>
+      </div>
+    ) : error ? (
+      <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <div class="text-center py-12">
+          <h1 class="text-3xl font-bold mb-2">Error</h1>
+          <p class="text-muted-foreground mb-6">{error}</p>
+          <a
+            href="/campaigns"
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+          >
+            Back to My Campaigns
+          </a>
+        </div>
+      </div>
+    ) : (
+      <CampaignDashboardContent initialCampaign={campaign} initialCharactersCount={charactersCount} />
+    )
+  }
+</MainLayout>
