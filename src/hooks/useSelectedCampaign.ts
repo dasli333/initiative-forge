@@ -9,13 +9,16 @@ interface UseSelectedCampaignReturn {
 const STORAGE_KEY = "selectedCampaignId";
 
 export function useSelectedCampaign(campaigns: Campaign[]): UseSelectedCampaignReturn {
-  const [selectedCampaignId, setSelectedCampaignIdState] = useState<string | null>(() => {
-    // Initialize from localStorage
-    if (typeof window !== "undefined") {
-      return localStorage.getItem(STORAGE_KEY);
+  // Initialize to null to match server-side rendering
+  const [selectedCampaignId, setSelectedCampaignIdState] = useState<string | null>(null);
+
+  // Load from localStorage after mount (client-side only)
+  useEffect(() => {
+    const storedId = localStorage.getItem(STORAGE_KEY);
+    if (storedId) {
+      setSelectedCampaignIdState(storedId);
     }
-    return null;
-  });
+  }, []);
 
   // Sync to localStorage when state changes
   useEffect(() => {

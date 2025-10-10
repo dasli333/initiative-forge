@@ -8,14 +8,15 @@ import { GlobalNav } from "./sidebar/GlobalNav";
 import { CampaignNav } from "./sidebar/CampaignNav";
 import { UserMenu } from "./sidebar/UserMenu";
 
-export function Sidebar() {
+interface SidebarProps {
+  currentPath: string;
+}
+
+export function Sidebar({ currentPath }: SidebarProps) {
   const { user, isLoading: isLoadingUser, logout } = useAuth();
   const { campaigns, isLoading: isLoadingCampaigns, error: campaignsError, refetch } = useCampaigns();
   const { selectedCampaignId, setSelectedCampaignId } = useSelectedCampaign(campaigns);
   const { activeCombat } = useActiveCombat(selectedCampaignId);
-
-  // Get current path for active link highlighting
-  const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
 
   return (
     <aside
