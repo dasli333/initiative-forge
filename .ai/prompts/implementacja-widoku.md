@@ -3,7 +3,7 @@ Twoim zadaniem jest zaimplementowanie widoku frontendu w oparciu o podany plan i
 Najpierw przejrzyj plan implementacji:
 
 <implementation_plan>
-{{implementation-plan}} <- zamień na referencję do planu implementacji widoku (np. @generations-view-implementation-plan.md)
+@.ai/ui-plans/main-layout-view-implementation-plan.md
 </implementation_plan>
 
 Teraz przejrzyj zasady implementacji:
@@ -15,14 +15,10 @@ Teraz przejrzyj zasady implementacji:
 Przejrzyj zdefiniowane typy:
 
 <types>
-{{types}} <- zamień na referencję do definicji DTOsów (np. @types.ts)
+@src/types.ts
 </types>
 
 Wdrażaj plan zgodnie z następującym podejściem:
-
-<implementation_approach>
-Realizuj maksymalnie 3 kroki planu implementacji, podsumuj krótko co zrobiłeś i opisz plan na 3 kolejne działania - zatrzymaj w tym momencie pracę i czekaj na mój feedback.
-</implementation_approach>
 
 Dokładnie przeanalizuj plan wdrożenia i zasady. Zwróć szczególną uwagę na strukturę komponentów, wymagania dotyczące integracji API i interakcje użytkownika opisane w planie.
 

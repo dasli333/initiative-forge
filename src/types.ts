@@ -398,3 +398,41 @@ export interface UpdateCombatSnapshotCommand {
 export interface UpdateCombatStatusCommand {
   status: "active" | "completed";
 }
+
+// ============================================================================
+// VIEW MODELS (for UI components)
+// ============================================================================
+
+/**
+ * ViewModel for logged-in user in UI
+ */
+export interface UserViewModel {
+  id: string;
+  email: string;
+  avatar?: string; // URL to avatar (if available from Supabase auth)
+}
+
+/**
+ * ViewModel for active combat
+ * Used to show "Active" badge on Combat nav item
+ */
+export interface ActiveCombatViewModel {
+  combat_id: string;
+  campaign_id: string;
+  status: "active";
+}
+
+/**
+ * Aggregated ViewModel for Sidebar
+ * (optional - can also manage individual pieces in hooks)
+ */
+export interface SidebarViewModel {
+  user: UserViewModel | null;
+  selectedCampaignId: string | null;
+  campaigns: Campaign[];
+  activeCombat: ActiveCombatViewModel | null;
+  currentPath: string;
+  isLoadingCampaigns: boolean;
+  isLoadingActiveCombat: boolean;
+  campaignsError: Error | null;
+}

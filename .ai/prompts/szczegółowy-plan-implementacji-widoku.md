@@ -9,7 +9,51 @@ Najpierw przejrzyj następujące informacje:
 
 2. Opis widoku:
 <view_description>
-{{view-description}} <- wklej opis implementowanego widoku z ui-plan.md
+### 2.10. Main Layout (Sidebar Navigation)
+
+**Ścieżka**: N/A (obecny na wszystkich widokach po zalogowaniu)
+
+**Główny cel**: Globalna nawigacja i dostęp do głównych modułów aplikacji.
+
+**Kluczowe informacje do wyświetlenia**:
+- Campaign selector (dropdown, localStorage persistence)
+- Global modules (My Campaigns, Monsters Library, Spells Library)
+- Campaign modules (Combat, Player Characters - aktywne tylko po wybraniu kampanii)
+- User menu (logout)
+
+**Kluczowe komponenty widoku**:
+- **Sidebar** (fixed left, width 240px, background slate-900, border-right slate-800):
+    - **Top Section**:
+        - Logo + App Name: "Initiative Forge" (emerald accent), click → /campaigns
+    - **Campaign Selector**:
+        - Label: "Current Campaign" (muted, small)
+        - Dropdown (Shadcn Select):
+            - Trigger: "[Selected Campaign Name]" lub "Select a campaign" (muted)
+            - Content: Lista kampanii (scrollable jeśli >10), Campaign Item (Name + metadata), Selected: checkmark icon
+            - Footer: "Manage Campaigns" link → /campaigns
+        - Persistence: localStorage ("selectedCampaignId")
+    - **Global Modules Section**:
+        - Label: "Global" (muted, uppercase, small)
+        - Nav List:
+            - "My Campaigns" (icon: folder, link: /campaigns)
+            - "Monsters Library" (icon: dragon, link: /monsters)
+            - "Spells Library" (icon: sparkles, link: /spells)
+        - Active link: emerald left border + emerald text
+    - **Campaign Modules Section**:
+        - Label: "Campaign" (muted, uppercase, small)
+        - Conditional rendering: tylko jeśli kampania wybrana
+        - Nav List:
+            - "Combat" (icon: swords, link: /combats/:id jeśli active, else disabled), Badge "Active" (emerald, pulsing) jeśli active combat
+            - "Player Characters" (icon: users, link: /campaigns/:selectedId/characters)
+        - Disabled state: opacity 0.5, cursor not-allowed
+    - **Bottom Section**:
+        - User Menu (Dropdown): Trigger (Avatar + Email truncated), Content (User info, "Logout" - icon log-out, destructive text)
+- **Main Content Area**: Background slate-950, padding responsive (4-8), max-width: none
+
+**UX, dostępność i względy bezpieczeństwa**:
+- **UX**: Campaign selector zapamiętuje wybór w localStorage, smooth transitions między widokami, active link highlighting
+- **Accessibility**: Sidebar role="navigation", skip to main content link (visually hidden, focused on tab), active links aria-current="page", keyboard navigation (Tab przez nav items, Enter to activate), focus visible (emerald ring)
+- **Security**: Supabase signOut przy logout → redirect /login, RLS zapewnia dostęp tylko do własnych kampanii w dropdownie
 </view_description>
 
 3. User Stories:

@@ -1,170 +1,57 @@
-import { useState } from "react";
-import { CampaignSelector } from "./CampaignSelector";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { BookOpen, Sparkles, Sword, Users, Layout } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useCampaigns } from "@/hooks/useCampaigns";
+import { useSelectedCampaign } from "@/hooks/useSelectedCampaign";
+import { useActiveCombat } from "@/hooks/useActiveCombat";
+import { AppHeader } from "./sidebar/AppHeader";
+import { CampaignSelector } from "./sidebar/CampaignSelector";
+import { GlobalNav } from "./sidebar/GlobalNav";
+import { CampaignNav } from "./sidebar/CampaignNav";
+import { UserMenu } from "./sidebar/UserMenu";
 
-interface Campaign {
-  id: string;
-  name: string;
-}
+export function Sidebar() {
+  const { user, isLoading: isLoadingUser, logout } = useAuth();
+  const { campaigns, isLoading: isLoadingCampaigns, error: campaignsError, refetch } = useCampaigns();
+  const { selectedCampaignId, setSelectedCampaignId } = useSelectedCampaign(campaigns);
+  const { activeCombat } = useActiveCombat(selectedCampaignId);
 
-interface SidebarProps {
-  campaigns?: Campaign[];
-  currentPath?: string;
-}
-
-interface NavItem {
-  name: string;
-  href: string;
-  icon: typeof Layout;
-  requiresCampaign?: boolean;
-}
-
-const navItems: NavItem[] = [
-  {
-    name: "My Campaigns",
-    href: "/campaigns",
-    icon: Layout,
-    requiresCampaign: false,
-  },
-  {
-    name: "Monsters Library",
-    href: "/monsters",
-    icon: BookOpen,
-    requiresCampaign: false,
-  },
-  {
-    name: "Spells Library",
-    href: "/spells",
-    icon: Sparkles,
-    requiresCampaign: false,
-  },
-  {
-    name: "Combat",
-    href: "/combat",
-    icon: Sword,
-    requiresCampaign: true,
-  },
-  {
-    name: "Player Characters",
-    href: "/characters",
-    icon: Users,
-    requiresCampaign: true,
-  },
-];
-
-export function Sidebar({ campaigns = [], currentPath = "" }: SidebarProps) {
-  const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(
-    null,
-  );
-
-  const isActive = (href: string) => {
-    if (href === "/campaigns") {
-      return currentPath === href || currentPath === "/";
-    }
-    return currentPath.startsWith(href);
-  };
+  // Get current path for active link highlighting
+  const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
-      {/* Logo/Header */}
-      <div className="flex h-16 items-center border-b border-sidebar-border px-6">
-        <h1 className="text-xl font-bold text-sidebar-foreground">
-          Initiative Forge
-        </h1>
-      </div>
+    <aside
+      role="navigation"
+      aria-label="Main navigation"
+      className="fixed left-0 top-0 h-screen w-60 bg-slate-900 border-r border-slate-800 flex flex-col"
+    >
+      {/* Top Section */}
+      <AppHeader />
 
-      <ScrollArea className="flex-1">
-        <div className="flex flex-col gap-4 p-4">
-          {/* Campaign Selector */}
-          <div className="space-y-2">
-            <label className="text-xs font-medium uppercase tracking-wider text-sidebar-foreground/70">
-              Campaign
-            </label>
-            <CampaignSelector
-              campaigns={campaigns}
-              onCampaignChange={setSelectedCampaignId}
-            />
-          </div>
+      {/* Campaign Selector */}
+      <CampaignSelector
+        campaigns={campaigns}
+        selectedCampaignId={selectedCampaignId}
+        onSelectionChange={setSelectedCampaignId}
+        isLoading={isLoadingCampaigns}
+        error={campaignsError}
+        onRetry={refetch}
+      />
 
-          <Separator className="bg-sidebar-border" />
+      {/* Navigation - flex-1 for spacing */}
+      <nav className="flex-1 overflow-y-auto py-4">
+        <GlobalNav currentPath={currentPath} />
+        <CampaignNav
+          selectedCampaignId={selectedCampaignId}
+          activeCombat={activeCombat}
+          currentPath={currentPath}
+        />
+      </nav>
 
-          {/* Global Modules */}
-          <nav className="space-y-1" aria-label="Global navigation">
-            <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wider text-sidebar-foreground/70">
-              Global
-            </p>
-            {navItems
-              .filter((item) => !item.requiresCampaign)
-              .map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item.href);
-                return (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                      active
-                        ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                    }`}
-                    aria-current={active ? "page" : undefined}
-                  >
-                    <Icon className="h-4 w-4" aria-hidden="true" />
-                    <span>{item.name}</span>
-                  </a>
-                );
-              })}
-          </nav>
-
-          <Separator className="bg-sidebar-border" />
-
-          {/* Campaign Modules */}
-          <nav className="space-y-1" aria-label="Campaign navigation">
-            <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wider text-sidebar-foreground/70">
-              Campaign
-            </p>
-            {navItems
-              .filter((item) => item.requiresCampaign)
-              .map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item.href);
-                const disabled = !selectedCampaignId;
-                return (
-                  <a
-                    key={item.href}
-                    href={disabled ? undefined : item.href}
-                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                      disabled
-                        ? "cursor-not-allowed opacity-50"
-                        : active
-                          ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                    }`}
-                    aria-current={active ? "page" : undefined}
-                    aria-disabled={disabled}
-                    onClick={(e) => {
-                      if (disabled) {
-                        e.preventDefault();
-                      }
-                    }}
-                  >
-                    <Icon className="h-4 w-4" aria-hidden="true" />
-                    <span>{item.name}</span>
-                  </a>
-                );
-              })}
-          </nav>
-        </div>
-      </ScrollArea>
-
-      {/* Footer */}
-      <div className="border-t border-sidebar-border p-4">
-        <p className="text-xs text-sidebar-foreground/70">
-          Initiative Forge v0.1
-        </p>
-      </div>
+      {/* Bottom Section - User Menu */}
+      {isLoadingUser ? (
+        <div className="h-16 bg-slate-800 animate-pulse m-4 rounded" />
+      ) : (
+        user && <UserMenu user={user} onLogout={logout} />
+      )}
     </aside>
   );
 }
