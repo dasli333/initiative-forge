@@ -5,6 +5,7 @@ import {
   useUpdateCampaignMutation,
   useDeleteCampaignMutation,
 } from "@/hooks/queries/useCampaigns";
+import { useCampaignStore } from "@/stores/campaignStore";
 import type { CampaignViewModel } from "@/types/campaigns";
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "./LoadingState";
@@ -23,11 +24,14 @@ export function CampaignsContentReactQuery() {
   const createCampaignMutation = useCreateCampaignMutation();
   const updateCampaignMutation = useUpdateCampaignMutation();
   const deleteCampaignMutation = useDeleteCampaignMutation();
+  const { setSelectedCampaignId } = useCampaignStore();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [deleteModalCampaign, setDeleteModalCampaign] = useState<CampaignViewModel | null>(null);
 
   const handleCampaignSelect = (id: string) => {
+    // Set the selected campaign in the store before navigation
+    setSelectedCampaignId(id);
     // Navigate to campaign details page
     window.location.href = `/campaigns/${id}`;
   };

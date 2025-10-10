@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import type { CampaignDTO } from "@/types";
 
 interface CampaignStore {
@@ -17,38 +17,48 @@ interface CampaignStore {
  * Global store for managing the currently selected campaign
  * This store is used across the entire application to know which campaign is active
  *
+ * Uses localStorage persistence to sync state across different React islands in Astro
  * Important: This store is only used on the client side, not during SSR
  */
 export const useCampaignStore = create<CampaignStore>()(
   devtools(
-    (set) => ({
-      // Initial state
-      selectedCampaignId: null,
-      selectedCampaign: null,
+    persist(
+      (set) => ({
+        // Initial state
+        selectedCampaignId: null,
+        selectedCampaign: null,
 
-      // Actions
-      setSelectedCampaignId: (id) => set({ selectedCampaignId: id }, false, "setSelectedCampaignId"),
+        // Actions
+        setSelectedCampaignId: (id) => set({ selectedCampaignId: id }, false, "setSelectedCampaignId"),
 
-      setSelectedCampaign: (campaign) =>
-        set(
-          {
-            selectedCampaign: campaign,
-            selectedCampaignId: campaign?.id || null,
-          },
-          false,
-          "setSelectedCampaign"
-        ),
+        setSelectedCampaign: (campaign) =>
+          set(
+            {
+              selectedCampaign: campaign,
+              selectedCampaignId: campaign?.id || null,
+            },
+            false,
+            "setSelectedCampaign"
+          ),
 
-      clearSelection: () =>
-        set(
-          {
-            selectedCampaignId: null,
-            selectedCampaign: null,
-          },
-          false,
-          "clearSelection"
-        ),
-    }),
+        clearSelection: () =>
+          set(
+            {
+              selectedCampaignId: null,
+              selectedCampaign: null,
+            },
+            false,
+            "clearSelection"
+          ),
+      }),
+      {
+        name: "campaign-storage", // name for localStorage key
+        partialize: (state) => ({
+          // Only persist the IDs, not the full campaign object
+          selectedCampaignId: state.selectedCampaignId,
+        }),
+      }
+    ),
     {
       name: "campaign-store",
     }
