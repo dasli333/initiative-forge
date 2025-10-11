@@ -1,14 +1,21 @@
+import { HydrationBoundary, type DehydratedState } from "@tanstack/react-query";
 import { AppProviders } from "@/providers/AppProviders";
 import { CampaignsContentReactQuery } from "./CampaignsContentReactQuery";
 
+interface CampaignsWrapperProps {
+  dehydratedState?: DehydratedState;
+}
+
 /**
  * Wrapper component that provides React Query context to CampaignsContent
- * This is needed because Astro mounts React components independently
+ * Accepts dehydrated state from server-side prefetching for SSR hydration
  */
-export function CampaignsWrapper() {
+export function CampaignsWrapper({ dehydratedState }: CampaignsWrapperProps) {
   return (
     <AppProviders>
-      <CampaignsContentReactQuery />
+      <HydrationBoundary state={dehydratedState}>
+        <CampaignsContentReactQuery />
+      </HydrationBoundary>
     </AppProviders>
   );
 }
