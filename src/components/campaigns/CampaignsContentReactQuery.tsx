@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { navigate } from "astro:transitions/client";
 import {
   useCampaignsQuery,
   useCreateCampaignMutation,
@@ -32,8 +33,8 @@ export function CampaignsContentReactQuery() {
   const handleCampaignSelect = (id: string) => {
     // Set the selected campaign in the store before navigation
     setSelectedCampaignId(id);
-    // Navigate to campaign details page
-    window.location.href = `/campaigns/${id}`;
+    // Navigate to campaign details page with View Transitions
+    navigate(`/campaigns/${id}`);
   };
 
   const handleCampaignUpdate = async (id: string, name: string) => {
