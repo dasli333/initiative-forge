@@ -1,6 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useCampaignStore } from "@/stores/campaignStore";
-import { useActiveCombat } from "@/hooks/useActiveCombat";
 import { AppHeader } from "./sidebar/AppHeader";
 import { CurrentCampaignDisplay } from "./sidebar/CurrentCampaignDisplay";
 import { GlobalNav } from "./sidebar/GlobalNav";
@@ -18,7 +17,6 @@ export function SidebarContent({ currentPath }: SidebarContentProps) {
   // Read campaign directly from store (no fetching)
   // Campaign is set by pages that fetch data (CampaignDashboard, CampaignsContent)
   const campaign = selectedCampaign;
-  const { activeCombat } = useActiveCombat(selectedCampaignId);
 
   return (
     <aside
@@ -35,7 +33,7 @@ export function SidebarContent({ currentPath }: SidebarContentProps) {
       {/* Navigation - flex-1 for spacing */}
       <nav className="flex-1 overflow-y-auto py-4">
         <GlobalNav currentPath={currentPath} />
-        <CampaignNav selectedCampaignId={selectedCampaignId} activeCombat={activeCombat} currentPath={currentPath} />
+        <CampaignNav selectedCampaignId={selectedCampaignId} currentPath={currentPath} />
       </nav>
 
       {/* Bottom Section - User Menu */}
