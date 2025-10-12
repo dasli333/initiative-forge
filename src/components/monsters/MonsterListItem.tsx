@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import type { MonsterDTO } from "@/types";
 import { cn } from "@/lib/utils";
+import { useLanguageStore } from "@/stores/languageStore";
 
 /**
  * Props for MonsterListItem component
@@ -31,6 +32,10 @@ interface MonsterListItemProps {
 export function MonsterListItem({ monster, isSelected, onClick }: MonsterListItemProps) {
   const { id, data } = monster;
 
+  // Get selected language from store
+  const selectedLanguage = useLanguageStore((state) => state.selectedLanguage);
+  const displayName = data.name[selectedLanguage];
+
   const handleClick = () => {
     onClick(id);
   };
@@ -53,12 +58,12 @@ export function MonsterListItem({ monster, isSelected, onClick }: MonsterListIte
       onKeyDown={handleKeyDown}
       tabIndex={0}
       role="button"
-      aria-label={`View details for ${data.name.en}`}
+      aria-label={`View details for ${displayName}`}
       aria-selected={isSelected}
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-medium truncate">{data.name.en}</h3>
+          <h3 className="text-sm font-medium truncate">{displayName}</h3>
           <p className="text-xs text-muted-foreground mt-0.5">
             {data.size} {data.type}
           </p>

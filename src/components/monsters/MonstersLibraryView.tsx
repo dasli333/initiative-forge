@@ -5,6 +5,7 @@ import { MonsterDetails } from "./MonsterDetails";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDebouncedValue } from "@/components/hooks/useDebouncedValue";
 import { useMonsters } from "@/components/hooks/useMonsters";
+import { useLanguageStore } from "@/stores/languageStore";
 import { FileSearch } from "lucide-react";
 
 /**
@@ -35,6 +36,9 @@ export function MonstersLibraryView() {
 
   // Selected monster state
   const [selectedMonsterId, setSelectedMonsterId] = useState<string | null>(null);
+
+  // Get selected language from store
+  const selectedLanguage = useLanguageStore((state) => state.selectedLanguage);
 
   // Fetch monsters with React Query infinite query
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useMonsters({
@@ -123,9 +127,12 @@ export function MonstersLibraryView() {
           <>
             {/* Monster header */}
             <div className="p-6 border-b border-border">
-              <h2 className="text-2xl font-bold">{selectedMonster.data.name.en}</h2>
-              {selectedMonster.data.name.pl !== selectedMonster.data.name.en && (
+              <h2 className="text-2xl font-bold">{selectedMonster.data.name[selectedLanguage]}</h2>
+              {selectedLanguage === "en" && selectedMonster.data.name.pl !== selectedMonster.data.name.en && (
                 <p className="text-sm text-muted-foreground italic mt-1">{selectedMonster.data.name.pl}</p>
+              )}
+              {selectedLanguage === "pl" && selectedMonster.data.name.en !== selectedMonster.data.name.pl && (
+                <p className="text-sm text-muted-foreground italic mt-1">{selectedMonster.data.name.en}</p>
               )}
             </div>
 

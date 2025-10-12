@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { SearchBar } from "./SearchBar";
 import { TypeFilter } from "./TypeFilter";
 import { SizeFilter } from "./SizeFilter";
 import { AlignmentFilter } from "./AlignmentFilter";
+import { useLanguageStore } from "@/stores/languageStore";
 
 /**
  * Props for MonstersHeader component
@@ -66,10 +69,29 @@ export function MonstersHeader({
   // Check if any filters are active
   const hasActiveFilters = searchQuery.trim() !== "" || type !== null || size !== null || alignment !== null;
 
+  // Language store for switching between EN/PL
+  const selectedLanguage = useLanguageStore((state) => state.selectedLanguage);
+  const toggleLanguage = useLanguageStore((state) => state.toggleLanguage);
+
   return (
     <header className="space-y-4 mb-6">
-      {/* Title */}
-      <h1 className="text-2xl font-bold">Monsters Library</h1>
+      {/* Title and Language Switch */}
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold">Monsters Library</h1>
+
+        {/* Language Switch */}
+        <div className="flex items-center gap-2">
+          <Label htmlFor="language-switch" className="text-sm font-medium cursor-pointer">
+            {selectedLanguage === "en" ? "EN" : "PL"}
+          </Label>
+          <Switch
+            id="language-switch"
+            checked={selectedLanguage === "pl"}
+            onCheckedChange={toggleLanguage}
+            aria-label="Toggle language between English and Polish"
+          />
+        </div>
+      </div>
 
       {/* Search bar - full width */}
       <SearchBar value={searchQuery} onChange={onSearchChange} />

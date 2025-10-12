@@ -27,10 +27,11 @@ export async function listMonsters(
   // Build query with exact count for pagination
   let query = supabase.from("monsters").select("*", { count: "exact" });
 
-  // Apply name filter (case-insensitive partial match)
+  // Apply name filter (case-insensitive partial match on both English and Polish names)
   if (name) {
     const sanitized = sanitizeLikePattern(name);
-    query = query.ilike("name", `%${sanitized}%`);
+    // Search in both the indexed 'name' column (EN) and the Polish name in JSONB
+    query = query.or(`name.ilike.%${sanitized}%,data->name->>pl.ilike.%${sanitized}%`);
   }
 
   // Apply type filter (exact match, case-insensitive)
