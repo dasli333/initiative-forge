@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ListCampaignsResponseDTO, CreateCampaignCommand, UpdateCampaignCommand, CampaignDTO } from "@/types";
 import type { CampaignViewModel } from "@/types/campaigns";
+import { transformToCampaignViewModels } from "@/lib/utils/campaignTransformers";
 import { toast } from "sonner";
 import { useCampaignStore } from "@/stores/campaignStore";
 
@@ -32,15 +33,8 @@ export function useCampaignsQuery() {
 
       const data: ListCampaignsResponseDTO = await response.json();
 
-      // Convert to CampaignViewModel with optional aggregated data
-      const viewModels: CampaignViewModel[] = data.campaigns.map((campaign) => ({
-        ...campaign,
-        characterCount: 0,
-        combatCount: 0,
-        hasActiveCombat: false,
-      }));
-
-      return viewModels;
+      // Convert to CampaignViewModel using shared transformer
+      return transformToCampaignViewModels(data.campaigns);
     },
   });
 }

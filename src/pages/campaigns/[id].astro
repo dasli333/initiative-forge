@@ -1,6 +1,8 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
 import { CampaignDashboardWrapper } from "@/components/campaign-dashboard/CampaignDashboardWrapper";
+import { dehydrate } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/queryClient";
 import type { CampaignDTO, ListPlayerCharactersResponseDTO } from "@/types";
 
 export const prerender = false;
@@ -12,6 +14,9 @@ if (!id) {
   return Astro.redirect("/campaigns");
 }
 
+// Create QueryClient for this request
+const queryClient = getQueryClient();
+
 // Fetch campaign data
 let campaign: CampaignDTO | null = null;
 let charactersCount = 0;
@@ -19,45 +24,76 @@ let notFound = false;
 let error: string | null = null;
 
 try {
-  const campaignResponse = await fetch(`${Astro.url.origin}/api/campaigns/${id}`, {
-    headers: {
-      Cookie: Astro.request.headers.get("Cookie") || "",
+  // Prefetch campaign data using React Query
+  await queryClient.prefetchQuery({
+    queryKey: ["campaign", id],
+    queryFn: async (): Promise<CampaignDTO> => {
+      const response = await fetch(`${Astro.url.origin}/api/campaigns/${id}`, {
+        headers: {
+          Cookie: Astro.request.headers.get("Cookie") || "",
+        },
+      });
+
+      if (response.status === 404) {
+        throw new Error("Campaign not found");
+      } else if (response.status === 401) {
+        throw new Error("Unauthorized");
+      } else if (!response.ok) {
+        throw new Error("Failed to load campaign");
+      }
+
+      return await response.json();
     },
   });
 
-  if (campaignResponse.status === 404) {
-    notFound = true;
-  } else if (campaignResponse.status === 401) {
-    return Astro.redirect("/login");
-  } else if (!campaignResponse.ok) {
-    error = "Failed to load campaign";
-  } else {
-    campaign = await campaignResponse.json();
-  }
-} catch (err) {
-  error = "Failed to load campaign";
-  console.error("Error fetching campaign:", err);
-}
+  // Get the prefetched campaign data
+  campaign = queryClient.getQueryData(["campaign", id]) || null;
 
-// Fetch characters count (only if campaign loaded successfully)
-if (campaign) {
-  try {
-    const charactersResponse = await fetch(`${Astro.url.origin}/api/campaigns/${id}/characters`, {
-      headers: {
-        Cookie: Astro.request.headers.get("Cookie") || "",
+  if (campaign) {
+    // Prefetch characters data using React Query
+    await queryClient.prefetchQuery({
+      queryKey: ["campaign", id, "characters"],
+      queryFn: async (): Promise<CampaignDTO[]> => {
+        const response = await fetch(`${Astro.url.origin}/api/campaigns/${id}/characters`, {
+          headers: {
+            Cookie: Astro.request.headers.get("Cookie") || "",
+          },
+        });
+
+        if (response.status === 404) {
+          return [];
+        }
+
+        if (!response.ok) {
+          throw new Error("Failed to load characters");
+        }
+
+        const data: ListPlayerCharactersResponseDTO = await response.json();
+        return data.characters;
       },
     });
 
-    if (charactersResponse.ok) {
-      const data: ListPlayerCharactersResponseDTO = await charactersResponse.json();
-      charactersCount = data.characters.length;
-    }
-    // Silently fail - fallback to 0 characters
-  } catch (err) {
-    console.error("Error fetching characters:", err);
-    // Silently fail - fallback to 0 characters
+    // Get the prefetched characters for initial count
+    const characters: any[] = queryClient.getQueryData(["campaign", id, "characters"]) || [];
+    charactersCount = characters.length;
   }
+} catch (err) {
+  const errorMessage = err instanceof Error ? err.message : "Unknown error";
+
+  if (errorMessage === "Campaign not found") {
+    notFound = true;
+  } else if (errorMessage === "Unauthorized") {
+    return Astro.redirect("/login");
+  } else {
+    error = "Failed to load campaign";
+  }
+
+  console.error("Error fetching campaign data:", err);
 }
+
+// Dehydrate the state to pass to the client
+const dehydratedState = dehydrate(queryClient);
+queryClient.clear(); // Clean up server-side cache
 
 const pageTitle = campaign ? campaign.name : "Campaign Not Found";
 ---
@@ -91,7 +127,12 @@ const pageTitle = campaign ? campaign.name : "Campaign Not Found";
         </div>
       </div>
     ) : (
-      <CampaignDashboardWrapper initialCampaign={campaign} initialCharactersCount={charactersCount} />
+      <CampaignDashboardWrapper
+        client:load
+        initialCampaign={campaign}
+        initialCharactersCount={charactersCount}
+        dehydratedState={dehydratedState}
+      />
     )
   }
 </MainLayout>

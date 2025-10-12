@@ -1,0 +1,185 @@
+Zasada działania: Strona jako "Dyrygent" 🎵
+Strona (.astro) jest głównym dyrygentem na serwerze. To ona decyduje, jakie dane są potrzebne dla niej i dla wszystkich jej wysp.
+
+Tworzy jedną instancję QueryClient na czas tego żądania (per-request).
+
+Pobiera wszystkie potrzebne dane.
+
+Pakuje je w jeden obiekt (dehydratedState).
+
+Przekazuje ten sam pakiet danych do MainLayout oraz do każdej wyspy z osobna.
+
+W przeglądarce, każda wyspa używa helpera getQueryClient, aby uzyskać dostęp do jednego, globalnego klienta (singletona) i wlewa do niego otrzymane dane.
+
+Struktura plików
+Oto jak mogłaby wyglądać Twoja struktura:
+
+src/
+├── components/
+│   ├── CampaignDetails.tsx      # Wyspa - szczegóły kampanii
+│   ├── PlayerCharacters.tsx     # Wyspa - postacie graczy
+│   └── Monsters.tsx             # Wyspa - potwory
+├── layouts/
+│   └── MainLayout.astro         # Główny layout (szablon)
+├── lib/
+│   └── queryClient.ts           # Nasz kluczowy helper
+└── pages/
+    └── campaigns/
+        └── [id].astro           # Strona-dyrygent dla konkretnej kampanii
+Krok po kroku: Implementacja
+1. Helper queryClient.ts (bez zmian)
+Ten plik jest naszym fundamentem.
+
+src/lib/queryClient.ts
+
+TypeScript
+
+import { QueryClient } from '@tanstack/react-query';
+
+let browserQueryClient: QueryClient | undefined = undefined;
+
+function makeQueryClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: { retry: false, staleTime: 1000 * 60 * 5 },
+    },
+  });
+}
+
+export function getQueryClient() {
+  if (import.meta.env.SSR) {
+    return makeQueryClient(); // Zawsze nowa instancja na serwerze
+  } else {
+    if (!browserQueryClient) {
+      browserQueryClient = makeQueryClient(); // Singleton w przeglądarce
+    }
+    return browserQueryClient;
+  }
+}
+2. Strona-Dyrygent: [id].astro
+To jest serce naszej logiki po stronie serwera.
+
+src/pages/campaigns/[id].astro
+
+Fragment kodu
+
+---
+import { dehydrate } from '@tanstack/react-query';
+import { getQueryClient } from '../../lib/queryClient';
+import MainLayout from '../../layouts/MainLayout.astro';
+import CampaignDetails from '../../components/CampaignDetails.tsx';
+import PlayerCharacters from '../../components/PlayerCharacters.tsx';
+import Monsters from '../../components/Monsters.tsx';
+
+const { id } = Astro.params;
+
+// 1. Stwórz tymczasowy QueryClient dla tego żądania
+const queryClient = getQueryClient();
+
+// 2. Pobierz WSZYSTKIE dane potrzebne dla tej strony i jej wysp
+await Promise.all([
+  queryClient.prefetchQuery({
+    queryKey: ['campaign', id],
+    queryFn: () => fetch(`https://api.example.com/campaigns/${id}`).then(res => res.json()),
+  }),
+  queryClient.prefetchQuery({
+    queryKey: ['characters', { campaignId: id }],
+    queryFn: () => fetch(`https://api.example.com/campaigns/${id}/characters`).then(res => res.json()),
+  }),
+  queryClient.prefetchQuery({
+    queryKey: ['monsters', { campaignId: id }],
+    queryFn: () => fetch(`https://api.example.com/campaigns/${id}/monsters`).then(res => res.json()),
+  }),
+]);
+
+// 3. Spakuj wszystkie dane do jednego obiektu
+const dehydratedState = dehydrate(queryClient);
+queryClient.clear(); // Posprzątaj po sobie na serwerze
+
+const campaign = await queryClient.getQueryData(['campaign', id]);
+---
+
+<MainLayout title={campaign.name} dehydratedState={dehydratedState}>
+  <CampaignDetails client:load dehydratedState={dehydratedState} campaignId={id} />
+  <PlayerCharacters client:visible dehydratedState={dehydratedState} campaignId={id} />
+  <Monsters client:idle dehydratedState={dehydratedState} campaignId={id} />
+</MainLayout>
+3. Layout i Wyspy (konsumenci danych)
+Layout po prostu przekazuje dane dalej i renderuje slot.
+
+src/layouts/MainLayout.astro
+
+Fragment kodu
+
+---
+const { title, dehydratedState } = Astro.props;
+---
+<html>
+  <head><title>{title}</title></head>
+  <body>
+    <header>Moja Apka D&D</header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+Każda wyspa jest zbudowana w ten sam sposób.
+
+src/components/PlayerCharacters.tsx
+
+TypeScript
+
+import React, { useState } from 'react';
+import { QueryClientProvider, HydrationBoundary, useQuery } from '@tanstack/react-query';
+import { getQueryClient } from '../lib/queryClient';
+
+// Komponent wyświetlający dane
+function CharacterList({ campaignId }) {
+  // Ten klucz MUSI być identyczny z tym użytym w `prefetchQuery`
+  const { data, isLoading } = useQuery({
+    queryKey: ['characters', { campaignId }]
+  });
+
+  if (isLoading) return <div>Ładowanie postaci...</div>;
+  return (
+    <section>
+      <h2>Postacie Graczy</h2>
+      <ul>{data?.map(char => <li key={char.id}>{char.name}</li>)}</ul>
+    </section>
+  );
+}
+
+// Wrapper do hydracji
+export default function PlayerCharacters({ dehydratedState, campaignId }) {
+  // Pobiera klienckiego singletona
+  const [queryClient] = useState(() => getQueryClient());
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <HydrationBoundary state={dehydratedState}>
+        <CharacterList campaignId={campaignId} />
+      </HydrationBoundary>
+    </QueryClientProvider>
+  );
+}
+Komponenty CampaignDetails.tsx i Monsters.tsx wyglądałyby analogicznie, używając swoich odpowiednich kluczy z useQuery.
+
+Odpowiedzi na Twoje kluczowe pytania
+Gdzie będzie jeden queryClient po stronie klienta?
+W module queryClient.ts.
+Zmienna browserQueryClient jest singletonem. Mimo że każda wyspa (PlayerCharacters, Monsters) wywołuje getQueryClient(), logika wewnątrz tego pliku sprawia, że instancja jest tworzona tylko raz przy pierwszym wywołaniu w przeglądarce. Wszystkie kolejne wywołania zwracają tę samą, już istniejącą instancję.
+
+Jak wygląda struktura po stronie serwera?
+Użytkownik wchodzi na /campaigns/123.
+
+Astro uruchamia plik src/pages/campaigns/[id].astro.
+
+Ten plik tworzy nową, tymczasową instancję QueryClient tylko na potrzeby tego jednego żądania.
+
+Pobiera dane kampanii, postaci i potworów, zapełniając cache tego tymczasowego klienta.
+
+Serializuje cache do obiektu dehydratedState.
+
+Renderuje HTML, wstrzykując dehydratedState jako prop do komponentów-wysp.
+
+Wysyła gotowy HTML do przeglądarki i niszczy tymczasową instancję QueryClient.

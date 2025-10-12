@@ -3,6 +3,7 @@ import "../styles/global.css";
 import { SidebarWrapper } from "@/components/SidebarWrapper";
 import { SkipToContent } from "@/components/SkipToContent";
 import { Toaster } from "@/components/ui/sonner";
+import { ReactQueryDevtoolsWrapper } from "@/components/ReactQueryDevtoolsWrapper";
 import { ClientRouter } from "astro:transitions";
 
 interface Props {
@@ -44,6 +45,9 @@ const { title = "Initiative Forge" } = Astro.props;
 
     <!-- Toast notifications -->
     <Toaster client:load />
+
+    <!-- React Query DevTools (only in development) -->
+    {import.meta.env.DEV && <ReactQueryDevtoolsWrapper client:only="react" />}
   </body>
 </html>
 

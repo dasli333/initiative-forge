@@ -1,21 +1,16 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
 import { CampaignsWrapper } from "@/components/campaigns/CampaignsWrapper";
-import { QueryClient, dehydrate } from "@tanstack/react-query";
+import { dehydrate } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/queryClient";
+import { transformToCampaignViewModels } from "@/lib/utils/campaignTransformers";
 import type { ListCampaignsResponseDTO } from "@/types";
 import type { CampaignViewModel } from "@/types/campaigns.ts";
 
 export const prerender = false;
 
-// Create a new QueryClient for this request (server-side)
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 60 * 1000,
-      gcTime: 5 * 60 * 1000,
-    },
-  },
-});
+// Get QueryClient (creates new instance for SSR)
+const queryClient = getQueryClient();
 
 // Prefetch campaigns data on the server
 await queryClient.prefetchQuery({
@@ -33,15 +28,8 @@ await queryClient.prefetchQuery({
 
     const data: ListCampaignsResponseDTO = await response.json();
 
-    // Convert to CampaignViewModel
-    const viewModels: CampaignViewModel[] = data.campaigns.map((campaign) => ({
-      ...campaign,
-      characterCount: 0,
-      combatCount: 0,
-      hasActiveCombat: false,
-    }));
-
-    return viewModels;
+    // Convert to CampaignViewModel using shared transformer
+    return transformToCampaignViewModels(data.campaigns);
   },
 });
 

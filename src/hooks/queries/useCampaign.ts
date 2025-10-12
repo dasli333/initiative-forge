@@ -42,7 +42,7 @@ export function useCampaignQuery(
       return await response.json();
     },
     enabled: !!campaignId && (options?.enabled ?? true),
-    staleTime: 60 * 1000, // Consider data fresh for 1 minute
-    gcTime: 5 * 60 * 1000, // Keep in cache for 5 minutes
+    // Note: staleTime and gcTime are inherited from queryClient defaults (10 min / 15 min)
+    // Override here only if this specific query needs different behavior
   });
 }

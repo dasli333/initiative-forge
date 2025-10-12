@@ -25,7 +25,7 @@ export function CampaignDashboardContentReactQuery({
   initialCharactersCount,
 }: CampaignDashboardContentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { setSelectedCampaign } = useCampaignStore();
+  const { setSelectedCampaignId } = useCampaignStore();
 
   // Use React Query for data fetching
   const { data: campaign = initialCampaign } = useCampaignQuery(initialCampaign.id, {
@@ -38,10 +38,11 @@ export function CampaignDashboardContentReactQuery({
 
   const updateCampaignMutation = useUpdateCampaignMutation();
 
-  // Set the selected campaign in the global store
+  // Set the selected campaign ID in the global store
+  // The full campaign data is fetched via React Query (useCampaignQuery)
   useEffect(() => {
-    setSelectedCampaign(campaign);
-  }, [campaign, setSelectedCampaign]);
+    setSelectedCampaignId(campaign.id);
+  }, [campaign.id, setSelectedCampaignId]);
 
   // Focus on container for accessibility
   useEffect(() => {
