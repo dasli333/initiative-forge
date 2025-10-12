@@ -98,8 +98,8 @@ export function MonstersHeader({
 
       {/* Filters row */}
       <div className="space-y-4">
-        {/* First row of filters */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {/* Filters in a row with consistent spacing */}
+        <div className="flex flex-wrap gap-3">
           <TypeFilter value={type} onChange={onTypeChange} />
           <SizeFilter value={size} onChange={onSizeChange} />
           <AlignmentFilter value={alignment} onChange={onAlignmentChange} />

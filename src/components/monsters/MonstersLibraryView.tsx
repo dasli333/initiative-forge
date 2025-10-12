@@ -88,8 +88,8 @@ export function MonstersLibraryView() {
 
   return (
     <div className="flex h-full -m-4 md:-m-8">
-      {/* Left Panel - Monster List (30% width) */}
-      <div className="w-[30%] border-r border-border flex flex-col">
+      {/* Left Panel - Monster List (minimum 500px to fit filters, 30% width on larger screens) */}
+      <div className="min-w-[500px] w-[30%] border-r border-border flex flex-col">
         {/* Header with filters - fixed at top of left panel */}
         <div className="p-4 border-b border-border">
           <MonstersHeader

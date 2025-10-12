@@ -39,26 +39,33 @@ export function MonsterDetails({ data }: MonsterDetailsProps) {
   return (
     <div className="space-y-6">
       {/* Basic Info Section */}
-      <section>
+      <section className="max-w-[600px]">
         <h3 className="text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-wide">Basic Info</h3>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-          <div>
-            <span className="font-semibold">Size:</span> {data.size}
+        <div className="grid grid-cols-2 gap-8 text-sm">
+          {/* Column 1: Type, Size, Alignment */}
+          <div className="space-y-2">
+            <div>
+              <span className="font-semibold">Type:</span> {data.type}
+            </div>
+            <div>
+              <span className="font-semibold">Size:</span> {data.size}
+            </div>
+            <div>
+              <span className="font-semibold">Alignment:</span> {data.alignment}
+            </div>
           </div>
-          <div>
-            <span className="font-semibold">Type:</span> {data.type}
-          </div>
-          <div className="col-span-2">
-            <span className="font-semibold">Alignment:</span> {data.alignment}
-          </div>
-          <div>
-            <span className="font-semibold">AC:</span> {data.armorClass}
-          </div>
-          <div>
-            <span className="font-semibold">HP:</span> {data.hitPoints.average} ({data.hitPoints.formula})
-          </div>
-          <div className="col-span-2">
-            <span className="font-semibold">Speed:</span> {data.speed.join(", ")}
+
+          {/* Column 2: HP, AC, Speed */}
+          <div className="space-y-2">
+            <div>
+              <span className="font-semibold">HP:</span> {data.hitPoints.average} ({data.hitPoints.formula})
+            </div>
+            <div>
+              <span className="font-semibold">AC:</span> {data.armorClass}
+            </div>
+            <div>
+              <span className="font-semibold">Speed:</span> {data.speed.join(", ")}
+            </div>
           </div>
         </div>
       </section>
@@ -66,7 +73,7 @@ export function MonsterDetails({ data }: MonsterDetailsProps) {
       <Separator />
 
       {/* Ability Scores Table */}
-      <section>
+      <section className="max-w-[600px]">
         <h3 className="text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-wide">Ability Scores</h3>
         <Table>
           <TableHeader>
