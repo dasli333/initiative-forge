@@ -1,8 +1,10 @@
 ---
 import "../styles/global.css";
-import { Sidebar } from "@/components/Sidebar";
+import { SidebarWrapper } from "@/components/SidebarWrapper";
 import { SkipToContent } from "@/components/SkipToContent";
 import { Toaster } from "@/components/ui/sonner";
+import { ReactQueryDevtoolsWrapper } from "@/components/ReactQueryDevtoolsWrapper";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title?: string;
@@ -25,6 +27,7 @@ const { title = "Initiative Forge" } = Astro.props;
       rel="stylesheet"
     />
     <title>{title}</title>
+    <ClientRouter />
   </head>
   <body class="h-full overflow-hidden bg-slate-950">
     <!-- Skip to main content link for accessibility -->
@@ -32,7 +35,7 @@ const { title = "Initiative Forge" } = Astro.props;
 
     <div class="flex h-full">
       <!-- Sidebar with navigation -->
-      <Sidebar client:load currentPath={Astro.url.pathname} />
+      <SidebarWrapper client:only="react" currentPath={Astro.url.pathname} />
 
       <!-- Main Content Area -->
       <main id="main-content" tabindex="-1" class="flex-1 ml-60 bg-slate-950 min-h-screen p-4 md:p-8 overflow-auto">
@@ -42,6 +45,9 @@ const { title = "Initiative Forge" } = Astro.props;
 
     <!-- Toast notifications -->
     <Toaster client:load />
+
+    <!-- React Query DevTools (only in development) -->
+    {import.meta.env.DEV && <ReactQueryDevtoolsWrapper client:only="react" />}
   </body>
 </html>
 

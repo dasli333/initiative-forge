@@ -1,10 +1,42 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
-import { CampaignsContent } from "@/components/campaigns/CampaignsContent";
+import { CampaignsWrapper } from "@/components/campaigns/CampaignsWrapper";
+import { dehydrate } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/queryClient";
+import { transformToCampaignViewModels } from "@/lib/utils/campaignTransformers";
+import type { ListCampaignsResponseDTO } from "@/types";
+import type { CampaignViewModel } from "@/types/campaigns.ts";
 
 export const prerender = false;
+
+// Get QueryClient (creates new instance for SSR)
+const queryClient = getQueryClient();
+
+// Prefetch campaigns data on the server
+await queryClient.prefetchQuery({
+  queryKey: ["campaigns"],
+  queryFn: async (): Promise<CampaignViewModel[]> => {
+    const response = await fetch(`${Astro.url.origin}/api/campaigns?limit=100&offset=0`, {
+      headers: {
+        Cookie: Astro.request.headers.get("Cookie") || "",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch campaigns");
+    }
+
+    const data: ListCampaignsResponseDTO = await response.json();
+
+    // Convert to CampaignViewModel using shared transformer
+    return transformToCampaignViewModels(data.campaigns);
+  },
+});
+
+// Dehydrate the state to pass to the client
+const dehydratedState = dehydrate(queryClient);
 ---
 
 <MainLayout title="My Campaigns">
-  <CampaignsContent client:load />
+  <CampaignsWrapper client:load dehydratedState={dehydratedState} />
 </MainLayout>

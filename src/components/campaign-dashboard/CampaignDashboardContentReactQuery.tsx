@@ -10,20 +10,38 @@ import {
 import { CampaignHeader } from "./CampaignHeader";
 import { StatsOverview } from "./StatsOverview";
 import { QuickActionsSection } from "./QuickActionsSection";
-import { useCampaignDashboard } from "@/hooks/useCampaignDashboard";
+import { useCampaignQuery } from "@/hooks/queries/useCampaign";
+import { useCampaignCharactersQuery } from "@/hooks/queries/useCampaignCharacters";
+import { useUpdateCampaignMutation } from "@/hooks/queries/useCampaigns";
+import { useCampaignStore } from "@/stores/campaignStore";
 import type { CampaignDashboardContentProps } from "@/types/campaign-dashboard";
 
 /**
- * Campaign Dashboard Content
+ * Campaign Dashboard Content with React Query
  * Main React component for campaign dashboard with breadcrumb, header, stats, and quick actions
  */
-export function CampaignDashboardContent({ initialCampaign, initialCharactersCount }: CampaignDashboardContentProps) {
-  const { campaign, charactersCount, isUpdating, error, updateCampaignName } = useCampaignDashboard(
-    initialCampaign,
-    initialCharactersCount
-  );
-
+export function CampaignDashboardContentReactQuery({
+  initialCampaign,
+  initialCharactersCount,
+}: CampaignDashboardContentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { setSelectedCampaign } = useCampaignStore();
+
+  // Use React Query for data fetching
+  const { data: campaign = initialCampaign } = useCampaignQuery(initialCampaign.id, {
+    enabled: true,
+  });
+
+  const { data: characters = [] } = useCampaignCharactersQuery(initialCampaign.id, {
+    enabled: true,
+  });
+
+  const updateCampaignMutation = useUpdateCampaignMutation();
+
+  // Update the selected campaign in the global store (for Sidebar display)
+  useEffect(() => {
+    setSelectedCampaign(campaign);
+  }, [campaign, setSelectedCampaign]);
 
   // Focus on container for accessibility
   useEffect(() => {
@@ -31,6 +49,18 @@ export function CampaignDashboardContent({ initialCampaign, initialCharactersCou
       containerRef.current.focus();
     }
   }, []);
+
+  const updateCampaignName = async (name: string) => {
+    await updateCampaignMutation.mutateAsync({ id: campaign.id, name });
+  };
+
+  const charactersCount = characters.length || initialCharactersCount;
+  const isUpdating = updateCampaignMutation.isPending;
+  const error = updateCampaignMutation.error
+    ? updateCampaignMutation.error instanceof Error
+      ? updateCampaignMutation.error.message
+      : "Failed to update campaign"
+    : null;
 
   return (
     <div

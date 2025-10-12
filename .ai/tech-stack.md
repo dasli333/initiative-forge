@@ -5,7 +5,8 @@ Frontend - Astro z React dla komponentów interaktywnych:
 - TypeScript 5 dla statycznego typowania kodu i lepszego wsparcia IDE
 - Tailwind 4 pozwala na wygodne stylowanie aplikacji
 - Shadcn/ui zapewnia bibliotekę dostępnych komponentów React, na których oprzemy UI
-- Zustand zapewnia state management dla aktywnej walki
+- Zustand zapewnia globalny state management dla aktywnej kampanii i innych stanów aplikacji
+- TanStack Query (React Query) do zarządzania stanem serwera, cache'owania i synchronizacji danych z backendem
 
 Backend - Supabase jako kompleksowe rozwiązanie backendowe:
 

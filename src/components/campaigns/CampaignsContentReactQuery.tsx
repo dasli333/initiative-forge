@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { useCampaigns } from "@/hooks/useCampaigns";
+import { navigate } from "astro:transitions/client";
+import {
+  useCampaignsQuery,
+  useCreateCampaignMutation,
+  useUpdateCampaignMutation,
+  useDeleteCampaignMutation,
+} from "@/hooks/queries/useCampaigns";
+import { useCampaignStore } from "@/stores/campaignStore";
 import type { CampaignViewModel } from "@/types/campaigns";
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "./LoadingState";
@@ -10,27 +17,52 @@ import { CreateCampaignModal } from "./CreateCampaignModal";
 import { DeleteCampaignModal } from "./DeleteCampaignModal";
 
 /**
- * Main content component for the campaigns view
+ * Main content component for the campaigns view using React Query
  * Manages the state and orchestrates all campaign operations
  */
-export function CampaignsContent() {
-  const { campaigns, isLoading, error, refetch, createCampaign, updateCampaign, deleteCampaign } = useCampaigns();
+export function CampaignsContentReactQuery() {
+  const { data: campaigns = [], isLoading, error, refetch } = useCampaignsQuery();
+  const createCampaignMutation = useCreateCampaignMutation();
+  const updateCampaignMutation = useUpdateCampaignMutation();
+  const deleteCampaignMutation = useDeleteCampaignMutation();
+  const { setSelectedCampaign } = useCampaignStore();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [deleteModalCampaign, setDeleteModalCampaign] = useState<CampaignViewModel | null>(null);
 
+  // Note: We don't clear selection when on campaigns list
+  // This allows the sidebar to show the last selected campaign
+  // Selection is updated when user clicks on a campaign
+
   const handleCampaignSelect = (id: string) => {
-    // Navigate to campaign details page
-    // TODO: Replace with client-side navigation when routing is implemented
-    window.location.href = `/campaigns/${id}`;
+    // Find the campaign and set it in the store before navigation
+    const campaign = campaigns.find((c) => c.id === id);
+    if (campaign) {
+      setSelectedCampaign(campaign as any); // CampaignViewModel is compatible with CampaignDTO
+    }
+    // Navigate to campaign details page with View Transitions
+    navigate(`/campaigns/${id}`);
   };
 
   const handleCampaignUpdate = async (id: string, name: string) => {
-    await updateCampaign(id, name);
+    await updateCampaignMutation.mutateAsync({ id, name });
   };
 
   const handleCampaignDelete = (campaign: CampaignViewModel) => {
     setDeleteModalCampaign(campaign);
+  };
+
+  const handleCreate = async (name: string) => {
+    const result = await createCampaignMutation.mutateAsync(name);
+    if (result) {
+      return { success: true };
+    }
+    return { success: false, error: "Failed to create campaign" };
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteCampaignMutation.mutateAsync(id);
+    return { success: true };
   };
 
   // Show loading state
@@ -38,13 +70,13 @@ export function CampaignsContent() {
     return <LoadingState />;
   }
 
-  // Show error state (fallback, usually errors are handled in the hook)
+  // Show error state
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="text-center py-12">
           <h2 className="text-2xl font-bold text-destructive mb-2">Error loading campaigns</h2>
-          <p className="text-muted-foreground mb-4">{error.message}</p>
+          <p className="text-muted-foreground mb-4">{error instanceof Error ? error.message : "An error occurred"}</p>
           <Button onClick={() => refetch()} variant="default">
             Try Again
           </Button>
@@ -62,7 +94,7 @@ export function CampaignsContent() {
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           onSuccess={() => setIsCreateModalOpen(false)}
-          onCreate={createCampaign}
+          onCreate={handleCreate}
         />
       </>
     );
@@ -86,14 +118,14 @@ export function CampaignsContent() {
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onSuccess={() => setIsCreateModalOpen(false)}
-        onCreate={createCampaign}
+        onCreate={handleCreate}
       />
 
       <DeleteCampaignModal
         campaign={deleteModalCampaign}
         onClose={() => setDeleteModalCampaign(null)}
         onSuccess={() => setDeleteModalCampaign(null)}
-        onDelete={deleteCampaign}
+        onDelete={handleDelete}
       />
     </div>
   );
