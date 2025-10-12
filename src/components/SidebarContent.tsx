@@ -14,8 +14,6 @@ export function SidebarContent({ currentPath }: SidebarContentProps) {
   const { user, isLoading: isLoadingUser, logout } = useAuth();
   const { selectedCampaignId, selectedCampaign } = useCampaignStore();
 
-  // Read campaign directly from store (no fetching)
-  // Campaign is set by pages that fetch data (CampaignDashboard, CampaignsContent)
   const campaign = selectedCampaign;
 
   return (
