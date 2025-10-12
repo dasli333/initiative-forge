@@ -22,7 +22,7 @@ export async function listMonsters(
   supabase: SupabaseClient,
   filters: ListMonstersQuery
 ): Promise<ListMonstersResponseDTO> {
-  const { name, cr, cr_min, cr_max, limit, offset } = filters;
+  const { name, type, size, alignment, limit, offset } = filters;
 
   // Build query with exact count for pagination
   let query = supabase.from("monsters").select("*", { count: "exact" });
@@ -33,18 +33,19 @@ export async function listMonsters(
     query = query.ilike("name", `%${sanitized}%`);
   }
 
-  // Apply exact CR filter
-  if (cr) {
-    query = query.eq("data->challengeRating->>rating", cr);
+  // Apply type filter (exact match, case-insensitive)
+  if (type) {
+    query = query.ilike("data->>type", type);
   }
 
-  // Apply CR range filters (only if exact CR not specified)
-  // Note: This requires cr_numeric column (see migration in implementation plan)
-  if (cr_min !== undefined && !cr) {
-    query = query.gte("cr_numeric", cr_min);
+  // Apply size filter (exact match, case-insensitive)
+  if (size) {
+    query = query.ilike("data->>size", size);
   }
-  if (cr_max !== undefined && !cr) {
-    query = query.lte("cr_numeric", cr_max);
+
+  // Apply alignment filter (exact match, case-insensitive)
+  if (alignment) {
+    query = query.ilike("data->>alignment", alignment);
   }
 
   // Apply pagination and sorting by name

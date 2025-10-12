@@ -11,9 +11,9 @@ export const prerender = false;
  *
  * Query parameters:
  * - name: Filter by monster name (case-insensitive partial match)
- * - cr: Filter by exact Challenge Rating (e.g., "1/4", "1/2", "5")
- * - cr_min: Minimum CR for range filtering (inclusive)
- * - cr_max: Maximum CR for range filtering (inclusive)
+ * - type: Filter by monster type (e.g., "Humanoid", "Beast", "Dragon")
+ * - size: Filter by monster size (e.g., "Small", "Medium", "Large")
+ * - alignment: Filter by alignment (e.g., "Lawful evil", "Chaotic neutral")
  * - limit: Max results per page (1-100, default: 20)
  * - offset: Pagination offset (default: 0)
  *
@@ -27,9 +27,9 @@ export async function GET(context: APIContext): Promise<Response> {
   const url = new URL(context.request.url);
   const queryParams = {
     name: url.searchParams.get("name") || undefined,
-    cr: url.searchParams.get("cr") || undefined,
-    cr_min: url.searchParams.get("cr_min") || undefined,
-    cr_max: url.searchParams.get("cr_max") || undefined,
+    type: url.searchParams.get("type") || undefined,
+    size: url.searchParams.get("size") || undefined,
+    alignment: url.searchParams.get("alignment") || undefined,
     limit: url.searchParams.get("limit") || undefined,
     offset: url.searchParams.get("offset") || undefined,
   };

@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { SearchBar } from "./SearchBar";
-import { CRFilter } from "./CRFilter";
+import { TypeFilter } from "./TypeFilter";
+import { SizeFilter } from "./SizeFilter";
+import { AlignmentFilter } from "./AlignmentFilter";
 
 /**
  * Props for MonstersHeader component
@@ -15,17 +17,29 @@ interface MonstersHeaderProps {
    */
   onSearchChange: (query: string) => void;
   /**
-   * Current minimum Challenge Rating filter
+   * Current type filter
    */
-  crMin: number | null;
+  type: string | null;
   /**
-   * Current maximum Challenge Rating filter
+   * Callback fired when type filter changes
    */
-  crMax: number | null;
+  onTypeChange: (type: string | null) => void;
   /**
-   * Callback fired when CR filter changes
+   * Current size filter
    */
-  onCRFilterChange: (min: number | null, max: number | null) => void;
+  size: string | null;
+  /**
+   * Callback fired when size filter changes
+   */
+  onSizeChange: (size: string | null) => void;
+  /**
+   * Current alignment filter
+   */
+  alignment: string | null;
+  /**
+   * Callback fired when alignment filter changes
+   */
+  onAlignmentChange: (alignment: string | null) => void;
   /**
    * Callback fired when reset filters button is clicked
    */
@@ -34,40 +48,45 @@ interface MonstersHeaderProps {
 
 /**
  * Header section of the Monsters Library view
- * Contains title, search bar, CR filter, and reset button
+ * Contains title, search bar, all filters, and reset button
  *
  * @param props - Component props
  */
 export function MonstersHeader({
   searchQuery,
   onSearchChange,
-  crMin,
-  crMax,
-  onCRFilterChange,
+  type,
+  onTypeChange,
+  size,
+  onSizeChange,
+  alignment,
+  onAlignmentChange,
   onResetFilters,
 }: MonstersHeaderProps) {
   // Check if any filters are active
-  const hasActiveFilters = searchQuery.trim() !== "" || crMin !== null || crMax !== null;
+  const hasActiveFilters = searchQuery.trim() !== "" || type !== null || size !== null || alignment !== null;
 
   return (
-    <header className="space-y-6 mb-8">
+    <header className="space-y-4 mb-6">
       {/* Title */}
-      <h1 className="text-3xl font-bold">Monsters Library</h1>
+      <h1 className="text-2xl font-bold">Monsters Library</h1>
 
       {/* Search bar - full width */}
       <SearchBar value={searchQuery} onChange={onSearchChange} />
 
       {/* Filters row */}
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
-        {/* CR Filter */}
-        <div className="w-full sm:w-auto sm:min-w-[300px]">
-          <CRFilter min={crMin} max={crMax} onChange={onCRFilterChange} />
+      <div className="space-y-4">
+        {/* First row of filters */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <TypeFilter value={type} onChange={onTypeChange} />
+          <SizeFilter value={size} onChange={onSizeChange} />
+          <AlignmentFilter value={alignment} onChange={onAlignmentChange} />
         </div>
 
         {/* Reset filters button */}
         {hasActiveFilters && (
-          <Button variant="ghost" onClick={onResetFilters} className="w-full sm:w-auto">
-            Reset filters
+          <Button variant="ghost" onClick={onResetFilters} size="sm">
+            Reset all filters
           </Button>
         )}
       </div>

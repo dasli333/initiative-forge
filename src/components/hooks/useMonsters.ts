@@ -7,8 +7,9 @@ import type { ListMonstersResponseDTO } from "@/types";
  */
 export interface UseMonstersParams {
   searchQuery: string;
-  crMin: number | null;
-  crMax: number | null;
+  type: string | null;
+  size: string | null;
+  alignment: string | null;
   limit: number;
 }
 
@@ -27,8 +28,9 @@ export interface UseMonstersParams {
  * @example
  * const { data, isLoading, fetchNextPage, hasNextPage } = useMonsters({
  *   searchQuery: 'dragon',
- *   crMin: 5,
- *   crMax: 15,
+ *   type: 'Dragon',
+ *   size: 'Large',
+ *   alignment: null,
  *   limit: 20
  * });
  * const monsters = data?.pages.flatMap(page => page.monsters) ?? [];

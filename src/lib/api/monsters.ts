@@ -5,8 +5,9 @@ import type { ListMonstersResponseDTO } from "@/types";
  */
 export interface FetchMonstersParams {
   searchQuery?: string;
-  crMin?: number | null;
-  crMax?: number | null;
+  type?: string | null;
+  size?: string | null;
+  alignment?: string | null;
   limit: number;
   offset: number;
 }
@@ -25,12 +26,16 @@ export async function fetchMonsters(params: FetchMonstersParams): Promise<ListMo
     queryParams.set("name", params.searchQuery.trim());
   }
 
-  if (params.crMin !== null && params.crMin !== undefined) {
-    queryParams.set("cr_min", String(params.crMin));
+  if (params.type && params.type.trim()) {
+    queryParams.set("type", params.type.trim());
   }
 
-  if (params.crMax !== null && params.crMax !== undefined) {
-    queryParams.set("cr_max", String(params.crMax));
+  if (params.size && params.size.trim()) {
+    queryParams.set("size", params.size.trim());
+  }
+
+  if (params.alignment && params.alignment.trim()) {
+    queryParams.set("alignment", params.alignment.trim());
   }
 
   queryParams.set("limit", String(params.limit));

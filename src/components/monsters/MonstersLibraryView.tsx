@@ -1,44 +1,48 @@
 import { useState } from "react";
 import { MonstersHeader } from "./MonstersHeader";
-import { MonsterGrid } from "./MonsterGrid";
-import { MonsterSlideover } from "./MonsterSlideover";
+import { MonsterList } from "./MonsterList";
+import { MonsterDetails } from "./MonsterDetails";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDebouncedValue } from "@/components/hooks/useDebouncedValue";
 import { useMonsters } from "@/components/hooks/useMonsters";
+import { FileSearch } from "lucide-react";
 
 /**
  * Main container component for the Monsters Library view
  * Manages all state and orchestrates child components
  *
  * Features:
+ * - Split-view layout (30% list, 70% details)
  * - Search by monster name (debounced 300ms)
- * - Filter by Challenge Rating range
- * - Infinite scroll pagination
- * - Slideover for detailed monster view
+ * - Filter by type, size, alignment
+ * - Infinite scroll pagination in list
+ * - Fixed detail view on the right
  * - React Query for server state management
  *
  * State management:
- * - Local state: filters (search, CR), slideover (selected monster, open state)
+ * - Local state: filters (search, type, size, alignment), selected monster
  * - Server state: React Query (monsters data, loading, error, pagination)
  */
 export function MonstersLibraryView() {
   // Filter state
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [crMin, setCrMin] = useState<number | null>(null);
-  const [crMax, setCrMax] = useState<number | null>(null);
+  const [type, setType] = useState<string | null>(null);
+  const [size, setSize] = useState<string | null>(null);
+  const [alignment, setAlignment] = useState<string | null>(null);
 
   // Debounced search query to reduce API calls
   const debouncedSearchQuery = useDebouncedValue(searchQuery, 300);
 
-  // Slideover state
+  // Selected monster state
   const [selectedMonsterId, setSelectedMonsterId] = useState<string | null>(null);
-  const [isSlideoverOpen, setIsSlideoverOpen] = useState<boolean>(false);
 
   // Fetch monsters with React Query infinite query
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useMonsters({
     searchQuery: debouncedSearchQuery,
-    crMin,
-    crMax,
-    limit: 20,
+    type,
+    size,
+    alignment,
+    limit: 30,
   });
 
   // Flatten paginated data into single array
@@ -55,57 +59,90 @@ export function MonstersLibraryView() {
     setSearchQuery(query);
   };
 
-  const handleCRFilterChange = (min: number | null, max: number | null) => {
-    // Validation is handled by CRFilter component
-    setCrMin(min);
-    setCrMax(max);
+  const handleTypeChange = (newType: string | null) => {
+    setType(newType);
+  };
+
+  const handleSizeChange = (newSize: string | null) => {
+    setSize(newSize);
+  };
+
+  const handleAlignmentChange = (newAlignment: string | null) => {
+    setAlignment(newAlignment);
   };
 
   const handleResetFilters = () => {
     setSearchQuery("");
-    setCrMin(null);
-    setCrMax(null);
+    setType(null);
+    setSize(null);
+    setAlignment(null);
   };
 
   const handleMonsterClick = (monsterId: string) => {
     setSelectedMonsterId(monsterId);
-    setIsSlideoverOpen(true);
-  };
-
-  const handleSlideoverOpenChange = (open: boolean) => {
-    setIsSlideoverOpen(open);
-    // Clear selected monster when closing
-    if (!open) {
-      setSelectedMonsterId(null);
-    }
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-7xl">
-      {/* Header with search and filters */}
-      <MonstersHeader
-        searchQuery={searchQuery}
-        onSearchChange={handleSearchChange}
-        crMin={crMin}
-        crMax={crMax}
-        onCRFilterChange={handleCRFilterChange}
-        onResetFilters={handleResetFilters}
-      />
+    <div className="flex h-full -m-4 md:-m-8">
+      {/* Left Panel - Monster List (30% width) */}
+      <div className="w-[30%] border-r border-border flex flex-col">
+        {/* Header with filters - fixed at top of left panel */}
+        <div className="p-4 border-b border-border">
+          <MonstersHeader
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchChange}
+            type={type}
+            onTypeChange={handleTypeChange}
+            size={size}
+            onSizeChange={handleSizeChange}
+            alignment={alignment}
+            onAlignmentChange={handleAlignmentChange}
+            onResetFilters={handleResetFilters}
+          />
+        </div>
 
-      {/* Monster grid with infinite scroll */}
-      <MonsterGrid
-        monsters={monsters}
-        isLoading={isLoading}
-        isError={isError}
-        onMonsterClick={handleMonsterClick}
-        hasNextPage={hasNextPage ?? false}
-        isFetchingNextPage={isFetchingNextPage}
-        onLoadMore={fetchNextPage}
-        refetch={refetch}
-      />
+        {/* Scrollable monster list */}
+        <div className="flex-1 overflow-y-auto">
+          <MonsterList
+            monsters={monsters}
+            selectedMonsterId={selectedMonsterId}
+            isLoading={isLoading}
+            isError={isError}
+            onMonsterClick={handleMonsterClick}
+            hasNextPage={hasNextPage ?? false}
+            isFetchingNextPage={isFetchingNextPage}
+            onLoadMore={fetchNextPage}
+            refetch={refetch}
+          />
+        </div>
+      </div>
 
-      {/* Slideover for monster details */}
-      <MonsterSlideover monster={selectedMonster} isOpen={isSlideoverOpen} onOpenChange={handleSlideoverOpenChange} />
+      {/* Right Panel - Monster Details (70% width) */}
+      <div className="w-[70%] flex flex-col">
+        {selectedMonster ? (
+          <>
+            {/* Monster header */}
+            <div className="p-6 border-b border-border">
+              <h2 className="text-2xl font-bold">{selectedMonster.data.name.en}</h2>
+              {selectedMonster.data.name.pl !== selectedMonster.data.name.en && (
+                <p className="text-sm text-muted-foreground italic mt-1">{selectedMonster.data.name.pl}</p>
+              )}
+            </div>
+
+            {/* Scrollable monster details */}
+            <ScrollArea className="flex-1 p-6">
+              <MonsterDetails data={selectedMonster.data} />
+            </ScrollArea>
+          </>
+        ) : (
+          // Empty state when no monster is selected
+          <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground">
+            <FileSearch className="h-16 w-16 mb-4" />
+            <h3 className="text-lg font-medium mb-2">No Monster Selected</h3>
+            <p className="text-sm">Select a monster from the list to view its details</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

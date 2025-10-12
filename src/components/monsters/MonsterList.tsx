@@ -1,19 +1,22 @@
 import { useEffect, useRef } from "react";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Loader2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { MonsterCard } from "./MonsterCard";
-import { SkeletonCards } from "./SkeletonCards";
-import { EmptyState } from "./EmptyState";
+import { MonsterListItem } from "./MonsterListItem";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { MonsterDTO } from "@/types";
 
 /**
- * Props for MonsterGrid component
+ * Props for MonsterList component
  */
-interface MonsterGridProps {
+interface MonsterListProps {
   /**
    * Array of monsters to display
    */
   monsters: MonsterDTO[];
+  /**
+   * ID of the currently selected monster
+   */
+  selectedMonsterId: string | null;
   /**
    * Whether initial data is loading
    */
@@ -23,7 +26,7 @@ interface MonsterGridProps {
    */
   isError: boolean;
   /**
-   * Callback fired when a monster card is clicked
+   * Callback fired when a monster is clicked
    */
   onMonsterClick: (monsterId: string) => void;
   /**
@@ -45,19 +48,14 @@ interface MonsterGridProps {
 }
 
 /**
- * Grid container for displaying monster cards with infinite scroll
- *
- * Features:
- * - Responsive grid layout (2 columns @ 1024px, 3 columns @ 1280px)
- * - Skeleton loading state
- * - Empty state when no results
- * - Error state with retry button
- * - Infinite scroll using Intersection Observer
+ * List container for displaying monsters with infinite scroll
+ * Shows a compact vertical list suitable for the left panel
  *
  * @param props - Component props
  */
-export function MonsterGrid({
+export function MonsterList({
   monsters,
+  selectedMonsterId,
   isLoading,
   isError,
   onMonsterClick,
@@ -65,7 +63,7 @@ export function MonsterGrid({
   isFetchingNextPage,
   onLoadMore,
   refetch,
-}: MonsterGridProps) {
+}: MonsterListProps) {
   const observerTarget = useRef<HTMLDivElement>(null);
 
   // Set up Intersection Observer for infinite scroll
@@ -93,8 +91,14 @@ export function MonsterGrid({
   // Initial loading state
   if (isLoading && !isFetchingNextPage) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-        <SkeletonCards count={20} />
+      <div className="h-full">
+        {/* Skeleton loading state */}
+        {Array.from({ length: 10 }).map((_, index) => (
+          <div key={index} className="py-3 px-4 border-b border-border">
+            <Skeleton className="h-4 w-3/4 mb-1" />
+            <Skeleton className="h-3 w-1/2" />
+          </div>
+        ))}
       </div>
     );
   }
@@ -103,11 +107,11 @@ export function MonsterGrid({
   if (isError && monsters.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
-        <AlertCircle className="h-16 w-16 text-destructive mb-4" />
-        <p className="text-lg font-semibold mb-2">Failed to load monsters</p>
-        <p className="text-sm text-muted-foreground mb-4">Please try again</p>
+        <AlertCircle className="h-12 w-12 text-destructive mb-3" />
+        <p className="text-sm font-semibold mb-1">Failed to load monsters</p>
+        <p className="text-xs text-muted-foreground mb-3">Please try again</p>
         {refetch && (
-          <Button onClick={() => refetch()} variant="outline">
+          <Button onClick={() => refetch()} variant="outline" size="sm">
             Retry
           </Button>
         )}
@@ -117,24 +121,33 @@ export function MonsterGrid({
 
   // Empty state (no results)
   if (!isLoading && monsters.length === 0) {
-    return <EmptyState />;
+    return (
+      <div className="flex flex-col items-center justify-center py-16">
+        <Search className="h-12 w-12 text-muted-foreground mb-3" />
+        <p className="text-sm font-semibold mb-1">No monsters found</p>
+        <p className="text-xs text-muted-foreground">Try adjusting your filters</p>
+      </div>
+    );
   }
 
-  // Main grid with monsters
+  // Main list with monsters
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-        {monsters.map((monster) => (
-          <MonsterCard key={monster.id} monster={monster} onClick={onMonsterClick} />
-        ))}
-      </div>
+    <div className="h-full">
+      {monsters.map((monster) => (
+        <MonsterListItem
+          key={monster.id}
+          monster={monster}
+          isSelected={selectedMonsterId === monster.id}
+          onClick={onMonsterClick}
+        />
+      ))}
 
       {/* Infinite scroll trigger element */}
-      <div ref={observerTarget} className="flex justify-center py-4">
+      <div ref={observerTarget} className="py-4">
         {isFetchingNextPage && (
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Loader2 className="h-5 w-5 animate-spin" />
-            <span className="text-sm">Loading more monsters...</span>
+          <div className="flex items-center justify-center gap-2 text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span className="text-xs">Loading more...</span>
           </div>
         )}
       </div>
