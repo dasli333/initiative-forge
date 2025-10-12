@@ -3,7 +3,7 @@ Twoim zadaniem jest zaimplementowanie widoku frontendu w oparciu o podany plan i
 Najpierw przejrzyj plan implementacji:
 
 <implementation_plan>
-@.ai/ui-plans/my-campaigns-view-implementation-plan.md
+@.ai/ui-plans/monsters-view-implementation-plan.md
 </implementation_plan>
 
 Teraz przejrzyj zasady implementacji:

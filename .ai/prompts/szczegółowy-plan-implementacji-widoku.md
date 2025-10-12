@@ -9,37 +9,46 @@ Najpierw przejrzyj następujące informacje:
 
 2. Opis widoku:
 <view_description>
-### 2.4. Campaign Dashboard
+### 2.8. Monsters Library
 
-**Ścieżka**: `/campaigns/:id`
+**Ścieżka**: `/monsters`
 
-**Główny cel**: Przegląd wybranej kampanii i szybki dostęp do głównych funkcji (zarządzanie postaciami, rozpoczęcie walki).
+**Główny cel**: Przeglądanie i wyszukiwanie globalnej biblioteki potworów z SRD.
 
 **Kluczowe informacje do wyświetlenia**:
 
-- Nazwa kampanii (edytowalna inline)
-- Data utworzenia kampanii
-- Statystyki: liczba postaci (w przyszłości: zadania, sesje)
-- Quick actions: przyciski do zarządzania postaciami i rozpoczęcia walki
+- Search bar z filtrem CR
+- Grid monster cards (Name, CR badge, Type, Size)
+- Slideover z pełnymi statystykami potwora
+- Infinite scroll dla paginacji
 
 **Kluczowe komponenty widoku**:
 
-- **Breadcrumb Navigation**: "My Campaigns"
-- **Stats Overview Section**:
-    - Header: H1 Nazwa kampanii (edytowalna inline - click → input), Metadata "Created on [date]" (muted)
-    - Stats Grid (responsywny, przygotowany na przyszłe rozszerzenia):
-        - Card: "Player Characters" + liczba (duża, emerald)
-- **Quick Actions Section**:
-    - H2: "Quick Actions"
-    - Grid (2 kolumny):
-        - Card "Player Characters": Icon + Description, Button "Manage Characters" → /campaigns/:id/characters
-        - Card "Combats": Icon + Description, Button "Start New Combat" (emerald) → /campaigns/:id/combats/new
+- **Header**:
+    - H1: "Monsters Library"
+    - Search bar: "Search monsters..." (debounce 300ms, full width)
+    - Filters (inline): CR Filter (Range slider 0-30 lub dual select Min/Max CR), Reset filters button
+- **Monster List**:
+    - Grid (2 kolumny na 1024px, 3 kolumny na 1280px+):
+        - **Monster Card**: Header Name (H3), CR Badge (emerald, large), Type + Size (muted), Click → otwiera Slideover
+    - **Infinite scroll**: 20 initial, trigger at 80%, loading spinner na dole "Loading more..."
+    - Loading state (initial): Skeleton cards
+    - Empty state: "No monsters found matching your filters"
+- **Slideover** (Shadcn Sheet, from right, width 400px):
+    - Header: Monster Name (H2), CR Badge, Close button (X)
+    - Body (Scroll Area):
+        - Basic Info: Size, Type, Alignment, AC, HP (average + formula), Speed
+        - Ability Scores: Table (STR, DEX, CON, INT, WIS, CHA - score + modifier)
+        - Skills, Senses, Languages
+        - **Traits**: Accordion dla każdego (name + description)
+        - **Actions**: Accordion (name, description z attack roll/damage)
+        - **Bonus Actions, Reactions**: Accordion (jeśli istnieją)
 
 **UX, dostępność i względy bezpieczeństwa**:
 
-- **UX**: Loading state (skeleton), error state (jeśli kampania nie istnieje → 404), focus na główny heading po load, inline editing z auto-save
-- **Accessibility**: Focus na H1 po załadowaniu strony, keyboard navigation dla button groups
-- **Security**: RLS zapewnia dostęp tylko dla właściciela kampanii, 404 jeśli kampania nie należy do usera
+- **UX**: Debounced search (300ms), paginated API calls, skeleton loading, smooth slideover animation
+- **Accessibility**: Focus trap w slideover, Escape zamyka slideover, ARIA labels dla filter controls, search input aria-describedby="search-hint"
+- **Security**: Public read access (no auth required), rate limiting dla API
 </view_description>
 
 3. User Stories:
@@ -49,116 +58,106 @@ Najpierw przejrzyj następujące informacje:
 
 4. Endpoint Description:
    <endpoint_description>
-
-### 2.1. Campaigns
-
-#### Get Campaign
-
-- **Method**: GET
-- **Path**: `/api/campaigns/:id`
-- **Description**: Returns a single campaign by ID
-- **Query Parameters**: N/A
+   - **Method**: GET
+- **Path**: `/api/monsters`
+- **Description**: Returns filtered and paginated list of monsters from the global SRD library
+- **Query Parameters**:
+    - `name` (optional, string): Filter by monster name (case-insensitive partial match)
+    - `cr` (optional, string): Filter by exact Challenge Rating (e.g., "1", "1/2", "5")
+    - `cr_min` (optional, number): Filter by minimum CR
+    - `cr_max` (optional, number): Filter by maximum CR
+    - `limit` (optional, number): Maximum results (default: 20, max: 100)
+    - `offset` (optional, number): Offset for pagination (default: 0)
 - **Request Body**: N/A
 - **Response**: 200 OK
 
 ```json
 {
-  "id": "uuid",
-  "user_id": "uuid",
-  "name": "Curse of Strahd",
-  "created_at": "2025-01-15T14:20:00Z",
-  "updated_at": "2025-01-15T14:20:00Z"
-}
-```
-
-- **Error Responses**:
-  - 401 Unauthorized: Missing or invalid authentication
-  - 404 Not Found: Campaign does not exist or user doesn't own it
-
-#### Update Campaign
-
-- **Method**: PATCH
-- **Path**: `/api/campaigns/:id`
-- **Description**: Updates campaign name
-- **Query Parameters**: N/A
-- **Request Body**:
-
-```json
-{
-  "name": "Curse of Strahd - Season 2"
-}
-```
-
-- **Response**: 200 OK
-
-```json
-{
-  "id": "uuid",
-  "user_id": "uuid",
-  "name": "Curse of Strahd - Season 2",
-  "created_at": "2025-01-15T14:20:00Z",
-  "updated_at": "2025-01-16T09:15:00Z"
-}
-```
-
-- **Error Responses**:
-  - 400 Bad Request: Invalid input
-  - 401 Unauthorized: Missing or invalid authentication
-  - 404 Not Found: Campaign does not exist or user doesn't own it
-  - 409 Conflict: New campaign name already exists for this user
-
-
-- **Method**: GET
-- **Path**: `/api/campaigns/:campaignId/characters`
-- **Description**: Returns all player characters in a campaign
-- **Query Parameters**: N/A
-- **Request Body**: N/A
-- **Response**: 200 OK
-
-```json
-{
-  "characters": [
+  "monsters": [
     {
       "id": "uuid",
-      "campaign_id": "uuid",
-      "name": "Aragorn",
-      "max_hp": 45,
-      "armor_class": 16,
-      "speed": 30,
-      "strength": 16,
-      "dexterity": 14,
-      "constitution": 14,
-      "intelligence": 10,
-      "wisdom": 12,
-      "charisma": 14,
-      "actions": [
-        {
-          "name": "Longsword Attack",
-          "type": "melee_weapon_attack",
-          "attack_bonus": 5,
-          "reach": "5 ft",
-          "damage_dice": "1d8",
-          "damage_bonus": 3,
-          "damage_type": "slashing"
-        }
-      ],
-      "created_at": "2025-01-15T14:30:00Z",
-      "updated_at": "2025-01-15T14:30:00Z"
+      "name": "Goblin",
+      "data": {
+        "name": {
+          "en": "Goblin",
+          "pl": "Goblin"
+        },
+        "size": "Small",
+        "type": "humanoid",
+        "category": "Goblin",
+        "alignment": "Neutral Evil",
+        "senses": ["Darkvision 60 ft.", "Passive Perception 9"],
+        "languages": ["Common", "Goblin"],
+        "abilityScores": {
+          "strength": { "score": 8, "modifier": -1, "save": -1 },
+          "dexterity": { "score": 14, "modifier": 2, "save": 2 },
+          "constitution": { "score": 10, "modifier": 0, "save": 0 },
+          "intelligence": { "score": 10, "modifier": 0, "save": 0 },
+          "wisdom": { "score": 8, "modifier": -1, "save": -1 },
+          "charisma": { "score": 8, "modifier": -1, "save": -1 }
+        },
+        "speed": ["30 ft."],
+        "hitPoints": {
+          "average": 7,
+          "formula": "2d6"
+        },
+        "armorClass": 15,
+        "challengeRating": {
+          "rating": "1/4",
+          "experiencePoints": 50,
+          "proficiencyBonus": 2
+        },
+        "skills": ["Stealth +6"],
+        "damageVulnerabilities": [],
+        "damageResistances": [],
+        "damageImmunities": [],
+        "conditionImmunities": [],
+        "gear": [],
+        "traits": [],
+        "actions": [
+          {
+            "name": "Scimitar",
+            "description": "Melee Attack Roll: +4, reach 5 ft. Hit: 5 (1d6 + 2) Slashing damage.",
+            "type": "melee",
+            "attackRoll": {
+              "type": "melee",
+              "bonus": 4
+            },
+            "damage": [
+              {
+                "average": 5,
+                "formula": "1d6 + 2",
+                "type": "Slashing"
+              }
+            ]
+          }
+        ],
+        "bonusActions": [],
+        "reactions": [],
+        "initiative": {
+          "modifier": 2,
+          "total": 12
+        },
+        "id": "goblin"
+      },
+      "created_at": "2025-01-10T00:00:00Z"
     }
-  ]
+  ],
+  "total": 1,
+  "limit": 20,
+  "offset": 0
 }
 ```
 
 - **Error Responses**:
-    - 401 Unauthorized: Missing or invalid authentication
-    - 404 Not Found: Campaign does not exist or user doesn't own it
+    - 400 Bad Request: Invalid query parameters
 
-
+**Note**: Public read access (no authentication required per RLS policy)
   </endpoint_description>
 
 5. Endpoint Implementation:
    <endpoint_implementation>
-   @src/pages/api/campaigns/[id].ts @src/pages/api/campaigns/[campaignId]/characters.ts @src/pages/api/campaigns/[campaignId]/combats.ts
+   @src/pages/api/monsters.ts
    </endpoint_implementation>
 
 6. Type Definitions:

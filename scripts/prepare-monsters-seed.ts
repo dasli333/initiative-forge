@@ -1,6 +1,6 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,17 +35,17 @@ function monsterToSql(monster: MonsterData): string {
  * Main function to generate the SQL migration file
  */
 function generateMonstersSeedMigration(): void {
-  console.log('🚀 Starting monsters seed generation...');
+  console.log("🚀 Starting monsters seed generation...");
 
   // Read the monsters JSON file
-  const monstersJsonPath = path.join(__dirname, '../src/schemas/data/monsters-legendary.json');
-  const monstersJson = fs.readFileSync(monstersJsonPath, 'utf-8');
+  const monstersJsonPath = path.join(__dirname, "../src/schemas/data/monsters-legendary.json");
+  const monstersJson = fs.readFileSync(monstersJsonPath, "utf-8");
   const monsters: MonsterData[] = JSON.parse(monstersJson);
 
   console.log(`📚 Loaded ${monsters.length} monsters from JSON`);
 
   // Generate SQL INSERT statements
-  const sqlValues = monsters.map(monsterToSql).join(',\n');
+  const sqlValues = monsters.map(monsterToSql).join(",\n");
 
   // Create the full migration file content
   const migrationContent = `-- migration: seed_monsters.sql
@@ -63,18 +63,18 @@ ON CONFLICT DO NOTHING;
 `;
 
   // Write the migration file
-  const migrationPath = path.join(__dirname, '../supabase/migrations/20251012000000_seed_monsters.sql');
-  fs.writeFileSync(migrationPath, migrationContent, 'utf-8');
+  const migrationPath = path.join(__dirname, "../supabase/migrations/20251012000000_seed_monsters.sql");
+  fs.writeFileSync(migrationPath, migrationContent, "utf-8");
 
   console.log(`✅ Migration file created: ${migrationPath}`);
   console.log(`📊 Total monsters: ${monsters.length}`);
-  console.log('✨ Done!');
+  console.log("✨ Done!");
 }
 
 // Run the script
 try {
   generateMonstersSeedMigration();
 } catch (error) {
-  console.error('❌ Error generating migration:', error);
+  console.error("❌ Error generating migration:", error);
   process.exit(1);
 }

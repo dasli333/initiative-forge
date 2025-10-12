@@ -47,8 +47,7 @@ export const useCampaignStore = create<CampaignStore>()(
             "setSelectedCampaign"
           ),
 
-        clearSelection: () =>
-          set({ selectedCampaignId: null, selectedCampaign: null }, false, "clearSelection"),
+        clearSelection: () => set({ selectedCampaignId: null, selectedCampaign: null }, false, "clearSelection"),
       }),
       {
         name: "campaign-storage", // name for localStorage key
