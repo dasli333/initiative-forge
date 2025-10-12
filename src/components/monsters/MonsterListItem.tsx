@@ -51,8 +51,9 @@ export function MonsterListItem({ monster, isSelected, onClick }: MonsterListIte
   return (
     <div
       className={cn(
-        "py-3 px-4 cursor-pointer transition-colors border-b border-border hover:bg-muted/50",
-        isSelected && "bg-muted"
+        "py-3 px-4 cursor-pointer transition-all duration-200 border-b border-border",
+        "hover:bg-muted/70 hover:border-l-2 hover:border-l-emerald-500/50",
+        isSelected && "bg-emerald-500/5 border-l-4 border-l-emerald-500"
       )}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
@@ -64,11 +65,18 @@ export function MonsterListItem({ monster, isSelected, onClick }: MonsterListIte
       <div className="flex items-center justify-between gap-2">
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-medium truncate">{displayName}</h3>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {data.size} {data.type}
-          </p>
+          <div className="flex items-center gap-1 mt-1">
+            <span className="text-xs bg-muted/40 px-1.5 py-0.5 rounded">
+              {data.size}
+            </span>
+            <span className="text-xs bg-muted/40 px-1.5 py-0.5 rounded">
+              {data.type}
+            </span>
+          </div>
         </div>
-        <Badge className="bg-emerald-500 hover:bg-emerald-600 flex-shrink-0 text-xs">CR {data.challengeRating.rating}</Badge>
+        <Badge className="bg-emerald-500 hover:bg-emerald-600 flex-shrink-0 text-xs shadow-sm">
+          CR {data.challengeRating.rating}
+        </Badge>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { MonstersHeader } from "./MonstersHeader";
 import { MonsterList } from "./MonsterList";
 import { MonsterDetails } from "./MonsterDetails";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 import { useDebouncedValue } from "@/components/hooks/useDebouncedValue";
 import { useMonsters } from "@/components/hooks/useMonsters";
 import { useLanguageStore } from "@/stores/languageStore";
@@ -126,14 +127,28 @@ export function MonstersLibraryView() {
         {selectedMonster ? (
           <>
             {/* Monster header */}
-            <div className="p-6 border-b border-border">
-              <h2 className="text-2xl font-bold">{selectedMonster.data.name[selectedLanguage]}</h2>
+            <div className="p-6 border-b border-border bg-gradient-to-r from-card via-card/80 to-emerald-500/5">
+              <h2 className="text-3xl font-bold mb-3">{selectedMonster.data.name[selectedLanguage]}</h2>
               {selectedLanguage === "en" && selectedMonster.data.name.pl !== selectedMonster.data.name.en && (
-                <p className="text-sm text-muted-foreground italic mt-1">{selectedMonster.data.name.pl}</p>
+                <p className="text-sm text-muted-foreground italic mb-3">{selectedMonster.data.name.pl}</p>
               )}
               {selectedLanguage === "pl" && selectedMonster.data.name.en !== selectedMonster.data.name.pl && (
-                <p className="text-sm text-muted-foreground italic mt-1">{selectedMonster.data.name.en}</p>
+                <p className="text-sm text-muted-foreground italic mb-3">{selectedMonster.data.name.en}</p>
               )}
+              <div className="flex flex-wrap gap-2 mt-3">
+                <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 text-sm shadow-sm">
+                  CR {selectedMonster.data.challengeRating.rating}
+                </Badge>
+                <Badge variant="secondary" className="px-3 py-1 text-sm">
+                  {selectedMonster.data.type}
+                </Badge>
+                <Badge variant="secondary" className="px-3 py-1 text-sm">
+                  {selectedMonster.data.size}
+                </Badge>
+                <Badge variant="secondary" className="px-3 py-1 text-sm">
+                  {selectedMonster.data.alignment}
+                </Badge>
+              </div>
             </div>
 
             {/* Scrollable monster details */}
