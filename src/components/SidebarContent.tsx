@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useCampaignQuery } from "@/hooks/queries/useCampaign";
 import { useCampaignStore } from "@/stores/campaignStore";
 import { useActiveCombat } from "@/hooks/useActiveCombat";
 import { AppHeader } from "./sidebar/AppHeader";
@@ -15,28 +13,12 @@ interface SidebarContentProps {
 
 export function SidebarContent({ currentPath }: SidebarContentProps) {
   const { user, isLoading: isLoadingUser, logout } = useAuth();
-  const { selectedCampaignId, setSelectedCampaignId } = useCampaignStore();
+  const { selectedCampaignId, selectedCampaign } = useCampaignStore();
 
-  // Extract campaign ID from URL if on a campaign page
-  const campaignIdFromUrl = (() => {
-    const campaignMatch = currentPath.match(/^\/campaigns\/([^/]+)/);
-    return campaignMatch ? campaignMatch[1] : null;
-  })();
-
-  // Sync URL campaign ID with store
-  useEffect(() => {
-    if (campaignIdFromUrl && campaignIdFromUrl !== selectedCampaignId) {
-      setSelectedCampaignId(campaignIdFromUrl);
-    } else if (!campaignIdFromUrl && currentPath === "/campaigns" && selectedCampaignId) {
-      // Clear selection when on campaigns list page
-      // Don't clear it on other pages like /login, /settings, etc.
-    }
-  }, [campaignIdFromUrl, selectedCampaignId, setSelectedCampaignId, currentPath]);
-
-  // Use the campaign ID (from URL or store)
-  const activeCampaignId = campaignIdFromUrl || selectedCampaignId;
-  const { data: campaign = null, isLoading: isLoadingCampaign } = useCampaignQuery(activeCampaignId);
-  const { activeCombat } = useActiveCombat(activeCampaignId);
+  // Read campaign directly from store (no fetching)
+  // Campaign is set by pages that fetch data (CampaignDashboard, CampaignsContent)
+  const campaign = selectedCampaign;
+  const { activeCombat } = useActiveCombat(selectedCampaignId);
 
   return (
     <aside
@@ -48,12 +30,12 @@ export function SidebarContent({ currentPath }: SidebarContentProps) {
       <AppHeader />
 
       {/* Current Campaign Display */}
-      <CurrentCampaignDisplay campaign={campaign} isLoading={isLoadingCampaign} />
+      <CurrentCampaignDisplay campaign={campaign} isLoading={false} />
 
       {/* Navigation - flex-1 for spacing */}
       <nav className="flex-1 overflow-y-auto py-4">
         <GlobalNav currentPath={currentPath} />
-        <CampaignNav selectedCampaignId={activeCampaignId} activeCombat={activeCombat} currentPath={currentPath} />
+        <CampaignNav selectedCampaignId={selectedCampaignId} activeCombat={activeCombat} currentPath={currentPath} />
       </nav>
 
       {/* Bottom Section - User Menu */}

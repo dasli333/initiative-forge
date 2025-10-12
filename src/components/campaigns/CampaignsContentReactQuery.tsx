@@ -25,14 +25,21 @@ export function CampaignsContentReactQuery() {
   const createCampaignMutation = useCreateCampaignMutation();
   const updateCampaignMutation = useUpdateCampaignMutation();
   const deleteCampaignMutation = useDeleteCampaignMutation();
-  const { setSelectedCampaignId } = useCampaignStore();
+  const { setSelectedCampaign } = useCampaignStore();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [deleteModalCampaign, setDeleteModalCampaign] = useState<CampaignViewModel | null>(null);
 
+  // Note: We don't clear selection when on campaigns list
+  // This allows the sidebar to show the last selected campaign
+  // Selection is updated when user clicks on a campaign
+
   const handleCampaignSelect = (id: string) => {
-    // Set the selected campaign in the store before navigation
-    setSelectedCampaignId(id);
+    // Find the campaign and set it in the store before navigation
+    const campaign = campaigns.find((c) => c.id === id);
+    if (campaign) {
+      setSelectedCampaign(campaign as any); // CampaignViewModel is compatible with CampaignDTO
+    }
     // Navigate to campaign details page with View Transitions
     navigate(`/campaigns/${id}`);
   };
