@@ -5,15 +5,24 @@ import { DEFAULT_USER_ID } from "@/db/supabase.client";
 export const prerender = false;
 
 /**
- * GET /api/combats/:id
+ * GET /api/campaigns/:campaignId/combats/:id
  * Returns combat details with current state snapshot
  */
 export async function GET(context: APIContext): Promise<Response> {
   // TODO: Authentication temporarily disabled - using default user
   const userId = DEFAULT_USER_ID;
 
-  // Extract combatId from params
+  // Extract campaignId and combatId from params
+  const campaignId = context.params.campaignId;
   const combatId = context.params.id;
+
+  if (!campaignId) {
+    return new Response(JSON.stringify({ error: "Campaign ID is required" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   if (!combatId) {
     return new Response(JSON.stringify({ error: "Combat ID is required" }), {
       status: 400,
@@ -23,6 +32,14 @@ export async function GET(context: APIContext): Promise<Response> {
 
   try {
     const combat = await getCombat(context.locals.supabase, userId, combatId);
+
+    // Verify combat belongs to the campaign
+    if (combat.campaign_id !== campaignId) {
+      return new Response(JSON.stringify({ error: "Combat not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
     return new Response(JSON.stringify(combat), {
       status: 200,
@@ -45,15 +62,24 @@ export async function GET(context: APIContext): Promise<Response> {
 }
 
 /**
- * DELETE /api/combats/:id
+ * DELETE /api/campaigns/:campaignId/combats/:id
  * Deletes a combat encounter
  */
 export async function DELETE(context: APIContext): Promise<Response> {
   // TODO: Authentication temporarily disabled - using default user
   const userId = DEFAULT_USER_ID;
 
-  // Extract combatId from params
+  // Extract campaignId and combatId from params
+  const campaignId = context.params.campaignId;
   const combatId = context.params.id;
+
+  if (!campaignId) {
+    return new Response(JSON.stringify({ error: "Campaign ID is required" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   if (!combatId) {
     return new Response(JSON.stringify({ error: "Combat ID is required" }), {
       status: 400,
@@ -62,6 +88,16 @@ export async function DELETE(context: APIContext): Promise<Response> {
   }
 
   try {
+    // Get combat first to verify it belongs to the campaign
+    const combat = await getCombat(context.locals.supabase, userId, combatId);
+
+    if (combat.campaign_id !== campaignId) {
+      return new Response(JSON.stringify({ error: "Combat not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     await deleteCombat(context.locals.supabase, userId, combatId);
 
     return new Response(null, {

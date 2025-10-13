@@ -1,20 +1,29 @@
 import type { APIContext } from "astro";
-import { updateCombatStatus } from "@/lib/services/combat.service";
+import { updateCombatStatus, getCombat } from "@/lib/services/combat.service";
 import { UpdateCombatStatusCommandSchema } from "@/lib/schemas/combat.schema";
 import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
 /**
- * PATCH /api/combats/:id/status
+ * PATCH /api/campaigns/:campaignId/combats/:id/status
  * Updates combat status (e.g., mark as completed)
  */
 export async function PATCH(context: APIContext): Promise<Response> {
   // TODO: Authentication temporarily disabled - using default user
   const userId = DEFAULT_USER_ID;
 
-  // Extract combatId from params
+  // Extract campaignId and combatId from params
+  const campaignId = context.params.campaignId;
   const combatId = context.params.id;
+
+  if (!campaignId) {
+    return new Response(JSON.stringify({ error: "Campaign ID is required" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   if (!combatId) {
     return new Response(JSON.stringify({ error: "Combat ID is required" }), {
       status: 400,
@@ -48,6 +57,16 @@ export async function PATCH(context: APIContext): Promise<Response> {
   }
 
   try {
+    // First verify combat belongs to the campaign
+    const existingCombat = await getCombat(context.locals.supabase, userId, combatId);
+
+    if (existingCombat.campaign_id !== campaignId) {
+      return new Response(JSON.stringify({ error: "Combat not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     const combat = await updateCombatStatus(context.locals.supabase, userId, combatId, validation.data.status);
 
     return new Response(JSON.stringify(combat), {
