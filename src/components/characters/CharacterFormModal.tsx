@@ -108,8 +108,8 @@ export const CharacterFormModal = ({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={handleCloseAttempt}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
+        <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col gap-0 p-0">
+          <DialogHeader className="px-6 pt-6 pb-4">
             <DialogTitle>{mode === "create" ? "Add Player Character" : "Edit Character"}</DialogTitle>
             <DialogDescription>
               {mode === "create"
@@ -118,11 +118,17 @@ export const CharacterFormModal = ({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="py-4">
-            <CharacterForm mode={mode} defaultValues={character || undefined} onSubmit={handleSubmit} />
+          <div className="flex-1 overflow-y-auto px-6">
+            <CharacterForm
+              ref={formRef}
+              mode={mode}
+              defaultValues={character || undefined}
+              onSubmit={handleSubmit}
+              onDirtyChange={setIsDirty}
+            />
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="px-6 py-4 border-t">
             <Button type="button" variant="outline" onClick={handleCloseAttempt} disabled={isSubmitting}>
               Cancel
             </Button>

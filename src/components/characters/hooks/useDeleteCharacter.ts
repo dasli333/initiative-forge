@@ -8,10 +8,7 @@ export const useDeleteCharacter = (campaignId: string) => {
 
   return useMutation({
     mutationFn: async (characterId: string) => {
-      const response = await fetch(
-        `/api/campaigns/${campaignId}/characters/${characterId}`,
-        { method: "DELETE" }
-      );
+      const response = await fetch(`/api/campaigns/${campaignId}/characters/${characterId}`, { method: "DELETE" });
 
       if (!response.ok) {
         const error = await response.json();

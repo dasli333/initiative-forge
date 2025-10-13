@@ -12,10 +12,7 @@ export interface CalculatedStats {
  * Hook for calculating derived character statistics
  * Calculates initiative modifier from dexterity and passive perception from wisdom
  */
-export const useCharacterCalculations = (
-  dexterity: number,
-  wisdom: number
-): CalculatedStats => {
+export const useCharacterCalculations = (dexterity: number, wisdom: number): CalculatedStats => {
   return useMemo(
     () => ({
       initiativeModifier: Math.floor((dexterity - 10) / 2),
