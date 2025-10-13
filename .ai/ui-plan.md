@@ -158,7 +158,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
   - H2: "Quick Actions"
   - Grid (2 kolumny):
     - Card "Player Characters": Icon + Description, Button "Manage Characters" → /campaigns/:id/characters
-    - Card "Combats": Icon + Description, Button "Start New Combat" (emerald) → /campaigns/:id/combats/new
+    - Card "Combats": Icon + Description, Button "View Combats" → /campaigns/:id/combats
 
 **UX, dostępność i względy bezpieczeństwa**:
 
@@ -213,7 +213,52 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 
 ---
 
-### 2.6. Combat Creation Wizard
+### 2.6. Combats List View
+
+**Ścieżka**: `/campaigns/:id/combats`
+
+**Główny cel**: Wyświetlenie listy walk w kampanii, możliwość wznowienia aktywnej walki lub rozpoczęcia nowej.
+
+**Kluczowe informacje do wyświetlenia**:
+
+- Grid combat cards (nazwa, status, data rozpoczęcia/zakończenia, liczba uczestników, obecna runda)
+- Przycisk tworzenia nowej walki
+- Empty state jeśli brak walk
+
+**Kluczowe komponenty widoku**:
+
+- **Header Section**:
+  - Breadcrumb: "My Campaigns > [Campaign Name] > Combats"
+  - H1: "Combats"
+  - Button: "Start New Combat" (emerald, icon +) → `/campaigns/:id/combats/new`
+- **Responsive Grid**:
+  - 2 kolumny (1024px ≤ screen < 1280px)
+  - 3 kolumny (screen ≥ 1280px)
+- **Combat Card** (Shadcn Card):
+  - Header: Nazwa walki, Status badge (Active emerald/Completed muted)
+  - Body:
+    - Round indicator: "Round X" (jeśli active)
+    - Participants count: "X participants"
+    - Date: "Started [date]" lub "Completed [date]"
+  - Footer:
+    - Button "Resume Combat" (emerald, jeśli active) → `/combats/:id`
+    - Button "View Combat" (secondary, jeśli completed) → `/combats/:id`
+    - Dropdown menu (dla completed): Delete
+- **Empty State**:
+  - Icon: swords (duży, muted)
+  - Heading: "No combats yet"
+  - Subtext: "Start your first combat to track initiative and manage encounters"
+  - Button: "Start New Combat" (emerald)
+
+**UX, dostępność i względy bezpieczeństwa**:
+
+- **UX**: Skeleton loading states podczas fetch, optimistic UI dla operacji, confirmation modal dla Delete ("Delete this combat? This action cannot be undone."), toast notifications (success/error), visual distinction między active i completed combats (emerald vs muted badges)
+- **Accessibility**: ARIA labels dla icon buttons, keyboard navigation dla dropdown menu, focus management w modalach, ARIA live dla statusu ładowania
+- **Security**: RLS zapewnia dostęp tylko do walk z własnych kampanii, validation przy usuwaniu
+
+---
+
+### 2.7. Combat Creation Wizard
 
 **Ścieżka**: `/campaigns/:id/combats/new`
 
@@ -279,7 +324,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 
 ---
 
-### 2.7. Combat View
+### 2.8. Combat View
 
 **Ścieżka**: `/combats/:id`
 
@@ -394,7 +439,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 
 ---
 
-### 2.8. Monsters Library
+### 2.9. Monsters Library
 
 **Ścieżka**: `/monsters`
 
@@ -437,7 +482,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 
 ---
 
-### 2.9. Spells Library
+### 2.10. Spells Library
 
 **Ścieżka**: `/spells`
 
@@ -483,7 +528,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 
 ---
 
-### 2.10. Main Layout (Sidebar Navigation)
+### 2.11. Main Layout (Sidebar Navigation)
 
 **Ścieżka**: N/A (obecny na wszystkich widokach po zalogowaniu)
 
@@ -519,9 +564,8 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
     - Conditional rendering: tylko jeśli `selectedCampaignId !== null`
     - Nav List:
       - "Campaign Home" (icon: home, link: /campaigns/:selectedCampaignId) - dashboard wybranej kampanii
-      - "Combat" (icon: swords, link: /combats/:id jeśli active, else disabled), Badge "Active" (emerald, pulsing) jeśli active combat
+      - "Combats" (icon: swords, link: /campaigns/:selectedCampaignId/combats) - lista walk, Badge "Active" (emerald, pulsing) jeśli istnieje aktywna walka
       - "Player Characters" (icon: users, link: /campaigns/:selectedCampaignId/characters)
-    - Disabled state: opacity 0.5, cursor not-allowed
   - **Bottom Section**:
     - User Menu (Dropdown): Trigger (Avatar + Email truncated), Content (User info, "Logout" - icon log-out, destructive text)
 - **Main Content Area**: Background slate-950, padding responsive (4-8), max-width: none
@@ -535,7 +579,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 
 ---
 
-### 2.11. Error States
+### 2.12. Error States
 
 **Ścieżka**: N/A (komponenty obecne w razie potrzeby)
 
@@ -694,8 +738,9 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
     ├── /campaigns (My Campaigns View)
     ├── /campaigns/:id (Campaign Dashboard)
     ├── /campaigns/:id/characters (Player Characters View)
+    ├── /campaigns/:id/combats (Combats List View)
     ├── /campaigns/:id/combats/new (Combat Creation Wizard)
-    ├── /combats/:id (Combat View)
+    ├── /combats/:id (Combat View - active combat)
     ├── /monsters (Monsters Library)
     └── /spells (Spells Library)
 ```
@@ -716,7 +761,7 @@ Initiative Forge to aplikacja internetowa dla Mistrzów Gry D&D 5e, zbudowana w 
 **Campaign Modules Section** (tylko jeśli kampania wybrana):
 
 - Campaign Home (ikona home + label) → `/campaigns/:selectedId` - dashboard wybranej kampanii
-- Combat (ikona swords + label, podświetlone jeśli active combat) → `/combats/:id`
+- Combats (ikona swords + label) → `/campaigns/:selectedId/combats` - lista walk, Badge "Active" (emerald, pulsing) jeśli istnieje aktywna walka
 - Player Characters (ikona users + label) → `/campaigns/:selectedId/characters`
 
 **Bottom Section:**
@@ -729,7 +774,8 @@ Używany w widokach zagnieżdżonych:
 
 - `/campaigns/:id` → "My Campaigns"
 - `/campaigns/:id/characters` → "My Campaigns > [Campaign Name] > Characters"
-- `/campaigns/:id/combats/new` → "My Campaigns > [Campaign Name] > New Combat"
+- `/campaigns/:id/combats` → "My Campaigns > [Campaign Name] > Combats"
+- `/campaigns/:id/combats/new` → "My Campaigns > [Campaign Name] > Combats > New Combat"
 - `/combats/:id` → "My Campaigns > [Campaign Name] > [Combat Name]"
 
 ### Nawigacja klawiaturą
@@ -876,6 +922,11 @@ Używany w widokach zagnieżdżonych:
 - **PATCH** `/api/campaigns/:campaignId/characters/:id` → Edycja
 - **DELETE** `/api/campaigns/:campaignId/characters/:id` → Usunięcie
 
+### Combats List View
+
+- **GET** `/api/campaigns/:campaignId/combats` → Lista walk
+- **DELETE** `/api/campaigns/:campaignId/combats/:id` → Usunięcie walki
+
 ### Combat Creation Wizard
 
 - **GET** `/api/campaigns/:campaignId/characters` → Step 2
@@ -884,9 +935,9 @@ Używany w widokach zagnieżdżonych:
 
 ### Combat View
 
-- **GET** `/api/combats/:id` → Initial load
-- **PATCH** `/api/combats/:id/snapshot` → Auto-save
-- **PATCH** `/api/combats/:id/status` → Completion
+- **GET** `/api/campaigns/:campaignId/combats/:id` → Initial load
+- **PATCH** `/api/campaigns/:campaignId/combats/:id/snapshot` → Auto-save
+- **PATCH** `/api/campaigns/:campaignId/combats/:id/status` → Completion
 - **GET** `/api/conditions` → Reference search
 - **GET** `/api/spells?...` → Reference search
 - **GET** `/api/monsters?...` → Reference search

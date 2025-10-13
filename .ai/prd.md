@@ -164,11 +164,12 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 
 **Tytuł:** Rozpoczynanie nowej walki
 
-**Opis:** Jako DM, w widoku mojej kampanii, chcę rozpocząć nową walkę, dodając do niej postacie graczy, potwory z biblioteki i NPC, aby przygotować starcie.
+**Opis:** Jako DM, w zakładce "Combat", chcę rozpocząć nową walkę, dodając do niej postacie graczy, potwory z biblioteki i NPC, aby przygotować starcie.
 
 **Kryteria akceptacji:**
 
-- W widoku kampanii znajduje się przycisk "Rozpocznij nową walkę".
+- W widoku "Combat" znajduje się przycisk "Rozpocznij nową walkę".
+- W widoku "Combat" znajdują się zapisane walki
 - Interfejs pozwala na wybranie postaci graczy z listy postaci kampanii.
 - Interfejs pozwala na wyszukanie i dodanie potworów z biblioteki.
 - System pozwala na dodanie wielu kopii tego samego potwora (np. 3 gobliny), które będą traktowane jako osobne jednostki.

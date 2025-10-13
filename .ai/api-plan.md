@@ -572,6 +572,42 @@ The API exposes the following main resources mapped to database tables:
 - API endpoints are for creating, loading, saving, and completing combats
 - All turn-by-turn operations (initiative rolls, next turn, damage, healing, conditions) happen client-side
 
+#### List Campaign Combats
+
+- **Method**: GET
+- **Path**: `/api/campaigns/:campaignId/combats`
+- **Description**: Returns all combats in a campaign
+- **Query Parameters**:
+  - `status` (optional, string): Filter by status ("active" or "completed")
+  - `limit` (optional, number): Maximum results (default: 50)
+  - `offset` (optional, number): Offset for pagination (default: 0)
+- **Request Body**: N/A
+- **Response**: 200 OK
+
+```json
+{
+  "combats": [
+    {
+      "id": "uuid",
+      "campaign_id": "uuid",
+      "name": "Goblin Ambush",
+      "status": "active",
+      "current_round": 3,
+      "participant_count": 7,
+      "created_at": "2025-01-16T15:00:00Z",
+      "updated_at": "2025-01-16T15:45:00Z"
+    }
+  ],
+  "total": 1,
+  "limit": 50,
+  "offset": 0
+}
+```
+
+- **Error Responses**:
+  - 401 Unauthorized: Missing or invalid authentication
+  - 404 Not Found: Campaign does not exist or user doesn't own it
+
 #### Create Combat
 
 - **Method**: POST
@@ -684,7 +720,7 @@ The API exposes the following main resources mapped to database tables:
 #### Get Combat
 
 - **Method**: GET
-- **Path**: `/api/combats/:id`
+- **Path**: `/api/campaigns/:campaignId/combats/:id`
 - **Description**: Returns combat details with current state snapshot
 - **Query Parameters**: N/A
 - **Request Body**: N/A
@@ -696,7 +732,7 @@ The API exposes the following main resources mapped to database tables:
 #### Update Combat Snapshot
 
 - **Method**: PATCH
-- **Path**: `/api/combats/:id/snapshot`
+- **Path**: `/api/campaigns/:campaignId/combats/:id/snapshot`
 - **Description**: Saves the current combat state (called periodically from client)
 - **Query Parameters**: N/A
 - **Request Body**:
@@ -734,7 +770,7 @@ The API exposes the following main resources mapped to database tables:
 #### Update Combat Status
 
 - **Method**: PATCH
-- **Path**: `/api/combats/:id/status`
+- **Path**: `/api/campaigns/:campaignId/combats/:id/status`
 - **Description**: Updates combat status (e.g., mark as completed)
 - **Query Parameters**: N/A
 - **Request Body**:
@@ -754,7 +790,7 @@ The API exposes the following main resources mapped to database tables:
 #### Delete Combat
 
 - **Method**: DELETE
-- **Path**: `/api/combats/:id`
+- **Path**: `/api/campaigns/:campaignId/combats/:id`
 - **Description**: Deletes a combat encounter
 - **Query Parameters**: N/A
 - **Request Body**: N/A

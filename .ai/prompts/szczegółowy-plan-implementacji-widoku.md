@@ -9,48 +9,69 @@ Najpierw przejrzyj następujące informacje:
 
 2. Opis widoku:
 <view_description>
-### 2.5. Player Characters View
+### 2.6. Combat Creation Wizard
 
-**Ścieżka**: `/campaigns/:id/characters`
+**Ścieżka**: `/campaigns/:id/combats/new`
 
-**Główny cel**: Zarządzanie postaciami graczy w kampanii (dodawanie, edycja, usuwanie).
+**Główny cel**: Utworzenie nowej walki poprzez 5-stopniowy wizard (nazwa, wybór PCs, dodanie potworów, dodanie NPCs, podsumowanie).
 
 **Kluczowe informacje do wyświetlenia**:
 
-- Lista postaci graczy z podstawowymi statystykami (Name, HP, AC, Initiative Modifier, Passive Perception)
-- Formularz tworzenia/edycji postaci z automatycznymi obliczeniami
-- Empty state jeśli brak postaci
+- Progress indicator (5 kroków)
+- Step 1: Combat name input
+- Step 2: Checkboxes postaci graczy (domyślnie wszystkie zaznaczone)
+- Step 3: Split view - searchable monster library (left 60%) + added monsters list (right 40%)
+- Step 4: Form dla ad-hoc NPCs (Simple/Advanced mode toggle)
+- Step 5: Podsumowanie wszystkich uczestników
 
 **Kluczowe komponenty widoku**:
 
-- **Header**:
-    - Breadcrumb: "My Campaigns > [Campaign Name] > Characters"
-    - H1: "Player Characters"
-    - Button: "Add Player Character" (emerald, icon +)
-- **Character List** (dwie możliwe варианты - UI決定する):
-    - **Variant A: Table** (Shadcn Table): Columns: Name, Max HP, AC, Initiative Mod, Passive Perception, Actions (dropdown)
-    - **Variant B: Grid** z Character Cards: Card zawiera Name (heading), Stats badges (HP, AC, Init, Perception), Dropdown actions (Edit, Delete)
-- **Empty State**:
-    - Icon: character icon
-    - Heading: "No characters yet"
-    - Button: "Add Character"
-- **Character Creation/Edit Modal** (Shadcn Dialog, max-width: 600px):
-    - Header: "Add Player Character" / "Edit Character"
-    - Form (React Hook Form + Zod):
-        - **Section 1: Basic Info** (Grid 2x2): Name (required), Max HP (1-999), AC (0-99), Speed (0-999, default 30)
-        - **Section 2: Ability Scores** (Grid 2x3): STR, DEX, CON, INT, WIS, CHA (1-30, default 10)
-        - **Auto-calculated displays** (real-time): "Initiative Modifier: +X" (emerald), "Passive Perception: X" (emerald)
-        - **Section 3: Actions** (Collapsible Accordion):
-            - Lista akcji (jeśli istnieją): Action item (Name, Type, Attack Bonus, Damage), Remove button
-            - Button: "+ Add Action"
-            - **Action Builder**: Name, Type (select: melee/ranged/spell attack), Attack Bonus, Reach/Range, Damage Dice (np. "1d8"), Damage Bonus, Damage Type
-    - Footer: "Cancel" (secondary), "Create Character"/"Save Changes" (emerald, disabled jeśli validation fails)
+- **Progress Indicator** (Shadcn Stepper lub custom):
+    - 5 steps: "Combat Name", "Select PCs", "Add Monsters", "Add NPCs", "Summary"
+    - Current step highlighted (emerald), completed steps: checkmark icon
+- **Step 1: Combat Name**:
+    - H2: "Name Your Combat"
+    - Input: Combat Name (required, max 255)
+    - Button: "Next" (disabled jeśli empty)
+- **Step 2: Select Player Characters**:
+    - H2: "Select Player Characters"
+    - Lista checkboxów: Checkbox + Character name + badges (HP, AC), domyślnie wszystkie checked
+    - Validation: przynajmniej 1 wybrany
+    - Buttons: "Back", "Next"
+- **Step 3: Add Monsters**:
+    - H2: "Add Monsters"
+    - **Left Panel (60%)**:
+        - Search bar: "Search monsters..." (debounce 300ms)
+        - Filter dropdown: CR (range slider lub select)
+        - Monster List (infinite scroll): Monster Card (Name, CR badge, Type+Size, "+ Add" button, click → accordion rozwija szczegóły)
+        - Loading spinner na dole
+    - **Right Panel (40%)**:
+        - H3: "Added to Combat"
+        - Lista dodanych: Monster item (Name, Count badge "x3" - click → inline input, Remove button X)
+        - Empty state: "No monsters added yet"
+    - Buttons: "Back", "Next"
+- **Step 4: Add Ad-hoc NPCs (Optional)**:
+    - H2: "Add NPCs (Optional)"
+    - Toggle: "Simple Mode" / "Advanced Mode" (Shadcn Switch)
+    - **Simple Mode Form**: Name, Max HP, AC, Initiative Modifier (opcjonalnie)
+    - **Advanced Mode Form**: Name, Max HP, AC, Speed, Ability Scores (grid 2x3), Actions (action builder)
+    - Lista dodanych NPCs (jeśli są): NPC Card (Name, HP, AC, Remove button)
+    - Button: "+ Add NPC"
+    - Buttons: "Back", "Next"
+- **Step 5: Summary**:
+    - H2: "Combat Summary"
+    - Sections:
+        - "Combat Name": [nazwa]
+        - "Player Characters (X)": Lista (Name, HP, AC)
+        - "Monsters (X)": Lista (Name x count)
+        - "NPCs (X)": Lista (Name, HP, AC)
+    - Buttons: "Back", "Start Combat" (emerald, duży)
 
 **UX, dostępność i względy bezpieczeństwa**:
 
-- **UX**: Real-time validation z inline errors, auto-focus na first input po otwarciu modalu, optimistic UI update po save, toast dla błędów API (np. character name already exists)
-- **Accessibility**: Focus trap w modalu, Escape zamyka modal (z confirmation jeśli są changes), ARIA labels dla wszystkich inputs, real-time announcements dla auto-calculated values
-- **Security**: Validation character name uniqueness w kampanii, RLS zapewnia dostęp tylko do postaci z własnych kampanii
+- **UX**: Keyboard navigation przez steps, focus management przy przechodzeniu między steps, validation każdego stepu przed "Next", progress saved w local state, confirmation modal przy Escape ("Discard combat?"), brak postaci w kampanii → warning banner w Step 2 z linkiem do character creation
+- **Accessibility**: ARIA live announcements przy zmianie kroków, focus na heading każdego stepu, keyboard support dla monster search i selection
+- **Security**: Validation uczestników (przynajmniej 1), RLS dla dostępu do campaign characters, public read dla monsters
 </view_description>
 
 3. User Stories:
