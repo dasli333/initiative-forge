@@ -1,6 +1,9 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
 import { PlayerCharactersWrapper } from "@/components/characters/PlayerCharactersWrapper";
+import { dehydrate } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/queryClient";
+import type { ListPlayerCharactersResponseDTO } from "@/types";
 
 export const prerender = false;
 
@@ -10,11 +13,37 @@ if (!id) {
   return Astro.redirect("/campaigns");
 }
 
+// Create QueryClient for this request
+const queryClient = getQueryClient();
+
 // TODO: Fetch campaign name from API when authentication is implemented
 // For now, we'll pass a placeholder
 const campaignName = "Campaign";
+
+// Prefetch characters data on the server
+await queryClient.prefetchQuery({
+  queryKey: ["campaigns", id, "characters"],
+  queryFn: async () => {
+    const response = await fetch(`${Astro.url.origin}/api/campaigns/${id}/characters`, {
+      headers: {
+        Cookie: Astro.request.headers.get("Cookie") || "",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch characters");
+    }
+
+    const data: ListPlayerCharactersResponseDTO = await response.json();
+    return data.characters;
+  },
+});
+
+// Dehydrate the state to pass to the client
+const dehydratedState = dehydrate(queryClient);
+queryClient.clear(); // Clean up server-side cache
 ---
 
 <MainLayout title="Player Characters - Initiative Forge">
-  <PlayerCharactersWrapper client:load campaignId={id} initialCampaignName={campaignName} />
+  <PlayerCharactersWrapper client:load campaignId={id} initialCampaignName={campaignName} dehydratedState={dehydratedState} />
 </MainLayout>
