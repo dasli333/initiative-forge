@@ -1,0 +1,20 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import { PlayerCharactersWrapper } from "@/components/characters/PlayerCharactersWrapper";
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect("/campaigns");
+}
+
+// TODO: Fetch campaign name from API when authentication is implemented
+// For now, we'll pass a placeholder
+const campaignName = "Campaign";
+---
+
+<MainLayout title="Player Characters - Initiative Forge">
+  <PlayerCharactersWrapper client:load campaignId={id} initialCampaignName={campaignName} />
+</MainLayout>
