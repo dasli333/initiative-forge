@@ -62,21 +62,15 @@ export function MonsterListItem({ monster, isSelected, onClick }: MonsterListIte
       aria-label={`View details for ${displayName}`}
       aria-selected={isSelected}
     >
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-medium truncate">{displayName}</h3>
-          <div className="flex items-center gap-1 mt-1">
-            <span className="text-xs bg-muted/40 px-1.5 py-0.5 rounded">
-              {data.size}
-            </span>
-            <span className="text-xs bg-muted/40 px-1.5 py-0.5 rounded">
-              {data.type}
-            </span>
-          </div>
+      <div className="flex flex-col gap-1">
+        <h3 className="text-sm font-medium truncate">{displayName}</h3>
+        <div className="flex items-center gap-1">
+          <Badge className="bg-emerald-500 hover:bg-emerald-600 flex-shrink-0 text-xs shadow-sm">
+            CR {data.challengeRating.rating}
+          </Badge>
+          <span className="text-xs bg-muted/40 px-1.5 py-0.5 rounded">{data.type}</span>
+          <span className="text-xs bg-muted/40 px-1.5 py-0.5 rounded">{data.size}</span>
         </div>
-        <Badge className="bg-emerald-500 hover:bg-emerald-600 flex-shrink-0 text-xs shadow-sm">
-          CR {data.challengeRating.rating}
-        </Badge>
       </div>
     </div>
   );

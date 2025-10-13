@@ -30,7 +30,7 @@ interface LanguageStore {
 export const useLanguageStore = create<LanguageStore>()(
   devtools(
     persist(
-      (set, get) => ({
+      (set) => ({
         // Initial state - default to English
         selectedLanguage: "en",
 
