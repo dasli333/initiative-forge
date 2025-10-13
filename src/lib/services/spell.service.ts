@@ -24,10 +24,11 @@ export async function listSpells(supabase: SupabaseClient, filters: ListSpellsQu
   // Build query with exact count for pagination
   let query = supabase.from("spells").select("*", { count: "exact" });
 
-  // Apply name filter (case-insensitive partial match)
+  // Apply name filter (case-insensitive partial match on both English and Polish names)
   if (name) {
     const sanitized = sanitizeLikePattern(name);
-    query = query.ilike("name", `%${sanitized}%`);
+    // Search in both the indexed 'name' column (EN) and the Polish name in JSONB
+    query = query.or(`name.ilike.%${sanitized}%,data->name->>pl.ilike.%${sanitized}%`);
   }
 
   // Apply level filter (exact match on data->level)
@@ -35,9 +36,10 @@ export async function listSpells(supabase: SupabaseClient, filters: ListSpellsQu
     query = query.eq("data->level", level);
   }
 
-  // Apply class filter (array contains check - case sensitive)
+  // Apply class filter (check if class exists in the JSONB array)
+  // Using @> (contains) operator for JSONB array matching
   if (spellClass) {
-    query = query.contains("data->classes", [spellClass]);
+    query = query.contains("data->classes", `["${spellClass}"]`);
   }
 
   // Apply pagination and sorting by level then name
