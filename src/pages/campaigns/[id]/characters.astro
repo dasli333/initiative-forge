@@ -45,5 +45,10 @@ queryClient.clear(); // Clean up server-side cache
 ---
 
 <MainLayout title="Player Characters - Initiative Forge">
-  <PlayerCharactersWrapper client:load campaignId={id} initialCampaignName={campaignName} dehydratedState={dehydratedState} />
+  <PlayerCharactersWrapper
+    client:load
+    campaignId={id}
+    initialCampaignName={campaignName}
+    dehydratedState={dehydratedState}
+  />
 </MainLayout>

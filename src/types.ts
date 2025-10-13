@@ -436,3 +436,26 @@ export interface SidebarViewModel {
   isLoadingActiveCombat: boolean;
   campaignsError: Error | null;
 }
+
+/**
+ * Combat summary for list view (without full state snapshot)
+ * Used in the combats list to display basic information without loading
+ * the entire combat state which can be large.
+ */
+export interface CombatSummaryDTO {
+  id: string;
+  campaign_id: string;
+  name: string;
+  status: "active" | "completed";
+  current_round: number;
+  participant_count: number;
+  created_at: string; // ISO 8601 date string
+  updated_at: string; // ISO 8601 date string
+}
+
+/**
+ * List combats response with pagination metadata
+ */
+export interface ListCombatsResponseDTO extends PaginationMetadataDTO {
+  combats: CombatSummaryDTO[];
+}

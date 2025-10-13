@@ -73,7 +73,7 @@ export const CharacterFormModal = ({
       const err = error as {
         status?: number;
         message?: string;
-        details?: Array<{ path: string; message: string }>;
+        details?: { path: string; message: string }[];
       };
 
       if (err.status === 409) {

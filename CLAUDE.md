@@ -62,6 +62,39 @@ Shadcn component aliases from `components.json`:
 - React components (.tsx) are for client-side interactivity only
 - Never use "use client" or Next.js directives (this is Astro, not Next.js)
 
+### Navigation in React Components
+
+**IMPORTANT: Use proper navigation for Astro View Transitions**
+
+For client-side navigation within React components:
+
+```tsx
+// ✅ BEST: Use Astro's navigate() API for programmatic navigation
+import { navigate } from "astro:transitions/client";
+
+const handleNavigate = useCallback(() => {
+  navigate("/target-page");
+}, []);
+
+// ✅ GOOD: Use <a> tags directly when possible
+<Button asChild>
+  <a href="/target-page">Navigate</a>
+</Button>
+
+// ❌ BAD: Direct window.location (bypasses View Transitions)
+window.location.href = "/target-page";
+```
+
+**Navigation options:**
+- `navigate(href)` - Programmatic navigation with View Transitions
+- `navigate(href, { history: 'replace' })` - Replace current history entry
+- Regular `<a>` tags - Automatically handled by Astro with View Transitions
+
+**When to use `window.location.href`:**
+- Only for external redirects (logout, login, external sites)
+- Authentication redirects (401 responses)
+- Full page reloads when absolutely necessary
+
 ## Key Coding Practices
 
 ### Error Handling Pattern
@@ -97,6 +130,75 @@ Shadcn component aliases from `components.json`:
 - Use `useId()` for accessibility attribute IDs
 - Consider `useOptimistic` for optimistic UI updates
 - Consider `useTransition` for non-urgent state updates
+
+### React Query / TanStack Query Integration
+
+**IMPORTANT: Always use the Wrapper + Hydration pattern to avoid hydration errors**
+
+When creating pages with React Query, follow this pattern:
+
+1. **Create a Wrapper component** (e.g., `CombatsListWrapper.tsx`):
+```tsx
+import { QueryClientProvider, HydrationBoundary } from "@tanstack/react-query";
+import type { DehydratedState } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/queryClient";
+import { YourView } from "./YourView";
+
+interface WrapperProps {
+  dehydratedState: DehydratedState;
+  // ... other props
+}
+
+export function YourWrapper({ dehydratedState, ...props }: WrapperProps) {
+  const queryClient = getQueryClient();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <HydrationBoundary state={dehydratedState}>
+        <YourView {...props} />
+      </HydrationBoundary>
+    </QueryClientProvider>
+  );
+}
+```
+
+2. **Prefetch data on the server** in your Astro page:
+```astro
+---
+import { dehydrate } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/queryClient";
+
+export const prerender = false;
+
+const queryClient = getQueryClient();
+
+// Prefetch data
+await queryClient.prefetchQuery({
+  queryKey: ["your-key", id],
+  queryFn: async () => {
+    const response = await fetch(`${Astro.url.origin}/api/your-endpoint`, {
+      headers: {
+        Cookie: Astro.request.headers.get("Cookie") || "",
+      },
+    });
+    if (!response.ok) throw new Error("Failed to fetch");
+    return response.json();
+  },
+});
+
+const dehydratedState = dehydrate(queryClient);
+---
+
+<YourWrapper client:load dehydratedState={dehydratedState} {...props} />
+```
+
+3. **Use queries normally** in your view component - data will be hydrated from server
+
+**Why this pattern?**
+- Prevents hydration mismatches between server and client
+- Ensures data is available immediately on client load
+- Shares QueryClient instance across the app (via `getQueryClient()`)
+- Proper SSR support with cache persistence
 
 ### Styling with Tailwind
 

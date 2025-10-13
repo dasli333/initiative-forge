@@ -9,6 +9,8 @@ import type {
   MonsterDataDTO,
   PlayerCharacter,
   ActionDTO,
+  CombatSummaryDTO,
+  ListCombatsResponseDTO,
 } from "@/types";
 
 /**
@@ -367,4 +369,67 @@ async function verifyCombatOwnership(
   if (combat.campaigns.user_id !== userId) {
     throw new Error("Combat not found");
   }
+}
+
+/**
+ * Lists all combats for a campaign with summary information
+ */
+export async function listCombats(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  campaignId: string,
+  options?: {
+    status?: "active" | "completed";
+    limit?: number;
+    offset?: number;
+  }
+): Promise<ListCombatsResponseDTO> {
+  // Verify campaign ownership
+  await verifyCampaignOwnership(supabase, userId, campaignId);
+
+  const { status, limit = 50, offset = 0 } = options || {};
+
+  // Build query
+  let query = supabase
+    .from("combats")
+    .select("*", { count: "exact" })
+    .eq("campaign_id", campaignId)
+    .order("updated_at", { ascending: false })
+    .range(offset, offset + limit - 1);
+
+  // Apply status filter if provided
+  if (status) {
+    query = query.eq("status", status);
+  }
+
+  const { data, error, count } = await query;
+
+  if (error) {
+    console.error("Error listing combats:", error);
+    throw new Error("Failed to list combats");
+  }
+
+  // Transform to CombatSummaryDTO
+  const combats: CombatSummaryDTO[] = (data || []).map((combat) => {
+    const snapshot = combat.state_snapshot as unknown as CombatSnapshotDTO | null;
+    const participantCount = snapshot?.participants?.length || 0;
+
+    return {
+      id: combat.id,
+      campaign_id: combat.campaign_id,
+      name: combat.name,
+      status: combat.status as "active" | "completed",
+      current_round: combat.current_round || 1,
+      participant_count: participantCount,
+      created_at: combat.created_at,
+      updated_at: combat.updated_at || combat.created_at,
+    };
+  });
+
+  return {
+    combats,
+    total: count || 0,
+    limit,
+    offset,
+  };
 }

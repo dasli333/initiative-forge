@@ -9,131 +9,95 @@ Najpierw przejrzyj następujące informacje:
 
 2. Opis widoku:
 <view_description>
-### 2.6. Combat Creation Wizard
+### 2.6. Combats List View
 
-**Ścieżka**: `/campaigns/:id/combats/new`
+**Ścieżka**: `/campaigns/:id/combats`
 
-**Główny cel**: Utworzenie nowej walki poprzez 5-stopniowy wizard (nazwa, wybór PCs, dodanie potworów, dodanie NPCs, podsumowanie).
+**Główny cel**: Wyświetlenie listy walk w kampanii, możliwość wznowienia aktywnej walki lub rozpoczęcia nowej.
 
 **Kluczowe informacje do wyświetlenia**:
 
-- Progress indicator (5 kroków)
-- Step 1: Combat name input
-- Step 2: Checkboxes postaci graczy (domyślnie wszystkie zaznaczone)
-- Step 3: Split view - searchable monster library (left 60%) + added monsters list (right 40%)
-- Step 4: Form dla ad-hoc NPCs (Simple/Advanced mode toggle)
-- Step 5: Podsumowanie wszystkich uczestników
+- Grid combat cards (nazwa, status, data rozpoczęcia/zakończenia, liczba uczestników, obecna runda)
+- Przycisk tworzenia nowej walki
+- Empty state jeśli brak walk
 
 **Kluczowe komponenty widoku**:
 
-- **Progress Indicator** (Shadcn Stepper lub custom):
-    - 5 steps: "Combat Name", "Select PCs", "Add Monsters", "Add NPCs", "Summary"
-    - Current step highlighted (emerald), completed steps: checkmark icon
-- **Step 1: Combat Name**:
-    - H2: "Name Your Combat"
-    - Input: Combat Name (required, max 255)
-    - Button: "Next" (disabled jeśli empty)
-- **Step 2: Select Player Characters**:
-    - H2: "Select Player Characters"
-    - Lista checkboxów: Checkbox + Character name + badges (HP, AC), domyślnie wszystkie checked
-    - Validation: przynajmniej 1 wybrany
-    - Buttons: "Back", "Next"
-- **Step 3: Add Monsters**:
-    - H2: "Add Monsters"
-    - **Left Panel (60%)**:
-        - Search bar: "Search monsters..." (debounce 300ms)
-        - Filter dropdown: CR (range slider lub select)
-        - Monster List (infinite scroll): Monster Card (Name, CR badge, Type+Size, "+ Add" button, click → accordion rozwija szczegóły)
-        - Loading spinner na dole
-    - **Right Panel (40%)**:
-        - H3: "Added to Combat"
-        - Lista dodanych: Monster item (Name, Count badge "x3" - click → inline input, Remove button X)
-        - Empty state: "No monsters added yet"
-    - Buttons: "Back", "Next"
-- **Step 4: Add Ad-hoc NPCs (Optional)**:
-    - H2: "Add NPCs (Optional)"
-    - Toggle: "Simple Mode" / "Advanced Mode" (Shadcn Switch)
-    - **Simple Mode Form**: Name, Max HP, AC, Initiative Modifier (opcjonalnie)
-    - **Advanced Mode Form**: Name, Max HP, AC, Speed, Ability Scores (grid 2x3), Actions (action builder)
-    - Lista dodanych NPCs (jeśli są): NPC Card (Name, HP, AC, Remove button)
-    - Button: "+ Add NPC"
-    - Buttons: "Back", "Next"
-- **Step 5: Summary**:
-    - H2: "Combat Summary"
-    - Sections:
-        - "Combat Name": [nazwa]
-        - "Player Characters (X)": Lista (Name, HP, AC)
-        - "Monsters (X)": Lista (Name x count)
-        - "NPCs (X)": Lista (Name, HP, AC)
-    - Buttons: "Back", "Start Combat" (emerald, duży)
+- **Header Section**:
+    - Breadcrumb: "My Campaigns > [Campaign Name] > Combats"
+    - H1: "Combats"
+    - Button: "Start New Combat" (emerald, icon +) → `/campaigns/:id/combats/new`
+- **Responsive Grid**:
+    - 2 kolumny (1024px ≤ screen < 1280px)
+    - 3 kolumny (screen ≥ 1280px)
+- **Combat Card** (Shadcn Card):
+    - Header: Nazwa walki, Status badge (Active emerald/Completed muted)
+    - Body:
+        - Round indicator: "Round X" (jeśli active)
+        - Participants count: "X participants"
+        - Date: "Started [date]" lub "Completed [date]"
+    - Footer:
+        - Button "Resume Combat" (emerald, jeśli active) → `/combats/:id`
+        - Button "View Combat" (secondary, jeśli completed) → `/combats/:id`
+        - Dropdown menu (dla completed): Delete
+- **Empty State**:
+    - Icon: swords (duży, muted)
+    - Heading: "No combats yet"
+    - Subtext: "Start your first combat to track initiative and manage encounters"
+    - Button: "Start New Combat" (emerald)
 
 **UX, dostępność i względy bezpieczeństwa**:
 
-- **UX**: Keyboard navigation przez steps, focus management przy przechodzeniu między steps, validation każdego stepu przed "Next", progress saved w local state, confirmation modal przy Escape ("Discard combat?"), brak postaci w kampanii → warning banner w Step 2 z linkiem do character creation
-- **Accessibility**: ARIA live announcements przy zmianie kroków, focus na heading każdego stepu, keyboard support dla monster search i selection
-- **Security**: Validation uczestników (przynajmniej 1), RLS dla dostępu do campaign characters, public read dla monsters
+- **UX**: Skeleton loading states podczas fetch, optimistic UI dla operacji, confirmation modal dla Delete ("Delete this combat? This action cannot be undone."), toast notifications (success/error), visual distinction między active i completed combats (emerald vs muted badges)
+- **Accessibility**: ARIA labels dla icon buttons, keyboard navigation dla dropdown menu, focus management w modalach, ARIA live dla statusu ładowania
+- **Security**: RLS zapewnia dostęp tylko do walk z własnych kampanii, validation przy usuwaniu
 </view_description>
 
 3. User Stories:
 <user_stories>
-#### ID: US-004
 
-**Tytuł:** Dodawanie postaci gracza do kampanii
-
-**Opis:** Jako DM, po wybraniu kampanii, chcę dodać do niej postacie moich graczy, wpisując ich podstawowe statystyki, aby móc później wykorzystać je w module walki.
-
-**Kryteria akceptacji:**
-
-- W widoku kampanii znajduje się opcja "Dodaj postać gracza".
-- Formularz dodawania postaci zawiera pola na: imię, HP, AC, szybkość oraz 6 atrybutów.
-- Po zapisaniu postaci, jest ona widoczna na liście postaci w danej kampanii.
-- System poprawnie oblicza i wyświetla inicjatywę oraz pasywną percepcję na podstawie wprowadzonych atrybutów.
 </user_stories>
 
 4. Endpoint Description:
    <endpoint_description>
-### 2.2. Player Characters
+### 2.6. Combats
 
-#### List Campaign Characters
+**Architecture Note**: The combat module uses a hybrid approach:
+
+- Real-time state is managed client-side with Zustand (zero latency)
+- Persistence is handled via `state_snapshot` (jsonb) in the database
+- API endpoints are for creating, loading, saving, and completing combats
+- All turn-by-turn operations (initiative rolls, next turn, damage, healing, conditions) happen client-side
+
+#### List Campaign Combats
 
 - **Method**: GET
-- **Path**: `/api/campaigns/:campaignId/characters`
-- **Description**: Returns all player characters in a campaign
-- **Query Parameters**: N/A
+- **Path**: `/api/campaigns/:campaignId/combats`
+- **Description**: Returns all combats in a campaign
+- **Query Parameters**:
+    - `status` (optional, string): Filter by status ("active" or "completed")
+    - `limit` (optional, number): Maximum results (default: 50)
+    - `offset` (optional, number): Offset for pagination (default: 0)
 - **Request Body**: N/A
 - **Response**: 200 OK
 
 ```json
 {
-  "characters": [
+  "combats": [
     {
       "id": "uuid",
       "campaign_id": "uuid",
-      "name": "Aragorn",
-      "max_hp": 45,
-      "armor_class": 16,
-      "speed": 30,
-      "strength": 16,
-      "dexterity": 14,
-      "constitution": 14,
-      "intelligence": 10,
-      "wisdom": 12,
-      "charisma": 14,
-      "actions": [
-        {
-          "name": "Longsword Attack",
-          "type": "melee_weapon_attack",
-          "attack_bonus": 5,
-          "reach": "5 ft",
-          "damage_dice": "1d8",
-          "damage_bonus": 3,
-          "damage_type": "slashing"
-        }
-      ],
-      "created_at": "2025-01-15T14:30:00Z",
-      "updated_at": "2025-01-15T14:30:00Z"
+      "name": "Goblin Ambush",
+      "status": "active",
+      "current_round": 3,
+      "participant_count": 7,
+      "created_at": "2025-01-16T15:00:00Z",
+      "updated_at": "2025-01-16T15:45:00Z"
     }
-  ]
+  ],
+  "total": 1,
+  "limit": 50,
+  "offset": 0
 }
 ```
 
@@ -141,35 +105,51 @@ Najpierw przejrzyj następujące informacje:
     - 401 Unauthorized: Missing or invalid authentication
     - 404 Not Found: Campaign does not exist or user doesn't own it
 
-#### Create Player Character
+#### Create Combat
 
 - **Method**: POST
-- **Path**: `/api/campaigns/:campaignId/characters`
-- **Description**: Creates a new player character in the campaign
+- **Path**: `/api/campaigns/:campaignId/combats`
+- **Description**: Creates a new combat encounter in a campaign
 - **Query Parameters**: N/A
 - **Request Body**:
 
 ```json
 {
-  "name": "Legolas",
-  "max_hp": 38,
-  "armor_class": 17,
-  "speed": 30,
-  "strength": 10,
-  "dexterity": 18,
-  "constitution": 12,
-  "intelligence": 12,
-  "wisdom": 16,
-  "charisma": 10,
-  "actions": [
+  "name": "Goblin Ambush",
+  "initial_participants": [
     {
-      "name": "Longbow Attack",
-      "type": "ranged_weapon_attack",
-      "attack_bonus": 7,
-      "range": "150/600 ft",
-      "damage_dice": "1d8",
-      "damage_bonus": 4,
-      "damage_type": "piercing"
+      "source": "player_character",
+      "player_character_id": "uuid"
+    },
+    {
+      "source": "monster",
+      "monster_id": "uuid",
+      "count": 3
+    },
+    {
+      "source": "ad_hoc_npc",
+      "display_name": "Bandit Leader",
+      "max_hp": 30,
+      "armor_class": 14,
+      "stats": {
+        "str": 14,
+        "dex": 12,
+        "con": 12,
+        "int": 10,
+        "wis": 10,
+        "cha": 14
+      },
+      "actions": [
+        {
+          "name": "Scimitar",
+          "type": "melee_weapon_attack",
+          "attack_bonus": 4,
+          "reach": "5 ft",
+          "damage_dice": "1d6",
+          "damage_bonus": 2,
+          "damage_type": "slashing"
+        }
+      ]
     }
   ]
 }
@@ -181,89 +161,145 @@ Najpierw przejrzyj następujące informacje:
 {
   "id": "uuid",
   "campaign_id": "uuid",
-  "name": "Legolas",
-  "max_hp": 38,
-  "armor_class": 17,
-  "speed": 30,
-  "strength": 10,
-  "dexterity": 18,
-  "constitution": 12,
-  "intelligence": 12,
-  "wisdom": 16,
-  "charisma": 10,
-  "actions": [
-    {
-      "name": "Longbow Attack",
-      "type": "ranged_weapon_attack",
-      "attack_bonus": 7,
-      "range": "150/600 ft",
-      "damage_dice": "1d8",
-      "damage_bonus": 4,
-      "damage_type": "piercing"
-    }
-  ],
-  "created_at": "2025-01-16T10:00:00Z",
-  "updated_at": "2025-01-16T10:00:00Z"
+  "name": "Goblin Ambush",
+  "status": "active",
+  "current_round": 1,
+  "state_snapshot": {
+    "participants": [
+      {
+        "id": "temp-uuid-1",
+        "source": "player_character",
+        "player_character_id": "uuid",
+        "display_name": "Aragorn",
+        "initiative": 0,
+        "current_hp": 45,
+        "max_hp": 45,
+        "armor_class": 16,
+        "stats": {
+          "str": 16,
+          "dex": 14,
+          "con": 14,
+          "int": 10,
+          "wis": 12,
+          "cha": 14
+        },
+        "actions": [...],
+        "is_active_turn": false,
+        "active_conditions": []
+      },
+      {
+        "id": "temp-uuid-2",
+        "source": "monster",
+        "monster_id": "uuid",
+        "display_name": "Goblin #1",
+        "initiative": 0,
+        "current_hp": 7,
+        "max_hp": 7,
+        "armor_class": 15,
+        "stats": {...},
+        "actions": [...],
+        "is_active_turn": false,
+        "active_conditions": []
+      }
+    ],
+    "active_participant_index": null
+  },
+  "created_at": "2025-01-16T15:00:00Z",
+  "updated_at": "2025-01-16T15:00:00Z"
 }
 ```
 
 - **Error Responses**:
-    - 400 Bad Request: Invalid input (missing required fields, invalid stat values)
+    - 400 Bad Request: Invalid input (missing name, invalid participants)
     - 401 Unauthorized: Missing or invalid authentication
-    - 404 Not Found: Campaign does not exist or user doesn't own it
-    - 409 Conflict: Character name already exists in this campaign
+    - 404 Not Found: Campaign, player character, or monster references don't exist
 
-#### Get Player Character
+#### Get Combat
 
 - **Method**: GET
-- **Path**: `/api/campaigns/:campaignId/characters/:id`
-- **Description**: Returns a single player character
+- **Path**: `/api/campaigns/:campaignId/combats/:id`
+- **Description**: Returns combat details with current state snapshot
 - **Query Parameters**: N/A
 - **Request Body**: N/A
 - **Response**: 200 OK (same structure as Create response)
 - **Error Responses**:
     - 401 Unauthorized: Missing or invalid authentication
-    - 404 Not Found: Character or campaign does not exist, or user doesn't own campaign
+    - 404 Not Found: Combat does not exist or user doesn't own the campaign
 
-#### Update Player Character
+#### Update Combat Snapshot
 
 - **Method**: PATCH
-- **Path**: `/api/campaigns/:campaignId/characters/:id`
-- **Description**: Updates player character fields
+- **Path**: `/api/campaigns/:campaignId/combats/:id/snapshot`
+- **Description**: Saves the current combat state (called periodically from client)
 - **Query Parameters**: N/A
-- **Request Body**: (partial update, all fields optional)
+- **Request Body**:
 
 ```json
 {
-  "name": "Legolas Greenleaf",
-  "max_hp": 42,
-  "actions": [...]
+  "state_snapshot": {
+    "participants": [...],
+    "active_participant_index": 2
+  },
+  "current_round": 3
 }
 ```
 
-- **Response**: 200 OK (full character object)
-- **Error Responses**:
-    - 400 Bad Request: Invalid input
-    - 401 Unauthorized: Missing or invalid authentication
-    - 404 Not Found: Character or campaign does not exist, or user doesn't own campaign
-    - 409 Conflict: New character name already exists in this campaign
+- **Response**: 200 OK
 
-#### Delete Player Character
+```json
+{
+  "id": "uuid",
+  "campaign_id": "uuid",
+  "name": "Goblin Ambush",
+  "status": "active",
+  "current_round": 3,
+  "state_snapshot": {...},
+  "created_at": "2025-01-16T15:00:00Z",
+  "updated_at": "2025-01-16T15:45:00Z"
+}
+```
+
+- **Error Responses**:
+    - 400 Bad Request: Invalid snapshot structure
+    - 401 Unauthorized: Missing or invalid authentication
+    - 404 Not Found: Combat does not exist or user doesn't own the campaign
+
+#### Update Combat Status
+
+- **Method**: PATCH
+- **Path**: `/api/campaigns/:campaignId/combats/:id/status`
+- **Description**: Updates combat status (e.g., mark as completed)
+- **Query Parameters**: N/A
+- **Request Body**:
+
+```json
+{
+  "status": "completed"
+}
+```
+
+- **Response**: 200 OK (full combat object)
+- **Error Responses**:
+    - 400 Bad Request: Invalid status value (must be "active" or "completed")
+    - 401 Unauthorized: Missing or invalid authentication
+    - 404 Not Found: Combat does not exist or user doesn't own the campaign
+
+#### Delete Combat
 
 - **Method**: DELETE
-- **Path**: `/api/campaigns/:campaignId/characters/:id`
-- **Description**: Deletes a player character
+- **Path**: `/api/campaigns/:campaignId/combats/:id`
+- **Description**: Deletes a combat encounter
 - **Query Parameters**: N/A
 - **Request Body**: N/A
 - **Response**: 204 No Content
 - **Error Responses**:
     - 401 Unauthorized: Missing or invalid authentication
-    - 404 Not Found: Character or campaign does not exist, or user doesn't own campaign
+    - 404 Not Found: Combat does not exist or user doesn't own the campaign
   </endpoint_description>
 
 5. Endpoint Implementation:
    <endpoint_implementation>
-   @src/pages/api/campaigns/[campaignId]/characters.ts @src/pages/api/campaigns/[campaignId]/characters/[id].ts
+   @src/pages/api/campaigns/[campaignId]/combats.ts @src/pages/api/campaigns/[campaignId]/combats/[id].ts @src/pages/api/campaigns/[campaignId]/combats/[id]/snapshot.ts @src/pages/api/campaigns/[campaignId]/combats/[id]/status.ts
    </endpoint_implementation>
 
 6. Type Definitions:

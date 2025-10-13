@@ -1,0 +1,63 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import { CombatsListWrapper } from "@/components/combats/CombatsListWrapper";
+import { DEFAULT_USER_ID } from "@/db/supabase.client";
+import { dehydrate } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/queryClient";
+import type { ListCombatsResponseDTO } from "@/types";
+
+export const prerender = false;
+
+const { id } = Astro.params;
+const supabase = Astro.locals.supabase;
+
+// Validate campaign ID
+if (!id) {
+  return Astro.redirect("/campaigns");
+}
+
+// Fetch campaign to verify it exists and get the name
+const { data: campaign, error } = await supabase
+  .from("campaigns")
+  .select("id, name")
+  .eq("id", id)
+  .eq("user_id", DEFAULT_USER_ID)
+  .single();
+
+if (error || !campaign) {
+  return Astro.redirect("/campaigns");
+}
+
+// Get QueryClient (creates new instance for SSR)
+const queryClient = getQueryClient();
+
+// Prefetch combats data on the server
+await queryClient.prefetchQuery({
+  queryKey: ["combats", campaign.id],
+  queryFn: async (): Promise<ListCombatsResponseDTO> => {
+    const response = await fetch(`${Astro.url.origin}/api/campaigns/${campaign.id}/combats`, {
+      headers: {
+        Cookie: Astro.request.headers.get("Cookie") || "",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch combats");
+    }
+
+    return response.json();
+  },
+});
+
+// Dehydrate the state to pass to the client
+const dehydratedState = dehydrate(queryClient);
+---
+
+<MainLayout title={`Combats - ${campaign.name}`}>
+  <CombatsListWrapper
+    client:load
+    campaignId={campaign.id}
+    campaignName={campaign.name}
+    dehydratedState={dehydratedState}
+  />
+</MainLayout>

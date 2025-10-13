@@ -12,7 +12,7 @@ export function CampaignNav({ selectedCampaignId, currentPath }: CampaignNavProp
   }
 
   const campaignHomeHref = `/campaigns/${selectedCampaignId}`;
-  const combatHref = `/campaigns/${selectedCampaignId}/combat`;
+  const combatHref = `/campaigns/${selectedCampaignId}/combats`;
   const charactersHref = `/campaigns/${selectedCampaignId}/characters`;
 
   return (

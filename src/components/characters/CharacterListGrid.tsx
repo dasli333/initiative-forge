@@ -170,11 +170,7 @@ const CharacterCard = ({
               >
                 <div className="text-xs font-medium uppercase text-muted-foreground mb-1">{key}</div>
                 <div className="text-xl font-bold">{value.raw}</div>
-                <div
-                  className={`text-xs font-semibold ${
-                    value.modifier >= 0 ? "text-emerald-500" : "text-red-400"
-                  }`}
-                >
+                <div className={`text-xs font-semibold ${value.modifier >= 0 ? "text-emerald-500" : "text-red-400"}`}>
                   {formatModifier(value.modifier)}
                 </div>
               </div>

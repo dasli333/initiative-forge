@@ -1,16 +1,72 @@
 import type { APIContext } from "astro";
 import { CreateCombatCommandSchema } from "@/lib/schemas/combat.schema";
-import { createCombat } from "@/lib/services/combat.service";
+import { createCombat, listCombats } from "@/lib/services/combat.service";
 import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
+
+/**
+ * GET /api/campaigns/:campaignId/combats
+ * Returns all combats in a campaign
+ */
+export async function GET(context: APIContext): Promise<Response> {
+  const userId = DEFAULT_USER_ID;
+
+  // Extract params
+  const campaignId = context.params.campaignId;
+  if (!campaignId) {
+    return new Response(JSON.stringify({ error: "Campaign ID is required" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  // Parse query params
+  const url = new URL(context.request.url);
+  const status = url.searchParams.get("status") as "active" | "completed" | null;
+  const limit = parseInt(url.searchParams.get("limit") || "50");
+  const offset = parseInt(url.searchParams.get("offset") || "0");
+
+  // Validate query params
+  if (status && !["active", "completed"].includes(status)) {
+    return new Response(JSON.stringify({ error: "Invalid status. Must be 'active' or 'completed'" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  try {
+    const result = await listCombats(context.locals.supabase, userId, campaignId, {
+      status: status || undefined,
+      limit,
+      offset,
+    });
+
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("not found")) {
+      return new Response(JSON.stringify({ error: "Campaign not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    console.error("Error listing combats:", error);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}
 
 /**
  * POST /api/campaigns/:campaignId/combats
  * Creates a new combat encounter with initial participants
  */
 export async function POST(context: APIContext): Promise<Response> {
-  const supabase = context.locals.supabase;
   // TODO: Authentication temporarily disabled - using default user
   // 1. Auth check
   // const {

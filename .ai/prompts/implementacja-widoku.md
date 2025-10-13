@@ -3,7 +3,7 @@ Twoim zadaniem jest zaimplementowanie widoku frontendu w oparciu o podany plan i
 Najpierw przejrzyj plan implementacji:
 
 <implementation_plan>
-@.ai/ui-plans/player-characters-view-implementation-plan.md
+@.ai/ui-plans/combats-list-view-implementation-plan.md
 </implementation_plan>
 
 Teraz przejrzyj zasady implementacji:
