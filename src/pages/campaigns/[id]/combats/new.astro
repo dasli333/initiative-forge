@@ -1,0 +1,63 @@
+---
+import { dehydrate } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/queryClient";
+import MainLayout from "@/layouts/MainLayout.astro";
+import { CombatCreationWizardWrapper } from "@/components/combat/wizard/CombatCreationWizardWrapper";
+import { DEFAULT_USER_ID } from "@/db/supabase.client";
+
+export const prerender = false;
+
+const { id } = Astro.params;
+const supabase = Astro.locals.supabase;
+
+// Validate campaign ID
+if (!id) {
+  return Astro.redirect("/campaigns");
+}
+
+// Fetch campaign to verify it exists and get the name
+const { data: campaign, error } = await supabase
+  .from("campaigns")
+  .select("id, name")
+  .eq("id", id)
+  .eq("user_id", DEFAULT_USER_ID)
+  .single();
+
+if (error || !campaign) {
+  return Astro.redirect("/campaigns");
+}
+
+// Get QueryClient (creates new instance for SSR)
+const queryClient = getQueryClient();
+
+// Prefetch player characters for better UX
+try {
+  await queryClient.prefetchQuery({
+    queryKey: ["player-characters", campaign.id],
+    queryFn: async () => {
+      const response = await fetch(`${Astro.url.origin}/api/campaigns/${campaign.id}/characters`, {
+        headers: {
+          Cookie: Astro.request.headers.get("Cookie") || "",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch player characters");
+      }
+
+      const data = await response.json();
+      return data.characters;
+    },
+  });
+} catch (error) {
+  console.error("Error prefetching player characters:", error);
+  // Continue anyway - the component will handle the error
+}
+
+// Dehydrate the state to pass to the client
+const dehydratedState = dehydrate(queryClient);
+---
+
+<MainLayout title={`Create Combat - ${campaign.name}`}>
+  <CombatCreationWizardWrapper client:load campaignId={campaign.id} dehydratedState={dehydratedState} />
+</MainLayout>

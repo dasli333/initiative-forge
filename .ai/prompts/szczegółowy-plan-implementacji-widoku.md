@@ -9,53 +9,87 @@ Najpierw przejrzyj następujące informacje:
 
 2. Opis widoku:
 <view_description>
-### 2.6. Combats List View
+### 2.7. Combat Creation Wizard
 
-**Ścieżka**: `/campaigns/:id/combats`
+**Ścieżka**: `/campaigns/:id/combats/new`
 
-**Główny cel**: Wyświetlenie listy walk w kampanii, możliwość wznowienia aktywnej walki lub rozpoczęcia nowej.
+**Główny cel**: Utworzenie nowej walki poprzez 5-stopniowy wizard (nazwa, wybór PCs, dodanie potworów, dodanie NPCs, podsumowanie).
 
 **Kluczowe informacje do wyświetlenia**:
 
-- Grid combat cards (nazwa, status, data rozpoczęcia/zakończenia, liczba uczestników, obecna runda)
-- Przycisk tworzenia nowej walki
-- Empty state jeśli brak walk
+- Progress indicator (5 kroków)
+- Step 1: Combat name input
+- Step 2: Checkboxes postaci graczy (domyślnie wszystkie zaznaczone)
+- Step 3: Split view - searchable monster library (left 60%) + added monsters list (right 40%)
+- Step 4: Form dla ad-hoc NPCs (Simple/Advanced mode toggle)
+- Step 5: Podsumowanie wszystkich uczestników
 
 **Kluczowe komponenty widoku**:
 
-- **Header Section**:
-    - Breadcrumb: "My Campaigns > [Campaign Name] > Combats"
-    - H1: "Combats"
-    - Button: "Start New Combat" (emerald, icon +) → `/campaigns/:id/combats/new`
-- **Responsive Grid**:
-    - 2 kolumny (1024px ≤ screen < 1280px)
-    - 3 kolumny (screen ≥ 1280px)
-- **Combat Card** (Shadcn Card):
-    - Header: Nazwa walki, Status badge (Active emerald/Completed muted)
-    - Body:
-        - Round indicator: "Round X" (jeśli active)
-        - Participants count: "X participants"
-        - Date: "Started [date]" lub "Completed [date]"
-    - Footer:
-        - Button "Resume Combat" (emerald, jeśli active) → `/combats/:id`
-        - Button "View Combat" (secondary, jeśli completed) → `/combats/:id`
-        - Dropdown menu (dla completed): Delete
-- **Empty State**:
-    - Icon: swords (duży, muted)
-    - Heading: "No combats yet"
-    - Subtext: "Start your first combat to track initiative and manage encounters"
-    - Button: "Start New Combat" (emerald)
+- **Progress Indicator** (Shadcn Stepper lub custom):
+    - 5 steps: "Combat Name", "Select PCs", "Add Monsters", "Add NPCs", "Summary"
+    - Current step highlighted (emerald), completed steps: checkmark icon
+- **Step 1: Combat Name**:
+    - H2: "Name Your Combat"
+    - Input: Combat Name (required, max 255)
+    - Button: "Next" (disabled jeśli empty)
+- **Step 2: Select Player Characters**:
+    - H2: "Select Player Characters"
+    - Lista checkboxów: Checkbox + Character name + badges (HP, AC), domyślnie wszystkie checked
+    - Validation: przynajmniej 1 wybrany
+    - Buttons: "Back", "Next"
+- **Step 3: Add Monsters**:
+    - H2: "Add Monsters"
+    - **Left Panel (60%)**:
+        - Search bar: "Search monsters..." (debounce 300ms)
+        - Filter dropdown: CR (range slider lub select)
+        - Monster List (infinite scroll): Monster Card (Name, CR badge, Type+Size, "+ Add" button, click → accordion rozwija szczegóły)
+        - Loading spinner na dole
+    - **Right Panel (40%)**:
+        - H3: "Added to Combat"
+        - Lista dodanych: Monster item (Name, Count badge "x3" - click → inline input, Remove button X)
+        - Empty state: "No monsters added yet"
+    - Buttons: "Back", "Next"
+- **Step 4: Add Ad-hoc NPCs (Optional)**:
+    - H2: "Add NPCs (Optional)"
+    - Toggle: "Simple Mode" / "Advanced Mode" (Shadcn Switch)
+    - **Simple Mode Form**: Name, Max HP, AC, Initiative Modifier (opcjonalnie)
+    - **Advanced Mode Form**: Name, Max HP, AC, Speed, Ability Scores (grid 2x3), Actions (action builder)
+    - Lista dodanych NPCs (jeśli są): NPC Card (Name, HP, AC, Remove button)
+    - Button: "+ Add NPC"
+    - Buttons: "Back", "Next"
+- **Step 5: Summary**:
+    - H2: "Combat Summary"
+    - Sections:
+        - "Combat Name": [nazwa]
+        - "Player Characters (X)": Lista (Name, HP, AC)
+        - "Monsters (X)": Lista (Name x count)
+        - "NPCs (X)": Lista (Name, HP, AC)
+    - Buttons: "Back", "Start Combat" (emerald, duży)
 
 **UX, dostępność i względy bezpieczeństwa**:
 
-- **UX**: Skeleton loading states podczas fetch, optimistic UI dla operacji, confirmation modal dla Delete ("Delete this combat? This action cannot be undone."), toast notifications (success/error), visual distinction między active i completed combats (emerald vs muted badges)
-- **Accessibility**: ARIA labels dla icon buttons, keyboard navigation dla dropdown menu, focus management w modalach, ARIA live dla statusu ładowania
-- **Security**: RLS zapewnia dostęp tylko do walk z własnych kampanii, validation przy usuwaniu
+- **UX**: Keyboard navigation przez steps, focus management przy przechodzeniu między steps, validation każdego stepu przed "Next", progress saved w local state, confirmation modal przy Escape ("Discard combat?"), brak postaci w kampanii → warning banner w Step 2 z linkiem do character creation
+- **Accessibility**: ARIA live announcements przy zmianie kroków, focus na heading każdego stepu, keyboard support dla monster search i selection
+- **Security**: Validation uczestników (przynajmniej 1), RLS dla dostępu do campaign characters, public read dla monsters
 </view_description>
 
 3. User Stories:
 <user_stories>
+#### ID: US-007
 
+**Tytuł:** Rozpoczynanie nowej walki
+
+**Opis:** Jako DM, w zakładce "Combat", chcę rozpocząć nową walkę, dodając do niej postacie graczy, potwory z biblioteki i NPC, aby przygotować starcie.
+
+**Kryteria akceptacji:**
+
+- W widoku "Combat" znajduje się przycisk "Rozpocznij nową walkę".
+- W widoku "Combat" znajdują się zapisane walki
+- Interfejs pozwala na wybranie postaci graczy z listy postaci kampanii.
+- Interfejs pozwala na wyszukanie i dodanie potworów z biblioteki.
+- System pozwala na dodanie wielu kopii tego samego potwora (np. 3 gobliny), które będą traktowane jako osobne jednostki.
+- Po dodaniu wszystkich uczestników, przycisk "Rzuć na inicjatywę" staje się aktywny.
 </user_stories>
 
 4. Endpoint Description:
