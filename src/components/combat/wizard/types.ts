@@ -22,7 +22,7 @@ export interface WizardState {
 
   // Step 3 specific state
   monsterSearchTerm: string;
-  monsterCRFilter: string; // "All", "0-1", "2-5", "6-10", "11-15", "16-20", "21+"
+  monsterTypeFilter: string | null;
 
   // Step 4 specific state
   npcMode: "simple" | "advanced";
@@ -139,11 +139,11 @@ export interface Step2Props {
  */
 export interface Step3Props {
   searchTerm: string;
-  crFilter: string;
+  typeFilter: string | null;
   monsters: MonsterViewModel[];
   addedMonsters: Map<string, AddedMonsterViewModel>;
   onSearchChange: (term: string) => void;
-  onCRFilterChange: (cr: string) => void;
+  onTypeFilterChange: (type: string | null) => void;
   onAddMonster: (monsterId: string, monsterName: string) => void;
   onUpdateCount: (monsterId: string, count: number) => void;
   onRemoveMonster: (monsterId: string) => void;

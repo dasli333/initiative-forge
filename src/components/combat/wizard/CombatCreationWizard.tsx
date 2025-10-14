@@ -19,9 +19,10 @@ import { Step4_AddNPCs } from "./Step4_AddNPCs";
 import { Step5_Summary } from "./Step5_Summary";
 
 import { usePlayerCharacters } from "./hooks/usePlayerCharacters";
-import { useMonsterSearch } from "./hooks/useMonsterSearch";
+import { useMonsters } from "@/components/hooks/useMonsters";
 import { useCombatCreation } from "./hooks/useCombatCreation";
-import { useDebounce } from "./hooks/useDebounce";
+import { useDebouncedValue } from "@/components/hooks/useDebouncedValue";
+import { useLanguageStore } from "@/stores/languageStore";
 
 import {
   validateStep1,
@@ -59,7 +60,7 @@ export function CombatCreationWizard({ campaignId }: CombatCreationWizardProps) 
 
   // Step 3 specific state
   const [monsterSearchTerm, setMonsterSearchTerm] = useState<string>("");
-  const [monsterCRFilter, setMonsterCRFilter] = useState<string>("All");
+  const [monsterTypeFilter, setMonsterTypeFilter] = useState<string | null>(null);
 
   // Step 4 specific state
   const [npcMode, setNPCMode] = useState<"simple" | "advanced">("simple");
@@ -73,9 +74,18 @@ export function CombatCreationWizard({ campaignId }: CombatCreationWizardProps) 
 
   // ==================== QUERIES & MUTATIONS ====================
   const playerCharactersQuery = usePlayerCharacters(campaignId);
-  const debouncedSearchTerm = useDebounce(monsterSearchTerm, 300);
-  const monstersQuery = useMonsterSearch(debouncedSearchTerm, monsterCRFilter);
+  const debouncedSearchTerm = useDebouncedValue(monsterSearchTerm, 300);
+  const monstersQuery = useMonsters({
+    searchQuery: debouncedSearchTerm,
+    type: monsterTypeFilter,
+    size: null,
+    alignment: null,
+    limit: 20,
+  });
   const createCombatMutation = useCombatCreation(campaignId);
+
+  // Language store for monster names
+  const selectedLanguage = useLanguageStore((state) => state.selectedLanguage);
 
   // ==================== DERIVED STATE ====================
   const playerCharacters = useMemo(() => {
@@ -96,7 +106,7 @@ export function CombatCreationWizard({ campaignId }: CombatCreationWizardProps) 
       page.monsters.map(
         (monster): MonsterViewModel => ({
           id: monster.id,
-          name: monster.data.name.pl || monster.data.name.en,
+          name: monster.data.name[selectedLanguage] || monster.data.name.en,
           cr: monster.data.challengeRating.rating,
           type: monster.data.type,
           size: monster.data.size,
@@ -109,7 +119,7 @@ export function CombatCreationWizard({ campaignId }: CombatCreationWizardProps) 
         })
       )
     );
-  }, [monstersQuery.data]);
+  }, [monstersQuery.data, selectedLanguage]);
 
   const selectedPlayerCharacters = useMemo(() => {
     return playerCharacters.filter((pc) => selectedPlayerCharacterIds.includes(pc.id));
@@ -287,7 +297,7 @@ export function CombatCreationWizard({ campaignId }: CombatCreationWizardProps) 
       addedMonsters,
       addedNPCs,
       monsterSearchTerm,
-      monsterCRFilter,
+      monsterTypeFilter,
       npcMode,
       npcFormData,
     };
@@ -303,11 +313,9 @@ export function CombatCreationWizard({ campaignId }: CombatCreationWizardProps) 
     addedMonsters,
     addedNPCs,
     monsterSearchTerm,
-    monsterCRFilter,
+    monsterTypeFilter,
     npcMode,
     npcFormData,
-    playerCharactersQuery.data,
-    monstersQuery.data,
     createCombatMutation,
   ]);
 
@@ -347,11 +355,11 @@ export function CombatCreationWizard({ campaignId }: CombatCreationWizardProps) 
         {currentStep === 3 && (
           <Step3_AddMonsters
             searchTerm={monsterSearchTerm}
-            crFilter={monsterCRFilter}
+            typeFilter={monsterTypeFilter}
             monsters={monsters}
             addedMonsters={addedMonsters}
             onSearchChange={setMonsterSearchTerm}
-            onCRFilterChange={setMonsterCRFilter}
+            onTypeFilterChange={setMonsterTypeFilter}
             onAddMonster={handleAddMonster}
             onUpdateCount={handleUpdateMonsterCount}
             onRemoveMonster={handleRemoveMonster}

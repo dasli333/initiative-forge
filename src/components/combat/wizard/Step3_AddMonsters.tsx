@@ -3,28 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Plus, X, Loader2 } from "lucide-react";
+import { TypeFilter } from "@/components/monsters/TypeFilter";
+import { useLanguageStore } from "@/stores/languageStore";
 import type { Step3Props, MonsterViewModel, AddedMonsterViewModel } from "./types";
-
-const CR_FILTER_OPTIONS = [
-  { value: "All", label: "All CR" },
-  { value: "0-1", label: "CR 0-1" },
-  { value: "2-5", label: "CR 2-5" },
-  { value: "6-10", label: "CR 6-10" },
-  { value: "11-15", label: "CR 11-15" },
-  { value: "16-20", label: "CR 16-20" },
-  { value: "21+", label: "CR 21+" },
-] as const;
 
 export function Step3_AddMonsters({
   searchTerm,
-  crFilter,
+  typeFilter,
   monsters,
   addedMonsters,
   onSearchChange,
-  onCRFilterChange,
+  onTypeFilterChange,
   onAddMonster,
   onUpdateCount,
   onRemoveMonster,
@@ -34,6 +26,9 @@ export function Step3_AddMonsters({
   onBack,
   onNext,
 }: Step3Props) {
+  // Language store for monster names
+  const selectedLanguage = useLanguageStore((state) => state.selectedLanguage);
+  const toggleLanguage = useLanguageStore((state) => state.toggleLanguage);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -72,11 +67,11 @@ export function Step3_AddMonsters({
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left Panel - Monster Library (60%) */}
         <div className="lg:col-span-3 space-y-4">
-          {/* Search and Filter */}
+          {/* Search, Filter and Language Switch */}
           <div className="flex gap-4">
-            <div className="flex-1">
-              <Label htmlFor="monster-search" className="sr-only">
-                Search monsters
+            <div className="flex-1 max-w-md space-y-2">
+              <Label htmlFor="monster-search" className="text-sm font-medium">
+                Search
               </Label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -91,22 +86,20 @@ export function Step3_AddMonsters({
               </div>
             </div>
 
-            <div className="w-40">
-              <Label htmlFor="cr-filter" className="sr-only">
-                Filter by CR
+            <div className="w-48">
+              <TypeFilter value={typeFilter} onChange={onTypeFilterChange} />
+            </div>
+
+            <div className="flex items-end gap-2 pb-0.5">
+              <Label htmlFor="language-switch" className="text-sm font-medium cursor-pointer">
+                {selectedLanguage === "en" ? "EN" : "PL"}
               </Label>
-              <Select value={crFilter} onValueChange={onCRFilterChange}>
-                <SelectTrigger id="cr-filter">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {CR_FILTER_OPTIONS.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Switch
+                id="language-switch"
+                checked={selectedLanguage === "pl"}
+                onCheckedChange={toggleLanguage}
+                aria-label="Toggle language between English and Polish"
+              />
             </div>
           </div>
 
