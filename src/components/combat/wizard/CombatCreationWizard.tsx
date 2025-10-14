@@ -170,14 +170,15 @@ export function CombatCreationWizard({ campaignId }: CombatCreationWizardProps) 
     return () => window.removeEventListener("keydown", handleEscape);
   }, []);
 
-  // Reset NPC form when mode changes
-  useEffect(() => {
-    if (npcMode === "simple") {
+  const handleNPCModeChange = useCallback((newMode: "simple" | "advanced") => {
+    setNPCMode(newMode);
+    // Synchronously reset form data to prevent race condition
+    if (newMode === "simple") {
       setNPCFormData(defaultSimpleNPCFormData());
     } else {
       setNPCFormData(defaultAdvancedNPCFormData());
     }
-  }, [npcMode]);
+  }, []);
 
   // ==================== HANDLERS ====================
   const handleNext = useCallback(() => {
@@ -374,7 +375,7 @@ export function CombatCreationWizard({ campaignId }: CombatCreationWizardProps) 
         {currentStep === 4 && (
           <Step4_AddNPCs
             mode={npcMode}
-            onModeChange={setNPCMode}
+            onModeChange={handleNPCModeChange}
             npcForm={npcFormData}
             onFormChange={handleNPCFormChange}
             onAddNPC={handleAddNPC}
