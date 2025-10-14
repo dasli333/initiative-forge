@@ -95,7 +95,7 @@ interface CombatViewWrapperProps {
 
 ### CombatTracker (Główny komponent widoku)
 
-**Opis:** Komponent orkiestrujący, zarządza layoutem trzech kolumn oraz logiką biznesową walki. Łączy store Zustand z komponentami UI. Odpowiada za inicjalizację stanu, obsługę globalnych skrótów klawiszowych oraz auto-save.
+**Opis:** Komponent orkiestrujący, zarządza layoutem trzech kolumn oraz logiką biznesową walki. Łączy store Zustand z komponentami UI. Odpowiada za inicjalizację stanu, obsługę globalnych skrótów klawiszowych.
 
 **Główne elementy:**
 - Layout trzech kolumn (Grid z Tailwind: `grid-cols-[30%_50%_20%]`)
@@ -108,7 +108,6 @@ interface CombatViewWrapperProps {
 **Obsługiwane zdarzenia:**
 - Inicjalizacja: `useEffect(() => loadCombat(data), [data])`
 - Skróty klawiszowe: `useKeyboardShortcuts({ Space: handleNextTurn, D: focusDamageInput, H: focusHealInput, Escape: handleCancel })`
-- Auto-save: `useAutoSave(isDirty, handleSave, 30000)`
 - Navigation intercept: `useUnsavedChanges(isDirty)`
 
 **Walidacja:** Brak na tym poziomie (delegowane do dzieci)
@@ -750,7 +749,6 @@ Widok Combat wykorzystuje hybrydowe podejście do zarządzania stanem:
 **Odpowiedzialność:**
 - Zarządzanie stanem walki w czasie rzeczywistym (zero latency)
 - Wszystkie operacje turn-by-turn (inicjatywa, next turn, HP, warunki, rzuty)
-- Śledzenie zmian (isDirty) dla auto-save
 - Przechowywanie historii rzutów
 
 **Struktura:**
@@ -1029,36 +1027,6 @@ export function useSaveSnapshot(combatId: string, campaignId: string) {
       return response.json();
     },
   });
-}
-```
-
-**useAutoSave(isDirty: boolean, saveFn: () => Promise<void>, delay: number = 30000)**
-
-Lokalizacja: `src/hooks/useAutoSave.ts`
-
-```typescript
-import { useEffect, useRef } from "react";
-
-export function useAutoSave(
-  isDirty: boolean,
-  saveFn: () => Promise<void>,
-  delay: number = 30000
-) {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (isDirty) {
-      timeoutRef.current = setTimeout(() => {
-        saveFn();
-      }, delay);
-    }
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [isDirty, saveFn, delay]);
 }
 ```
 
@@ -1438,16 +1406,6 @@ if (!campaignId) {
      - Input max length 100
      - Skeleton loader podczas ładowania wyników
 
-8. **Auto-save (CombatTracker)**
-   - **Komponent:** useAutoSave hook
-   - **Warunki:**
-     - `isDirty = true` (są niezapisane zmiany)
-     - Nie może trwać inny zapis (`isSaving = false`)
-     - Musi minąć 30s od ostatniej zmiany
-   - **Wpływ na UI:**
-     - Indicator "Saving..." podczas zapisu
-     - Toast jeśli błąd: "Failed to save. Retry?"
-
 ## 10. Obsługa błędów
 
 ### 1. Combat Not Found (404)
@@ -1520,7 +1478,7 @@ try {
 
 ### 3. API Save Error
 
-**Gdzie:** Podczas auto-save lub manual save (`saveSnapshot()`)
+**Gdzie:** Podczas manual save (`saveSnapshot()`)
 
 **Przyczyna:**
 - Błąd sieci
@@ -1701,7 +1659,6 @@ useEffect(() => {
    src/hooks/queries/useCombat.ts
    src/hooks/queries/useConditions.ts
    src/hooks/mutations/useSaveSnapshot.ts
-   src/hooks/useAutoSave.ts
    src/hooks/useUnsavedChanges.ts
    src/hooks/useKeyboardShortcuts.ts
    src/components/combat/
@@ -1717,7 +1674,7 @@ useEffect(() => {
 
 4. **Stwórz custom hooks**
    - Zaimplementuj `useCombat`, `useConditions`, `useSaveSnapshot`
-   - Zaimplementuj `useAutoSave`, `useUnsavedChanges`, `useKeyboardShortcuts`
+   - Zaimplementuj `useUnsavedChanges`, `useKeyboardShortcuts`
 
 ### Faza 2: Zustand Store (2-3 dni)
 
@@ -1775,7 +1732,6 @@ useEffect(() => {
     - Podłącz wszystkie kolumny
     - Integracja z useCombatStore
     - Keyboard shortcuts
-    - Auto-save hook
 
 13. **Stwórz NextTurnButton (FAB)**
     - Fixed positioning
@@ -1848,35 +1804,7 @@ useEffect(() => {
     - Empty action list
     - Brak aktywnego uczestnika
     - >20 uczestników (virtualization warning)
-
-### Faza 10: Testing i polish (2-3 dni)
-
-24. **Manual testing**
-    - Pełny scenariusz walki (od create do complete)
-    - Testuj z różną liczbą uczestników (2, 5, 10, 20+)
-    - Testuj wszystkie interakcje użytkownika
-    - Testuj na różnych rozmiarach okna (desktop only w MVP)
-
-25. **Performance optimization**
-    - Sprawdź re-renders z React DevTools
-    - Dodaj React.memo gdzie potrzeba
-    - Sprawdź czy auto-save nie blokuje UI
-    - Przetestuj infinite scroll w reference panel
-
-26. **Final polish**
-    - Przejrzyj wszystkie komponenty pod kątem styling consistency
-    - Sprawdź wszystkie tooltip teksty
-    - Sprawdź aria-labels
-    - Code review
-
-### Faza 11: Dokumentacja (1 dzień)
-
-27. **Napisz dokumentację**
-    - README dla modułu combat
-    - Komentarze w useCombatStore (już częściowo zrobione)
-    - Przykłady użycia custom hooks
-
-**Szacowany czas całkowity: 15-25 dni roboczych (3-5 tygodni)**
+    
 
 ---
 
