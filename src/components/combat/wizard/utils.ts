@@ -5,6 +5,7 @@ import type {
   SimpleNPCFormData,
   AdvancedNPCFormData,
   AdHocNPC,
+  AddedMonsterViewModel,
   PlayerCharacterDTO,
   MonsterDTO,
   CreateCombatCommand,
@@ -27,11 +28,11 @@ export function mapWizardStateToCommand(wizardState: WizardState): CreateCombatC
   });
 
   // 2. Dodaj potwory
-  wizardState.addedMonsters.forEach((count, monsterId) => {
+  wizardState.addedMonsters.forEach((monsterData, monsterId) => {
     initial_participants.push({
       source: "monster",
       monster_id: monsterId,
-      count: count,
+      count: monsterData.count,
     });
   });
 
@@ -66,6 +67,21 @@ export function mapWizardStateToCommand(wizardState: WizardState): CreateCombatC
     name: wizardState.combatName,
     initial_participants: initial_participants,
   };
+}
+
+/**
+ * Generuje domyślną nazwę dla walki
+ * Format: "Combat - Oct 14, 2025 14:30"
+ */
+export function generateDefaultCombatName(): string {
+  const now = new Date();
+  return `Combat - ${now.toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })}`;
 }
 
 /**
@@ -105,7 +121,7 @@ export function validateStep2(selectedIds: string[]): {
  */
 export function validateStep5(
   selectedPlayerCharacterIds: string[],
-  addedMonsters: Map<string, number>,
+  addedMonsters: Map<string, AddedMonsterViewModel>,
   addedNPCs: AdHocNPC[]
 ): {
   valid: boolean;

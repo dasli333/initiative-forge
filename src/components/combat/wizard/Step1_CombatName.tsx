@@ -1,13 +1,21 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { validateStep1 } from "./utils";
+import { RefreshCw } from "lucide-react";
+import { validateStep1, generateDefaultCombatName } from "./utils";
 import type { Step1Props } from "./types";
 
 export function Step1_CombatName({ combatName, onNameChange, onNext }: Step1Props) {
   const [touched, setTouched] = useState(false);
   const validation = validateStep1(combatName);
+
+  // Auto-fill with default name on mount if empty
+  useEffect(() => {
+    if (combatName.trim().length === 0) {
+      onNameChange(generateDefaultCombatName());
+    }
+  }, []); // Run only once on mount
 
   const handleBlur = useCallback(() => {
     setTouched(true);
@@ -23,6 +31,10 @@ export function Step1_CombatName({ combatName, onNameChange, onNext }: Step1Prop
     [onNext, validation.valid]
   );
 
+  const handleGenerateNewName = useCallback(() => {
+    onNameChange(generateDefaultCombatName());
+  }, [onNameChange]);
+
   const showError = touched && !validation.valid;
 
   return (
@@ -33,7 +45,19 @@ export function Step1_CombatName({ combatName, onNameChange, onNext }: Step1Prop
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="combat-name">Combat Name</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="combat-name">Combat Name</Label>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleGenerateNewName}
+              className="h-auto py-1 px-2 text-xs"
+            >
+              <RefreshCw className="w-3 h-3 mr-1" />
+              Generate New
+            </Button>
+          </div>
           <Input
             id="combat-name"
             type="text"

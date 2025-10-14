@@ -17,7 +17,7 @@ export interface WizardState {
   completedSteps: number[]; // np. [1, 2] jeśli użytkownik jest na Step 3
   combatName: string;
   selectedPlayerCharacterIds: string[];
-  addedMonsters: Map<string, number>; // monster_id -> count
+  addedMonsters: Map<string, AddedMonsterViewModel>; // monster_id -> AddedMonsterViewModel
   addedNPCs: AdHocNPC[];
 
   // Step 3 specific state
