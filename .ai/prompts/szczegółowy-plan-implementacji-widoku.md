@@ -9,87 +9,185 @@ Najpierw przejrzyj następujące informacje:
 
 2. Opis widoku:
 <view_description>
-### 2.7. Combat Creation Wizard
+### 2.8. Combat View
 
-**Ścieżka**: `/campaigns/:id/combats/new`
+**Ścieżka**: `/combats/:id`
 
-**Główny cel**: Utworzenie nowej walki poprzez 5-stopniowy wizard (nazwa, wybór PCs, dodanie potworów, dodanie NPCs, podsumowanie).
+**Główny cel**: Prowadzenie walki w czasie rzeczywistym z 3-kolumnowym interfejsem (initiative list, active character sheet, reference search).
 
 **Kluczowe informacje do wyświetlenia**:
 
-- Progress indicator (5 kroków)
-- Step 1: Combat name input
-- Step 2: Checkboxes postaci graczy (domyślnie wszystkie zaznaczone)
-- Step 3: Split view - searchable monster library (left 60%) + added monsters list (right 40%)
-- Step 4: Form dla ad-hoc NPCs (Simple/Advanced mode toggle)
-- Step 5: Podsumowanie wszystkich uczestników
+- **Left column (30%)**: Posortowana lista inicjatywy z HP controls, condition badges, round counter
+- **Middle column (50%)**: Karta aktywnej postaci z statystykami, akcjami, roll controls, roll log
+- **Right column (20%)**: Reference search (conditions/spells/monsters tabs)
+- Floating "Next Turn" button
+- Turn transition animations
 
 **Kluczowe komponenty widoku**:
 
-- **Progress Indicator** (Shadcn Stepper lub custom):
-    - 5 steps: "Combat Name", "Select PCs", "Add Monsters", "Add NPCs", "Summary"
-    - Current step highlighted (emerald), completed steps: checkmark icon
-- **Step 1: Combat Name**:
-    - H2: "Name Your Combat"
-    - Input: Combat Name (required, max 255)
-    - Button: "Next" (disabled jeśli empty)
-- **Step 2: Select Player Characters**:
-    - H2: "Select Player Characters"
-    - Lista checkboxów: Checkbox + Character name + badges (HP, AC), domyślnie wszystkie checked
-    - Validation: przynajmniej 1 wybrany
-    - Buttons: "Back", "Next"
-- **Step 3: Add Monsters**:
-    - H2: "Add Monsters"
-    - **Left Panel (60%)**:
-        - Search bar: "Search monsters..." (debounce 300ms)
-        - Filter dropdown: CR (range slider lub select)
-        - Monster List (infinite scroll): Monster Card (Name, CR badge, Type+Size, "+ Add" button, click → accordion rozwija szczegóły)
-        - Loading spinner na dole
-    - **Right Panel (40%)**:
-        - H3: "Added to Combat"
-        - Lista dodanych: Monster item (Name, Count badge "x3" - click → inline input, Remove button X)
-        - Empty state: "No monsters added yet"
-    - Buttons: "Back", "Next"
-- **Step 4: Add Ad-hoc NPCs (Optional)**:
-    - H2: "Add NPCs (Optional)"
-    - Toggle: "Simple Mode" / "Advanced Mode" (Shadcn Switch)
-    - **Simple Mode Form**: Name, Max HP, AC, Initiative Modifier (opcjonalnie)
-    - **Advanced Mode Form**: Name, Max HP, AC, Speed, Ability Scores (grid 2x3), Actions (action builder)
-    - Lista dodanych NPCs (jeśli są): NPC Card (Name, HP, AC, Remove button)
-    - Button: "+ Add NPC"
-    - Buttons: "Back", "Next"
-- **Step 5: Summary**:
-    - H2: "Combat Summary"
-    - Sections:
-        - "Combat Name": [nazwa]
-        - "Player Characters (X)": Lista (Name, HP, AC)
-        - "Monsters (X)": Lista (Name x count)
-        - "NPCs (X)": Lista (Name, HP, AC)
-    - Buttons: "Back", "Start Combat" (emerald, duży)
+**LEFT COLUMN (30%) - Interactive Initiative List:**
+
+- **Header**:
+    - Round counter: "Round X" (emerald badge)
+    - Button: "Roll Initiative" (tylko jeśli nie rozpoczęto - initial load)
+- **Initiative List** (Scroll Area, auto-scroll do aktywnej):
+    - **Initiative Item**:
+        - Display name (H3, size depends on active)
+        - Initiative value badge (emerald)
+        - **Active turn indicator**: emerald glow border + background highlight
+        - **HP Controls**:
+            - Display: "[current] / [max]"
+            - Input field (number)
+            - Button: 🩸 "DMG" (destructive red)
+            - Button: 💚 "HEAL" (emerald green)
+            - Workflow: wpisz wartość → klik DMG/HEAL → current HP update → input clears
+        - AC badge: shield icon + value
+        - **Condition badges** (small pills): Icon + name, hover → Tooltip z pełnym opisem
+        - Button: "+ Add Condition" (small) → Combobox (Shadcn) z listą conditions
+        - **0 HP state**: Opacity 0.5, skull icon, strikethrough name, aria-label "[Name] is unconscious"
+- Footer: "Combat started [time ago]"
+
+**MIDDLE COLUMN (50%) - Active Character Sheet:**
+
+- **Header Section**:
+    - Nazwa postaci (H2, emerald)
+    - **HP Bar**: Visual progress bar (emerald fill, gray background), numbers overlay "X / Y HP"
+    - AC Display: Shield icon + value (large badge)
+- **Stats Section**:
+    - H3: "Ability Scores"
+    - Grid 2x3: Stat card (STR, DEX, CON, INT, WIS, CHA) - Label (muted), Score value (duży), Modifier badge ("+X"/"-X")
+- **Actions Section**:
+    - H3: "Actions"
+    - Lista akcji jako przyciski (Shadcn Button, outline):
+        - Icon typu (melee: sword, ranged: bow, spell: sparkles)
+        - Nazwa akcji
+        - Badge: attack bonus ("+5")
+        - Badge: damage dice ("1d8+3")
+        - Click → wykonuje rzut
+    - Empty state: "No actions available"
+- **Roll Controls**:
+    - Radio Group: "Normal" / "Advantage" / "Disadvantage" (icons: = / ↑↑ / ↓↓)
+- **Roll Log**:
+    - H3: "Recent Rolls"
+    - Ostatnie 3 rzuty (małe karty, stack):
+        - Roll Card: Icon + typ (Attack/Damage/Save), Wynik (duży, emerald jeśli crit/success, red jeśli fail), Formula + modyfikatory (muted), Timestamp (muted)
+    - Empty state: "No rolls yet"
+
+**RIGHT COLUMN (20%) - Reference Search:**
+
+- **Header**: Search bar "Search conditions, spells, monsters..." (debounce 300ms, clear button X)
+- **Tabs** (Shadcn Tabs): [Conditions] [Spells] [Monsters]
+    - **Conditions Tab**:
+        - Lista D&D 5e conditions: Condition Item (accordion) - Icon + Name, click → rozwija opis, button "Apply to [selected]"
+    - **Spells Tab**:
+        - Filters: Level (0-9, select), Class (multi-select)
+        - Spell List: Spell Card (Name, Level badge, School+Casting Time, click → accordion pełny opis)
+    - **Monsters Tab**:
+        - Monster List: Monster Card (Name, CR badge, Type+Size, click → rozwija stats, opcjonalnie button "Add to Combat")
+- Scroll Area dla każdej zakładki, loading states (skeleton)
+
+**Floating Action Button (FAB):**
+
+- Position: fixed bottom-right
+- Button (large, emerald, circular): Icon arrow right, Text "Next Turn", Subtext "(Space)"
+- Keyboard shortcut: Spacebar
+- Animacja: pulsująca
+
+**Turn Transition Animation Sequence:**
+
+1. Fade out emerald glow poprzedniej postaci (0.2s)
+2. Smooth scroll lista inicjatywy do następnej (0.3s)
+3. Emerald glow następnej postaci (0.3s fade in)
+4. Middle column: fade out starej karty → fade in nowej (0.2s każda)
+5. Reset input fields w HP controls
+6. **End of round**: Toast "Round X begins" (emerald, auto-dismiss 3s), auto-save state snapshot
+
+**Combat Exit Warning:**
+
+- User klika inny link w nawigacji
+- Jeśli `isDirty === true`:
+    - Modal (Shadcn Alert Dialog): "Unsaved Changes", "You have unsaved changes. Save before leaving?"
+    - Actions: "Save & Leave" (emerald), "Leave without saving" (destructive), "Cancel" (secondary)
 
 **UX, dostępność i względy bezpieczeństwa**:
 
-- **UX**: Keyboard navigation przez steps, focus management przy przechodzeniu między steps, validation każdego stepu przed "Next", progress saved w local state, confirmation modal przy Escape ("Discard combat?"), brak postaci w kampanii → warning banner w Step 2 z linkiem do character creation
-- **Accessibility**: ARIA live announcements przy zmianie kroków, focus na heading każdego stepu, keyboard support dla monster search i selection
-- **Security**: Validation uczestników (przynajmniej 1), RLS dla dostępu do campaign characters, public read dla monsters
+- **UX**: Zustand dla real-time state (zero latency), debounced auto-save (co 30s jeśli isDirty), optimistic UI dla wszystkich operacji, smooth animations, toast notifications dla błędów
+- **Accessibility**: ARIA live region dla roll results ("You rolled 18 to hit"), ARIA live dla turn changes ("It's Aragorn's turn"), focus management (po "Next Turn" → focus na active character name), keyboard shortcuts (Spacebar: Next Turn, D: damage input, H: heal input, Escape: clear focus/close modals)
+- **Security**: RLS dla dostępu do combat (tylko owner kampanii), validation HP values (clamp do 0-max), state snapshot encryption (opcjonalnie)
+- **Performance**: Virtualized lists jeśli >20 participants, debounced search, skeleton loading states
+
+**Error Cases**:
+
+- Combat nie istnieje → 404 page
+- State snapshot corrupted → error state "Failed to load combat state" z "Retry"/"Reset Combat"
+- API save error → toast "Failed to save. Changes may be lost." z retry button
 </view_description>
 
 3. User Stories:
 <user_stories>
-#### ID: US-007
+#### ID: US-008
 
-**Tytuł:** Rozpoczynanie nowej walki
+**Tytuł:** Ustalanie kolejności w walce
 
-**Opis:** Jako DM, w zakładce "Combat", chcę rozpocząć nową walkę, dodając do niej postacie graczy, potwory z biblioteki i NPC, aby przygotować starcie.
+**Opis:** Jako DM, po dodaniu wszystkich uczestników walki, chcę, aby system automatycznie rzucił za wszystkich na inicjatywę i posortował ich od najwyższego do najniższego wyniku, aby natychmiast rozpocząć pierwszą rundę.
 
 **Kryteria akceptacji:**
 
-- W widoku "Combat" znajduje się przycisk "Rozpocznij nową walkę".
-- W widoku "Combat" znajdują się zapisane walki
-- Interfejs pozwala na wybranie postaci graczy z listy postaci kampanii.
-- Interfejs pozwala na wyszukanie i dodanie potworów z biblioteki.
-- System pozwala na dodanie wielu kopii tego samego potwora (np. 3 gobliny), które będą traktowane jako osobne jednostki.
-- Po dodaniu wszystkich uczestników, przycisk "Rzuć na inicjatywę" staje się aktywny.
+- Po kliknięciu "Rzuć na inicjatywę", system dla każdej postaci wykonuje rzut k20 i dodaje jej modyfikator do inicjatywy.
+- Uczestnicy walki są wyświetleni w formie listy w porządku malejącej inicjatywy.
+- Pierwsza postać na liście jest oznaczona jako aktywna.
+
+#### ID: US-009
+
+**Tytuł:** Śledzenie tur i stanu postaci
+
+**Opis:** Jako DM, w trakcie walki, chcę wyraźnie widzieć, czyja jest tura, przechodzić do następnej postaci i na bieżąco modyfikować punkty życia uczestników, aby płynnie prowadzić starcie.
+
+**Kryteria akceptacji:**
+
+- Aktywna postać jest wizualnie wyróżniona.
+- Przycisk "Następna tura" przesuwa wskaźnik aktywnej postaci na kolejną na liście inicjatywy.
+- Po ostatniej postaci w rundzie, licznik rund zwiększa się o 1, a tura wraca na początek listy.
+- Przy każdej postaci widoczne są przyciski/pola do wpisania wartości obrażeń lub leczenia, które aktualizują jej aktualne HP.
+- Postaci z 0 HP są wyraźnie oznaczone (np. wyszarzone, przekreślone).
+
+#### ID: US-010
+
+**Tytuł:** Wykonywanie akcji w turze
+
+**Opis:** Jako DM, gdy jest tura potwora lub NPC, chcę widzieć jego kartę z dostępnymi akcjami i jednym kliknięciem wykonywać rzuty na atak, aby przyspieszyć rozgrywkę.
+
+**Kryteria akceptacji:**
+
+- W centralnej części ekranu walki wyświetlana jest uproszczona karta aktywnej postaci/potwora.
+- Karta zawiera listę akcji (np. "Atak mieczem", "Ugryzienie").
+- Kliknięcie w nazwę akcji powoduje wykonanie rzutu na trafienie (k20 + modyfikator) i wyświetlenie wyniku.
+- System wyświetla również rzut na obrażenia powiązany z daną akcją.
+
+#### ID: US-011
+
+**Tytuł:** Rzuty z ułatwieniem i utrudnieniem
+
+**Opis:** Jako DM, podczas wykonywania rzutu na atak, chcę mieć możliwość wybrania, czy rzut ma być wykonany normalnie, z ułatwieniem (advantage) czy z utrudnieniem (disadvantage).
+
+**Kryteria akceptacji:**
+
+- Przy każdej akcji wymagającej rzutu k20 znajdują się przełączniki/przyciski do wyboru trybu rzutu (Normalny, Ułatwienie, Utrudnienie).
+- Wybranie "Ułatwienia" powoduje rzut dwiema kośćmi k20 i wybranie wyższego wyniku.
+- Wybranie "Utrudnienia" powoduje rzut dwiema kośćmi k20 i wybranie niższego wyniku.
+
+#### ID: US-012
+
+**Tytuł:** Zarządzanie stanami (conditions)
+
+**Opis:** Jako DM, chcę móc przypisać postaci dowolny stan (np. "oszołomiony", "spętany") i łatwo sprawdzić jego opis bez opuszczania ekranu walki.
+
+**Kryteria akceptacji:**
+
+- Przy każdej postaci na liście inicjatywy jest opcja "Dodaj stan".
+- Po kliknięciu pojawia się lista wszystkich dostępnych stanów w D&D 5e.
+- Wybrany stan pojawia się jako ikona/tag przy nazwie postaci.
+- Najechanie kursorem na ikonę/tag stanu wyświetla jego pełny opis z zasadami.
 </user_stories>
 
 4. Endpoint Description:
