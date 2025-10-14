@@ -124,12 +124,15 @@ export function CombatCreationWizard({ campaignId }: CombatCreationWizardProps) 
   }, [npcMode, npcFormData]);
 
   // ==================== EFFECTS ====================
-  // Auto-select all player characters on load
+  // Auto-select all player characters on load (only once)
+  const [hasAutoSelected, setHasAutoSelected] = useState(false);
+
   useEffect(() => {
-    if (playerCharacters.length > 0 && selectedPlayerCharacterIds.length === 0) {
+    if (!hasAutoSelected && playerCharacters.length > 0 && selectedPlayerCharacterIds.length === 0) {
       setSelectedPlayerCharacterIds(playerCharacters.map((pc) => pc.id));
+      setHasAutoSelected(true);
     }
-  }, [playerCharacters, selectedPlayerCharacterIds.length]);
+  }, [playerCharacters, selectedPlayerCharacterIds.length, hasAutoSelected]);
 
   // Focus management on step change
   useEffect(() => {

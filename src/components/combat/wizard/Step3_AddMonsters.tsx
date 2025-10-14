@@ -67,7 +67,7 @@ export function Step3_AddMonsters({
         Add Monsters
       </h2>
 
-      <p className="text-gray-600 dark:text-gray-400 mb-6">Search and add monsters from the library to your combat.</p>
+      <p className="text-muted-foreground mb-6">Search and add monsters from the library to your combat.</p>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left Panel - Monster Library (60%) */}
@@ -79,7 +79,7 @@ export function Step3_AddMonsters({
                 Search monsters
               </Label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   id="monster-search"
                   type="text"
@@ -111,10 +111,10 @@ export function Step3_AddMonsters({
           </div>
 
           {/* Monster List */}
-          <div className="border rounded-lg overflow-hidden">
+          <div className="border border-border rounded-lg overflow-hidden bg-card">
             <div className="max-h-[600px] overflow-y-auto">
               {monsters.length === 0 && !isLoading ? (
-                <div className="p-8 text-center text-gray-500">
+                <div className="p-8 text-center text-muted-foreground">
                   No monsters found. Try adjusting your search or filters.
                 </div>
               ) : (
@@ -128,7 +128,7 @@ export function Step3_AddMonsters({
               {/* Loading indicator / Load more trigger */}
               {hasMore && (
                 <div ref={loadMoreRef} className="p-4 flex justify-center">
-                  {isLoading && <Loader2 className="w-6 h-6 animate-spin text-gray-500" />}
+                  {isLoading && <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />}
                 </div>
               )}
             </div>
@@ -137,11 +137,11 @@ export function Step3_AddMonsters({
 
         {/* Right Panel - Added Monsters (40%) */}
         <div className="lg:col-span-2">
-          <div className="sticky top-4 border rounded-lg p-4 bg-gray-50 dark:bg-gray-900">
+          <div className="sticky top-4 border border-border rounded-lg p-4 bg-card shadow-sm">
             <h3 className="text-lg font-semibold mb-4">Added to Combat</h3>
 
             {addedMonsters.size === 0 ? (
-              <div className="py-8 text-center text-gray-500">
+              <div className="py-8 text-center text-muted-foreground">
                 <p className="text-sm">No monsters added yet</p>
                 <p className="text-xs mt-1">Click the + button to add monsters</p>
               </div>
@@ -163,7 +163,7 @@ export function Step3_AddMonsters({
 
       {/* Navigation */}
       <div className="flex justify-between pt-6">
-        <Button onClick={onBack} variant="outline">
+        <Button onClick={onBack} variant="outline" size="lg">
           Back
         </Button>
         <Button onClick={onNext} size="lg">
@@ -183,13 +183,15 @@ function MonsterCard({
   onAdd: (monsterId: string, monsterName: string) => void;
 }) {
   return (
-    <AccordionItem value={monster.id}>
-      <div className="flex items-center justify-between pr-4 hover:bg-gray-50 dark:hover:bg-gray-900">
-        <AccordionTrigger className="flex-1 hover:no-underline">
-          <div className="flex items-center gap-3 text-left">
+    <AccordionItem value={monster.id} className="border-border">
+      <div className="flex items-center justify-between pr-4 hover:bg-accent/50 transition-colors">
+        <AccordionTrigger className="flex-1 hover:no-underline px-4 py-3">
+          <div className="flex items-center gap-3 text-left flex-wrap">
             <span className="font-medium">{monster.name}</span>
-            <Badge variant="secondary">{monster.cr}</Badge>
-            <span className="text-sm text-gray-600 dark:text-gray-400">
+            <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white px-2 py-0.5 text-xs shadow-sm">
+              CR {monster.cr}
+            </Badge>
+            <span className="text-sm text-muted-foreground">
               {monster.size} {monster.type}
             </span>
           </div>
@@ -206,17 +208,17 @@ function MonsterCard({
         </Button>
       </div>
 
-      <AccordionContent className="px-4 pb-4">
+      <AccordionContent className="px-4 pb-4 bg-muted/30">
         <div className="space-y-3 text-sm">
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             <div>
-              <span className="font-medium">HP:</span> {monster.hp}
+              <span className="font-medium">HP:</span> <span className="text-muted-foreground">{monster.hp}</span>
             </div>
             <div>
-              <span className="font-medium">AC:</span> {monster.ac}
+              <span className="font-medium">AC:</span> <span className="text-muted-foreground">{monster.ac}</span>
             </div>
             <div>
-              <span className="font-medium">Speed:</span> {monster.speed.join(", ")}
+              <span className="font-medium">Speed:</span> <span className="text-muted-foreground">{monster.speed.join(", ")}</span>
             </div>
           </div>
 
@@ -225,8 +227,8 @@ function MonsterCard({
               <h4 className="font-semibold mb-2">Actions</h4>
               <ul className="space-y-1">
                 {monster.actions.slice(0, 3).map((action, idx) => (
-                  <li key={idx} className="text-gray-700 dark:text-gray-300">
-                    <span className="font-medium">{action.name}:</span> {action.description}
+                  <li key={idx} className="text-muted-foreground">
+                    <span className="font-medium text-foreground">{action.name}:</span> {action.description}
                   </li>
                 ))}
               </ul>
@@ -287,7 +289,7 @@ function AddedMonsterItem({
   }, [isEditing]);
 
   return (
-    <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border">
+    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-card via-card/80 to-emerald-500/5 rounded-lg border border-border shadow-sm">
       <div className="flex-1">
         <span className="font-medium">{monster.name}</span>
       </div>
@@ -307,7 +309,7 @@ function AddedMonsterItem({
         ) : (
           <Badge
             variant="secondary"
-            className="cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600"
+            className="cursor-pointer hover:bg-accent"
             onClick={handleCountClick}
           >
             x{monster.count}

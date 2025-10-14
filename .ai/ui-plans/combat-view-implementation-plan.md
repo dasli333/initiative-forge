@@ -1370,11 +1370,6 @@ if (!campaignId) {
          - "Cancel": Zamyka dialog, zostaje na stronie
     - Result: Dialog chroni przed utratą danych
 
-14. **Auto-save**
-    - System: Co 30s (jeśli `isDirty = true`) wywołuje `saveSnapshot()`
-    - User feedback: Wyświetla "Saving..." indicator → po sukcesie "Saved at [time]" → po błędzie toast "Failed to save"
-    - Result: Zmiany zapisywane automatycznie bez akcji użytkownika
-
 ## 9. Warunki i walidacja
 
 ### Warunki walidowane przez interfejs

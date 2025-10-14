@@ -34,15 +34,15 @@ export function Step2_SelectPlayerCharacters({
         <h2 id="step-2-heading" className="text-2xl font-bold mb-6" tabIndex={-1}>
           Select Player Characters
         </h2>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="flex items-center gap-4 p-4 border rounded-lg">
+            <div key={i} className="flex items-center gap-4 p-4 border border-border rounded-lg bg-card">
               <Skeleton className="w-5 h-5" />
               <div className="flex-1 space-y-2">
-                <Skeleton className="h-5 w-32" />
+                <Skeleton className="h-5 w-48" />
                 <div className="flex gap-2">
-                  <Skeleton className="h-5 w-16" />
-                  <Skeleton className="h-5 w-16" />
+                  <Skeleton className="h-6 w-20" />
+                  <Skeleton className="h-6 w-20" />
                 </div>
               </div>
             </div>
@@ -65,7 +65,7 @@ export function Step2_SelectPlayerCharacters({
           <AlertDescription>Failed to load player characters. Please try again.</AlertDescription>
         </Alert>
         <div className="flex justify-between pt-6">
-          <Button onClick={onBack} variant="outline">
+          <Button onClick={onBack} variant="outline" size="lg">
             Back
           </Button>
         </div>
@@ -85,17 +85,17 @@ export function Step2_SelectPlayerCharacters({
           <AlertTitle>No Player Characters</AlertTitle>
           <AlertDescription>
             No player characters in this campaign. You can still create a combat with only monsters and NPCs, or{" "}
-            <a href={`/campaigns/${playerCharacters[0]?.id || ""}/characters/new`} className="underline font-medium">
+            <a href={`/campaigns/${playerCharacters[0]?.id || ""}/characters/new`} className="underline font-medium hover:underline">
               create a character first
             </a>
             .
           </AlertDescription>
         </Alert>
         <div className="flex justify-between pt-6">
-          <Button onClick={onBack} variant="outline">
+          <Button onClick={onBack} variant="outline" size="lg">
             Back
           </Button>
-          <Button onClick={onNext}>Skip to Monsters</Button>
+          <Button onClick={onNext} size="lg">Skip to Monsters</Button>
         </div>
       </div>
     );
@@ -108,7 +108,7 @@ export function Step2_SelectPlayerCharacters({
         Select Player Characters
       </h2>
 
-      <p className="text-gray-600 dark:text-gray-400 mb-4">
+      <p className="text-muted-foreground mb-6">
         Choose which player characters will participate in this combat.
       </p>
 
@@ -120,9 +120,13 @@ export function Step2_SelectPlayerCharacters({
             <div
               key={character.id}
               className={`
-                flex items-center gap-4 p-4 border rounded-lg
-                transition-colors duration-150
-                ${isSelected ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-500" : "hover:bg-gray-50 dark:hover:bg-gray-900"}
+                group relative flex items-center gap-4 p-4 rounded-lg border
+                transition-all duration-200 ease-out
+                ${
+                  isSelected
+                    ? "bg-gradient-to-r from-card via-card/80 to-emerald-500/5 border-emerald-500 shadow-sm"
+                    : "bg-card border-border hover:border-emerald-500/30 hover:shadow-sm"
+                }
               `}
             >
               <Checkbox
@@ -131,11 +135,33 @@ export function Step2_SelectPlayerCharacters({
                 onCheckedChange={() => handleToggle(character.id)}
               />
               <Label htmlFor={`character-${character.id}`} className="flex-1 cursor-pointer">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-base">{character.name}</span>
+                <div className="flex items-center justify-between gap-4">
+                  <span className="font-semibold text-base">
+                    {character.name}
+                  </span>
                   <div className="flex gap-2">
-                    <Badge variant="secondary">HP: {character.max_hp}</Badge>
-                    <Badge variant="secondary">AC: {character.armor_class}</Badge>
+                    <Badge
+                      className={`
+                        px-3 py-1 text-sm shadow-sm
+                        ${isSelected
+                          ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                          : "bg-secondary text-secondary-foreground"
+                        }
+                      `}
+                    >
+                      HP: {character.max_hp}
+                    </Badge>
+                    <Badge
+                      className={`
+                        px-3 py-1 text-sm shadow-sm
+                        ${isSelected
+                          ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                          : "bg-secondary text-secondary-foreground"
+                        }
+                      `}
+                    >
+                      AC: {character.armor_class}
+                    </Badge>
                   </div>
                 </div>
               </Label>
@@ -145,13 +171,13 @@ export function Step2_SelectPlayerCharacters({
       </div>
 
       {!validation.valid && (
-        <p className="text-sm text-amber-600 dark:text-amber-400 mb-4" role="alert">
+        <p className="text-sm text-amber-600 dark:text-amber-400 mb-4 font-medium" role="alert">
           {validation.error}
         </p>
       )}
 
       <div className="flex justify-between pt-4">
-        <Button onClick={onBack} variant="outline">
+        <Button onClick={onBack} variant="outline" size="lg">
           Back
         </Button>
         <Button onClick={onNext} disabled={!validation.valid} size="lg">

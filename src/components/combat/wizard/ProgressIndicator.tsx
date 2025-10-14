@@ -6,15 +6,16 @@ const STEP_LABELS = ["Combat Name", "Select PCs", "Add Monsters", "Add NPCs", "S
 export function ProgressIndicator({ currentStep, completedSteps }: ProgressIndicatorProps) {
   return (
     <nav aria-label="Progress" className="mb-8">
-      <ol className="flex items-center justify-between">
+      <ol className="flex items-start justify-between">
         {STEP_LABELS.map((label, index) => {
           const stepNumber = (index + 1) as 1 | 2 | 3 | 4 | 5;
           const isCompleted = completedSteps.includes(stepNumber);
           const isCurrent = currentStep === stepNumber;
+          const isFirstOrLast = index === 0 || index === STEP_LABELS.length - 1;
 
           return (
-            <li key={stepNumber} className="flex flex-col items-center gap-2 flex-1">
-              <div className="flex items-center w-full">
+            <li key={stepNumber} className="flex flex-col items-center gap-2" style={{ flex: isFirstOrLast ? '0 0 auto' : '1 1 0%' }}>
+              <div className="flex items-center" style={{ width: isFirstOrLast ? 'auto' : '100%' }}>
                 {/* Line before (except first step) */}
                 {index > 0 && (
                   <div
@@ -27,7 +28,7 @@ export function ProgressIndicator({ currentStep, completedSteps }: ProgressIndic
                 {/* Step indicator */}
                 <div
                   className={`
-                    flex items-center justify-center
+                    flex items-center justify-center flex-shrink-0
                     w-10 h-10 rounded-full font-medium text-sm
                     transition-colors duration-200
                     ${
@@ -52,7 +53,7 @@ export function ProgressIndicator({ currentStep, completedSteps }: ProgressIndic
               {/* Step label */}
               <span
                 className={`
-                  text-xs font-medium text-center
+                  text-xs font-medium text-center whitespace-nowrap
                   ${
                     isCurrent
                       ? "text-emerald-600 dark:text-emerald-400"

@@ -34,12 +34,12 @@ export function Step4_AddNPCs({
         Add NPCs (Optional)
       </h2>
 
-      <p className="text-gray-600 dark:text-gray-400 mb-6">
+      <p className="text-muted-foreground mb-6">
         Create custom NPCs for this combat. You can skip this step if not needed.
       </p>
 
       {/* Mode Toggle */}
-      <div className="flex items-center gap-3 mb-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+      <div className="flex items-center gap-3 mb-6 p-4 bg-muted/50 rounded-lg border border-border">
         <Label htmlFor="mode-toggle" className="font-medium">
           Simple Mode
         </Label>
@@ -71,11 +71,11 @@ export function Step4_AddNPCs({
 
         {/* Added NPCs List */}
         <div className="lg:col-span-1">
-          <div className="sticky top-4 border rounded-lg p-4 bg-gray-50 dark:bg-gray-900">
+          <div className="sticky top-4 border border-border rounded-lg p-4 bg-card shadow-sm">
             <h3 className="text-lg font-semibold mb-4">Added NPCs ({addedNPCs.length})</h3>
 
             {addedNPCs.length === 0 ? (
-              <div className="py-8 text-center text-gray-500">
+              <div className="py-8 text-center text-muted-foreground">
                 <p className="text-sm">No NPCs added yet</p>
               </div>
             ) : (
@@ -91,7 +91,7 @@ export function Step4_AddNPCs({
 
       {/* Navigation */}
       <div className="flex justify-between pt-6">
-        <Button onClick={onBack} variant="outline">
+        <Button onClick={onBack} variant="outline" size="lg">
           Back
         </Button>
         <Button onClick={onNext} size="lg">
@@ -115,7 +115,7 @@ function SimpleNPCForm({
   isValid: boolean;
 }) {
   return (
-    <div className="border rounded-lg p-6 space-y-4 bg-white dark:bg-gray-800">
+    <div className="border border-border rounded-lg p-6 space-y-4 bg-card shadow-sm">
       <h3 className="text-lg font-semibold">Create Simple NPC</h3>
 
       <div className="space-y-4">
@@ -164,7 +164,7 @@ function SimpleNPCForm({
             onChange={(e) => onChange({ initiative_modifier: parseInt(e.target.value) || 0 })}
             placeholder="e.g., +2"
           />
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Used to calculate DEX modifier</p>
+          <p className="text-sm text-muted-foreground mt-1">Used to calculate DEX modifier</p>
         </div>
 
         <Button onClick={onAdd} disabled={!isValid} className="w-full">
@@ -235,7 +235,7 @@ function AdvancedNPCForm({
   );
 
   return (
-    <div className="border rounded-lg p-6 space-y-6 bg-white dark:bg-gray-800">
+    <div className="border border-border rounded-lg p-6 space-y-6 bg-card shadow-sm">
       <h3 className="text-lg font-semibold">Create Advanced NPC</h3>
 
       <div className="space-y-4">
@@ -320,11 +320,11 @@ function AdvancedNPCForm({
           </div>
 
           {form.actions.length === 0 ? (
-            <p className="text-sm text-gray-500 text-center py-4">No actions added</p>
+            <p className="text-sm text-muted-foreground text-center py-4">No actions added</p>
           ) : (
             <div className="space-y-3">
               {form.actions.map((action, index) => (
-                <div key={index} className="border rounded-lg p-3 relative">
+                <div key={index} className="border border-border rounded-lg p-3 relative bg-muted/30">
                   <Button
                     type="button"
                     size="sm"
@@ -380,7 +380,7 @@ function AdvancedNPCForm({
 // Added NPC Card
 function AddedNPCCard({ npc, onRemove }: { npc: AdHocNPC; onRemove: (npcId: string) => void }) {
   return (
-    <div className="flex items-start justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border">
+    <div className="flex items-start justify-between p-3 bg-gradient-to-r from-card via-card/80 to-emerald-500/5 rounded-lg border border-border shadow-sm">
       <div className="flex-1 min-w-0">
         <p className="font-medium truncate">{npc.display_name}</p>
         <div className="flex gap-2 mt-1">

@@ -32,13 +32,13 @@ export function Step5_Summary({
         Combat Summary
       </h2>
 
-      <p className="text-gray-600 dark:text-gray-400 mb-6">
+      <p className="text-muted-foreground mb-6">
         Review your combat setup before starting. You can go back to make changes if needed.
       </p>
 
       <div className="space-y-6">
         {/* Combat Name */}
-        <Card>
+        <Card className="border-border bg-card shadow-sm">
           <CardHeader>
             <CardTitle className="text-lg">Combat Name</CardTitle>
           </CardHeader>
@@ -49,7 +49,7 @@ export function Step5_Summary({
 
         {/* Player Characters */}
         {selectedPlayerCharacters.length > 0 && (
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg flex items-center justify-between">
                 Player Characters
@@ -61,7 +61,7 @@ export function Step5_Summary({
                 {selectedPlayerCharacters.map((character) => (
                   <div
                     key={character.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-lg"
+                    className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border border-border"
                   >
                     <span className="font-medium">{character.name}</span>
                     <div className="flex gap-2">
@@ -77,7 +77,7 @@ export function Step5_Summary({
 
         {/* Monsters */}
         {addedMonsters.size > 0 && (
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg flex items-center justify-between">
                 Monsters
@@ -91,7 +91,7 @@ export function Step5_Summary({
                 {Array.from(addedMonsters.values()).map((monster) => (
                   <div
                     key={monster.monster_id}
-                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-lg"
+                    className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border border-border"
                   >
                     <span className="font-medium">{monster.name}</span>
                     <Badge variant="outline">x{monster.count}</Badge>
@@ -104,7 +104,7 @@ export function Step5_Summary({
 
         {/* NPCs */}
         {addedNPCs.length > 0 && (
-          <Card>
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg flex items-center justify-between">
                 NPCs
@@ -116,7 +116,7 @@ export function Step5_Summary({
                 {addedNPCs.map((npc) => (
                   <div
                     key={npc.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-lg"
+                    className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border border-border"
                   >
                     <span className="font-medium">{npc.display_name}</span>
                     <div className="flex gap-2">
@@ -131,15 +131,15 @@ export function Step5_Summary({
         )}
 
         {/* Total Summary */}
-        <Card className="border-emerald-500 dark:border-emerald-700">
+        <Card className="border-emerald-500 bg-gradient-to-r from-card via-card/80 to-emerald-500/10 shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Total Participants</p>
+                <p className="text-sm text-muted-foreground">Total Participants</p>
                 <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{totalParticipants}</p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Ready to start</p>
+                <p className="text-sm text-muted-foreground">Ready to start</p>
                 <p className="text-lg font-semibold">{combatName}</p>
               </div>
             </div>
@@ -148,8 +148,8 @@ export function Step5_Summary({
 
         {/* Validation Error */}
         {!validation.valid && (
-          <div className="p-4 bg-red-50 dark:bg-red-950/20 border border-red-500 rounded-lg" role="alert">
-            <p className="text-red-600 dark:text-red-400 font-medium">{validation.error}</p>
+          <div className="p-4 bg-destructive/10 border border-destructive rounded-lg" role="alert">
+            <p className="text-destructive font-medium">{validation.error}</p>
           </div>
         )}
       </div>
@@ -158,7 +158,7 @@ export function Step5_Summary({
       <Separator className="my-6" />
 
       <div className="flex justify-between items-center">
-        <Button onClick={onBack} variant="outline" disabled={isSubmitting}>
+        <Button onClick={onBack} variant="outline" size="lg" disabled={isSubmitting}>
           Back
         </Button>
 

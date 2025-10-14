@@ -45,14 +45,14 @@ export function Step1_CombatName({ combatName, onNameChange, onNext }: Step1Prop
             maxLength={255}
             aria-invalid={showError}
             aria-describedby={showError ? "combat-name-error" : undefined}
-            className={showError ? "border-red-500 focus-visible:ring-red-500" : ""}
+            className={showError ? "border-destructive focus-visible:ring-destructive" : ""}
           />
           {showError && (
-            <p id="combat-name-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
+            <p id="combat-name-error" className="text-sm text-destructive" role="alert">
               {validation.error}
             </p>
           )}
-          <p className="text-sm text-gray-600 dark:text-gray-400">{combatName.length}/255 characters</p>
+          <p className="text-sm text-muted-foreground">{combatName.length}/255 characters</p>
         </div>
 
         <div className="flex justify-end pt-4">
