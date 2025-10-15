@@ -211,7 +211,8 @@ function MonsterCard({
               <span className="font-medium">AC:</span> <span className="text-muted-foreground">{monster.ac}</span>
             </div>
             <div>
-              <span className="font-medium">Speed:</span> <span className="text-muted-foreground">{monster.speed.join(", ")}</span>
+              <span className="font-medium">Speed:</span>{" "}
+              <span className="text-muted-foreground">{monster.speed.join(", ")}</span>
             </div>
           </div>
 
@@ -300,11 +301,7 @@ function AddedMonsterItem({
             className="w-16 h-8 text-center"
           />
         ) : (
-          <Badge
-            variant="secondary"
-            className="cursor-pointer hover:bg-accent"
-            onClick={handleCountClick}
-          >
+          <Badge variant="secondary" className="cursor-pointer hover:bg-accent" onClick={handleCountClick}>
             x{monster.count}
           </Badge>
         )}

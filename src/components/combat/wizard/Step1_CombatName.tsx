@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -9,13 +9,15 @@ import type { Step1Props } from "./types";
 export function Step1_CombatName({ combatName, onNameChange, onNext }: Step1Props) {
   const [touched, setTouched] = useState(false);
   const validation = validateStep1(combatName);
+  const hasInitialized = useRef(false);
 
   // Auto-fill with default name on mount if empty
   useEffect(() => {
-    if (combatName.trim().length === 0) {
+    if (!hasInitialized.current && combatName.trim().length === 0) {
+      hasInitialized.current = true;
       onNameChange(generateDefaultCombatName());
     }
-  }, []); // Run only once on mount
+  }, [combatName, onNameChange]); // Include all dependencies
 
   const handleBlur = useCallback(() => {
     setTouched(true);

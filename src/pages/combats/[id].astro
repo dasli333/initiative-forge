@@ -1,0 +1,104 @@
+---
+import { dehydrate } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/queryClient";
+import { CombatViewWrapper } from "@/components/combat/CombatViewWrapper";
+import Layout from "@/layouts/Layout.astro";
+import type { CombatDTO } from "@/types";
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+console.log("[Combat Page] Combat ID:", id);
+
+if (!id) {
+  console.log("[Combat Page] No ID provided, redirecting to 404");
+  return Astro.redirect("/404");
+}
+
+const queryClient = getQueryClient();
+
+// Prefetch combat data
+let combatData: CombatDTO | null = null;
+
+try {
+  console.log("[Combat Page] Fetching combat from:", `${Astro.url.origin}/api/combats/${id}`);
+
+  await queryClient.prefetchQuery({
+    queryKey: ["combat", id],
+    queryFn: async () => {
+      const response = await fetch(`${Astro.url.origin}/api/combats/${id}`, {
+        headers: {
+          Cookie: Astro.request.headers.get("Cookie") || "",
+        },
+      });
+
+      console.log("[Combat Page] Fetch response status:", response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("[Combat Page] Fetch failed:", response.status, errorText);
+
+        if (response.status === 404) {
+          throw new Error("Combat not found");
+        }
+        throw new Error(`Failed to fetch combat: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("[Combat Page] Combat data received:", data);
+      combatData = data;
+      return data;
+    },
+  });
+
+  // Prefetch conditions
+  await queryClient.prefetchQuery({
+    queryKey: ["conditions"],
+    queryFn: async () => {
+      const response = await fetch(`${Astro.url.origin}/api/conditions`, {
+        headers: {
+          Cookie: Astro.request.headers.get("Cookie") || "",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch conditions");
+      }
+
+      const data = await response.json();
+      return data.conditions;
+    },
+  });
+} catch (error) {
+  console.error("[Combat Page] Error prefetching combat:", error);
+  return Astro.redirect("/404");
+}
+
+const dehydratedState = dehydrate(queryClient);
+
+// Wyciągnij campaignId z prefetched data
+const cachedCombat = queryClient.getQueryData(["combat", id]) as CombatDTO | undefined;
+const campaignId = cachedCombat?.campaign_id;
+
+console.log("[Combat Page] Cached combat:", cachedCombat);
+console.log("[Combat Page] Campaign ID:", campaignId);
+console.log("[Combat Page] Combat data:", combatData);
+
+if (!campaignId || !combatData) {
+  console.error("[Combat Page] Missing campaignId or combatData, redirecting to 404");
+  return Astro.redirect("/404");
+}
+
+console.log("[Combat Page] Rendering combat view for:", combatData.name);
+---
+
+<Layout title={`Combat: ${combatData.name}`}>
+  <CombatViewWrapper
+    client:load
+    dehydratedState={dehydratedState}
+    combatId={id}
+    campaignId={campaignId}
+    initialData={combatData}
+  />
+</Layout>

@@ -7,7 +7,7 @@ export function useDeleteCombat(campaignId: string) {
 
   return useMutation({
     mutationFn: async (combatId: string): Promise<void> => {
-      const response = await fetch(`/api/campaigns/${campaignId}/combats/${combatId}`, {
+      const response = await fetch(`/api/combats/${combatId}`, {
         method: "DELETE",
       });
 

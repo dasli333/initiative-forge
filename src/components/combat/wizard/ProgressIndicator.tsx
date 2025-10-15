@@ -14,8 +14,12 @@ export function ProgressIndicator({ currentStep, completedSteps }: ProgressIndic
           const isFirstOrLast = index === 0 || index === STEP_LABELS.length - 1;
 
           return (
-            <li key={stepNumber} className="flex flex-col items-center gap-2" style={{ flex: isFirstOrLast ? '0 0 auto' : '1 1 0%' }}>
-              <div className="flex items-center" style={{ width: isFirstOrLast ? 'auto' : '100%' }}>
+            <li
+              key={stepNumber}
+              className="flex flex-col items-center gap-2"
+              style={{ flex: isFirstOrLast ? "0 0 auto" : "1 1 0%" }}
+            >
+              <div className="flex items-center" style={{ width: isFirstOrLast ? "auto" : "100%" }}>
                 {/* Line before (except first step) */}
                 {index > 0 && (
                   <div

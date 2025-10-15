@@ -24,8 +24,8 @@ export function useCombatCreation(campaignId: string) {
       return data;
     },
     onSuccess: (combat) => {
-      // Redirect do combat tracker
-      navigate(`/campaigns/${campaignId}/combats/${combat.id}`);
+      // Redirect do combat tracker (używa uproszczonego URL bez campaign_id)
+      navigate(`/combats/${combat.id}`);
     },
     onError: (error) => {
       // Wyświetl error toast (np. Shadcn Toast)

@@ -85,7 +85,10 @@ export function Step2_SelectPlayerCharacters({
           <AlertTitle>No Player Characters</AlertTitle>
           <AlertDescription>
             No player characters in this campaign. You can still create a combat with only monsters and NPCs, or{" "}
-            <a href={`/campaigns/${playerCharacters[0]?.id || ""}/characters/new`} className="underline font-medium hover:underline">
+            <a
+              href={`/campaigns/${playerCharacters[0]?.id || ""}/characters/new`}
+              className="underline font-medium hover:underline"
+            >
               create a character first
             </a>
             .
@@ -95,7 +98,9 @@ export function Step2_SelectPlayerCharacters({
           <Button onClick={onBack} variant="outline" size="lg">
             Back
           </Button>
-          <Button onClick={onNext} size="lg">Skip to Monsters</Button>
+          <Button onClick={onNext} size="lg">
+            Skip to Monsters
+          </Button>
         </div>
       </div>
     );
@@ -108,9 +113,7 @@ export function Step2_SelectPlayerCharacters({
         Select Player Characters
       </h2>
 
-      <p className="text-muted-foreground mb-6">
-        Choose which player characters will participate in this combat.
-      </p>
+      <p className="text-muted-foreground mb-6">Choose which player characters will participate in this combat.</p>
 
       <div className="space-y-3 mb-6">
         {playerCharacters.map((character) => {
@@ -136,16 +139,15 @@ export function Step2_SelectPlayerCharacters({
               />
               <Label htmlFor={`character-${character.id}`} className="flex-1 cursor-pointer">
                 <div className="flex items-center justify-between gap-4">
-                  <span className="font-semibold text-base">
-                    {character.name}
-                  </span>
+                  <span className="font-semibold text-base">{character.name}</span>
                   <div className="flex gap-2">
                     <Badge
                       className={`
                         px-3 py-1 text-sm shadow-sm
-                        ${isSelected
-                          ? "bg-emerald-500 hover:bg-emerald-600 text-white"
-                          : "bg-secondary text-secondary-foreground"
+                        ${
+                          isSelected
+                            ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                            : "bg-secondary text-secondary-foreground"
                         }
                       `}
                     >
@@ -154,9 +156,10 @@ export function Step2_SelectPlayerCharacters({
                     <Badge
                       className={`
                         px-3 py-1 text-sm shadow-sm
-                        ${isSelected
-                          ? "bg-emerald-500 hover:bg-emerald-600 text-white"
-                          : "bg-secondary text-secondary-foreground"
+                        ${
+                          isSelected
+                            ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                            : "bg-secondary text-secondary-foreground"
                         }
                       `}
                     >
