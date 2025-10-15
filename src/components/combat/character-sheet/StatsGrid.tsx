@@ -26,12 +26,12 @@ export function StatsGrid({ stats }: StatsGridProps) {
   ];
 
   return (
-    <div className="rounded-lg overflow-hidden border border-border/50">
-      <Table>
+    <div className="rounded-lg overflow-hidden border border-border/50 w-full">
+      <Table className="table-fixed w-full">
         <TableHeader>
           <TableRow className="bg-muted/50 hover:bg-muted/50">
             {abilities.map((ability) => (
-              <TableHead key={ability.name} className="text-center font-semibold">
+              <TableHead key={ability.name} className="text-center font-semibold w-[16.666%]">
                 {ability.name}
               </TableHead>
             ))}

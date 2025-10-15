@@ -18,7 +18,7 @@ export function ActionsList({ actions, onActionClick }: ActionsListProps) {
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 max-w-full overflow-hidden min-w-0">
       {actions.map((action, index) => (
         <ActionButton key={`${action.name}-${index}`} action={action} onClick={onActionClick} />
       ))}

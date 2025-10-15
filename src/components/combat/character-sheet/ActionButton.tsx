@@ -28,11 +28,19 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
     : null;
 
   return (
-    <Button variant="outline" className="w-full justify-start gap-3 h-auto py-3" onClick={() => onClick(action)}>
+    <Button
+      variant="outline"
+      className="w-full justify-start gap-3 h-auto py-3 overflow-hidden"
+      onClick={() => onClick(action)}
+    >
       <Icon className="h-4 w-4 shrink-0" />
-      <div className="flex-1 text-left">
-        <p className="font-semibold">{action.name}</p>
-        {action.description && <p className="text-xs text-muted-foreground line-clamp-1">{action.description}</p>}
+      <div className="flex-1 text-left overflow-hidden min-w-0">
+        <p className="font-semibold truncate">{action.name}</p>
+        {action.description && (
+          <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed mt-1 break-words">
+            {action.description}
+          </p>
+        )}
       </div>
       <div className="flex gap-2 shrink-0">
         {attackBonus && (

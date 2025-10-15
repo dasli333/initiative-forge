@@ -100,32 +100,38 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
 
   return (
     <>
-      <div className="h-full -m-4 md:-m-8 grid grid-cols-[30%_50%_20%]">
+      <div className="h-full -m-4 md:-m-8 grid grid-cols-[minmax(0,30%)_minmax(0,50%)_minmax(0,20%)] overflow-x-hidden">
         {/* Left Column: Initiative List */}
-        <InitiativeList
-          participants={participants}
-          currentRound={currentRound}
-          activeParticipantIndex={activeParticipantIndex}
-          onRollInitiative={rollInitiative}
-          onParticipantUpdate={handleParticipantUpdate}
-          conditions={conditions}
-        />
+        <div className="overflow-hidden min-w-0">
+          <InitiativeList
+            participants={participants}
+            currentRound={currentRound}
+            activeParticipantIndex={activeParticipantIndex}
+            onRollInitiative={rollInitiative}
+            onParticipantUpdate={handleParticipantUpdate}
+            conditions={conditions}
+          />
+        </div>
 
         {/* Middle Column: Active Character Sheet */}
-        <ActiveCharacterSheet
-          participant={activeParticipant}
-          rollMode={rollMode}
-          recentRolls={recentRolls}
-          onActionClick={handleActionClick}
-          onRollModeChange={setRollMode}
-        />
+        <div className="overflow-hidden min-w-0">
+          <ActiveCharacterSheet
+            participant={activeParticipant}
+            rollMode={rollMode}
+            recentRolls={recentRolls}
+            onActionClick={handleActionClick}
+            onRollModeChange={setRollMode}
+          />
+        </div>
 
         {/* Right Column: Reference Panel */}
-        <ReferencePanel
-          conditions={conditions}
-          activeParticipantId={activeParticipant?.id ?? null}
-          onApplyCondition={handleApplyCondition}
-        />
+        <div className="overflow-hidden min-w-0">
+          <ReferencePanel
+            conditions={conditions}
+            activeParticipantId={activeParticipant?.id ?? null}
+            onApplyCondition={handleApplyCondition}
+          />
+        </div>
       </div>
 
       {/* Floating Action Button */}

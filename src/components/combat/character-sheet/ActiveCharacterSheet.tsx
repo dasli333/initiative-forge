@@ -9,7 +9,6 @@ import { RollControls } from "./RollControls";
 import { RollLog } from "./RollLog";
 import { GradientSeparator, SectionHeader } from "@/components/library";
 import { Dumbbell, Swords, Dices } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ActiveCharacterSheetProps {
   participant: CombatParticipantDTO | null;
@@ -38,20 +37,22 @@ export function ActiveCharacterSheet({
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col min-w-0">
       {/* Character Header - Fixed */}
-      <CharacterHeader
-        name={participant.display_name}
-        currentHP={participant.current_hp}
-        maxHP={participant.max_hp}
-        armorClass={participant.armor_class}
-      />
+      <div className="flex-shrink-0 min-w-0">
+        <CharacterHeader
+          name={participant.display_name}
+          currentHP={participant.current_hp}
+          maxHP={participant.max_hp}
+          armorClass={participant.armor_class}
+        />
+      </div>
 
       {/* Scrollable Content */}
-      <ScrollArea className="flex-1">
+      <div className="flex-1 overflow-y-auto min-w-0">
         <div className="p-6 space-y-6">
           {/* Stats Grid */}
-          <section>
+          <section className="overflow-hidden">
             <SectionHeader icon={Dumbbell} title="Ability Scores" />
             <StatsGrid stats={participant.stats} />
           </section>
@@ -59,7 +60,7 @@ export function ActiveCharacterSheet({
           <GradientSeparator />
 
           {/* Actions */}
-          <section>
+          <section className="overflow-hidden">
             <SectionHeader icon={Swords} title="Actions" />
             <ActionsList actions={participant.actions} onActionClick={onActionClick} />
           </section>
@@ -67,19 +68,19 @@ export function ActiveCharacterSheet({
           <GradientSeparator />
 
           {/* Roll Controls */}
-          <section>
+          <section className="overflow-hidden">
             <RollControls value={rollMode} onChange={onRollModeChange} />
           </section>
 
           <GradientSeparator />
 
           {/* Roll Log */}
-          <section>
+          <section className="overflow-hidden">
             <SectionHeader icon={Dices} title="Recent Rolls" />
             <RollLog rolls={recentRolls} />
           </section>
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 }
