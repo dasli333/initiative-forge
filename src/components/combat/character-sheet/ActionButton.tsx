@@ -1,7 +1,7 @@
 // Button for executing an action (attack, spell, etc.)
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { AttackBadge, DamageBadge } from "@/components/library";
 import { Sword, Wand2, Zap } from "lucide-react";
 import type { ActionDTO } from "@/types";
 
@@ -14,14 +14,8 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
   // Icon based on action type
   const Icon = action.type === "melee" ? Sword : action.type === "ranged" ? Zap : Wand2;
 
-  const attackBonus =
-    action.attack_bonus !== undefined && action.attack_bonus !== null
-      ? action.attack_bonus >= 0
-        ? `+${action.attack_bonus}`
-        : `${action.attack_bonus}`
-      : null;
-
-  const damageDice = action.damage_dice
+  // Prepare damage formula
+  const damageFormula = action.damage_dice
     ? action.damage_bonus && action.damage_bonus > 0
       ? `${action.damage_dice}+${action.damage_bonus}`
       : action.damage_dice
@@ -30,28 +24,24 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
   return (
     <Button
       variant="outline"
-      className="w-full justify-start gap-3 h-auto py-3 overflow-hidden"
+      className="w-full justify-start gap-3 h-auto py-3 overflow-hidden transition-colors hover:bg-transparent hover:border-emerald-500 hover:shadow-sm"
       onClick={() => onClick(action)}
     >
       <Icon className="h-4 w-4 shrink-0" />
       <div className="flex-1 text-left overflow-hidden min-w-0">
-        <p className="font-semibold truncate">{action.name}</p>
+        <div className="flex items-center gap-2 flex-wrap">
+          <p className="font-semibold">{action.name}</p>
+          {action.attack_bonus !== undefined && action.attack_bonus !== null && (
+            <AttackBadge bonus={action.attack_bonus} />
+          )}
+          {damageFormula && (
+            <DamageBadge formula={damageFormula} type={action.damage_type} showType={!!action.damage_type} />
+          )}
+        </div>
         {action.description && (
           <p className="w-full text-xs text-muted-foreground line-clamp-3 leading-relaxed mt-1 break-words whitespace-normal">
             {action.description}
           </p>
-        )}
-      </div>
-      <div className="flex gap-2 shrink-0">
-        {attackBonus && (
-          <Badge variant="secondary" className="font-mono">
-            {attackBonus}
-          </Badge>
-        )}
-        {damageDice && (
-          <Badge variant="secondary" className="font-mono">
-            {damageDice}
-          </Badge>
         )}
       </div>
     </Button>
