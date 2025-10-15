@@ -2,7 +2,7 @@
 import { dehydrate } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/queryClient";
 import { CombatViewWrapper } from "@/components/combat/CombatViewWrapper";
-import Layout from "@/layouts/Layout.astro";
+import MainLayout from "@/layouts/MainLayout.astro";
 import type { CombatDTO } from "@/types";
 
 export const prerender = false;
@@ -93,7 +93,7 @@ if (!campaignId || !combatData) {
 console.log("[Combat Page] Rendering combat view for:", combatData.name);
 ---
 
-<Layout title={`Combat: ${combatData.name}`}>
+<MainLayout title={`Combat: ${combatData.name}`}>
   <CombatViewWrapper
     client:load
     dehydratedState={dehydratedState}
@@ -101,4 +101,4 @@ console.log("[Combat Page] Rendering combat view for:", combatData.name);
     campaignId={campaignId}
     initialData={combatData}
   />
-</Layout>
+</MainLayout>

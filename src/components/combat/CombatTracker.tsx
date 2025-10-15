@@ -100,7 +100,7 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
 
   return (
     <>
-      <div className="h-screen grid grid-cols-[30%_50%_20%]">
+      <div className="h-full -m-4 md:-m-8 grid grid-cols-[30%_50%_20%]">
         {/* Left Column: Initiative List */}
         <InitiativeList
           participants={participants}
