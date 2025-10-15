@@ -37,7 +37,7 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
       <div className="flex-1 text-left overflow-hidden min-w-0">
         <p className="font-semibold truncate">{action.name}</p>
         {action.description && (
-          <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed mt-1 break-words">
+          <p className="w-full text-xs text-muted-foreground line-clamp-3 leading-relaxed mt-1 break-words whitespace-normal">
             {action.description}
           </p>
         )}
