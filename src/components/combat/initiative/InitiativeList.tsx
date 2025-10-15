@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { CombatParticipantDTO, ActiveConditionDTO, ConditionDTO } from "@/types";
+import type { CombatParticipantDTO, ConditionDTO } from "@/types";
 import { InitiativeHeader } from "./InitiativeHeader";
 import { InitiativeItem } from "./InitiativeItem";
 

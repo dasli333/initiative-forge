@@ -1,8 +1,9 @@
-// HP control component with damage and heal buttons
+// HP control component with visual progress bar, damage and heal buttons
 
 import { useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 
 interface HPControlsProps {
   currentHP: number;
@@ -47,30 +48,55 @@ export function HPControls({ currentHP, maxHP, onHPChange }: HPControlsProps) {
 
   const isValid = !error && value !== "";
 
+  // Calculate HP percentage and color
+  const hpPercentage = maxHP > 0 ? (currentHP / maxHP) * 100 : 0;
+  const hpColor = hpPercentage > 50 ? "bg-emerald-600" : hpPercentage > 25 ? "bg-yellow-600" : "bg-red-600";
+
   return (
     <div className="space-y-1">
+      {/* Horizontal layout: Progress bar on left, controls on right */}
       <div className="flex items-center gap-2">
-        <Input
-          type="number"
-          placeholder="Value"
-          value={value}
-          onChange={handleChange}
-          className={`w-20 ${error ? "border-red-500" : ""}`}
-          min={1}
-        />
-        <Button size="sm" variant="destructive" onClick={handleDamage} disabled={!isValid}>
-          DMG
-        </Button>
-        <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700" onClick={handleHeal} disabled={!isValid}>
-          HEAL
-        </Button>
+        {/* Left: HP Progress Bar */}
+        <div className="flex-1 min-w-0 space-y-0.5">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted-foreground font-medium">HP</span>
+            <span className="font-semibold text-xs">
+              {currentHP}/{maxHP}
+            </span>
+          </div>
+          <Progress value={hpPercentage} className="h-1.5" indicatorClassName={hpColor} />
+        </div>
+
+        {/* Right: Input + Buttons */}
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <Input
+            type="number"
+            placeholder="#"
+            value={value}
+            onChange={handleChange}
+            className={`w-14 h-7 text-xs px-2 ${error ? "border-red-500" : ""}`}
+            min={1}
+          />
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={handleDamage}
+            disabled={!isValid}
+            className="h-7 px-2 text-xs"
+          >
+            DMG
+          </Button>
+          <Button
+            size="sm"
+            className="bg-emerald-600 hover:bg-emerald-700 h-7 px-2 text-xs"
+            onClick={handleHeal}
+            disabled={!isValid}
+          >
+            HEAL
+          </Button>
+        </div>
       </div>
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-muted-foreground">
-          {currentHP} / {maxHP} HP
-        </span>
-        {error && <span className="text-xs text-red-500">{error}</span>}
-      </div>
+      {error && <span className="text-xs text-red-500 block">{error}</span>}
     </div>
   );
 }

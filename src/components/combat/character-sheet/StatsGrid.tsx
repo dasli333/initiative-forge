@@ -1,33 +1,55 @@
-// Grid of 6 ability scores
+// Compact table display of 6 ability scores
 
 import type { StatsDTO } from "@/types";
-import { StatCard } from "./StatCard";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { calculateModifier } from "@/lib/dice";
 
 interface StatsGridProps {
   stats: StatsDTO;
 }
 
+/**
+ * Formats modifier with +/- prefix
+ */
+function formatModifier(modifier: number): string {
+  return modifier >= 0 ? `+${modifier}` : `${modifier}`;
+}
+
 export function StatsGrid({ stats }: StatsGridProps) {
   const abilities = [
-    { name: "STR", score: stats.str },
-    { name: "DEX", score: stats.dex },
-    { name: "CON", score: stats.con },
-    { name: "INT", score: stats.int },
-    { name: "WIS", score: stats.wis },
-    { name: "CHA", score: stats.cha },
+    { name: "STR", score: stats.str, modifier: calculateModifier(stats.str) },
+    { name: "DEX", score: stats.dex, modifier: calculateModifier(stats.dex) },
+    { name: "CON", score: stats.con, modifier: calculateModifier(stats.con) },
+    { name: "INT", score: stats.int, modifier: calculateModifier(stats.int) },
+    { name: "WIS", score: stats.wis, modifier: calculateModifier(stats.wis) },
+    { name: "CHA", score: stats.cha, modifier: calculateModifier(stats.cha) },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-4">
-      {abilities.map((ability) => (
-        <StatCard
-          key={ability.name}
-          name={ability.name}
-          score={ability.score}
-          modifier={calculateModifier(ability.score)}
-        />
-      ))}
+    <div className="rounded-lg overflow-hidden border border-border/50">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-muted/50 hover:bg-muted/50">
+            {abilities.map((ability) => (
+              <TableHead key={ability.name} className="text-center font-semibold">
+                {ability.name}
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow className="hover:bg-muted/30 transition-colors">
+            {abilities.map((ability) => (
+              <TableCell key={ability.name} className="text-center py-3">
+                <div className="font-medium text-base">{ability.score}</div>
+                <span className={`text-xs font-medium ${ability.modifier >= 0 ? "text-emerald-500" : "text-red-400"}`}>
+                  ({formatModifier(ability.modifier)})
+                </span>
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
   );
 }

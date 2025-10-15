@@ -7,7 +7,9 @@ import { StatsGrid } from "./StatsGrid";
 import { ActionsList } from "./ActionsList";
 import { RollControls } from "./RollControls";
 import { RollLog } from "./RollLog";
-import { Separator } from "@/components/ui/separator";
+import { GradientSeparator, SectionHeader } from "@/components/library";
+import { Dumbbell, Swords, Dices } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ActiveCharacterSheetProps {
   participant: CombatParticipantDTO | null;
@@ -36,8 +38,8 @@ export function ActiveCharacterSheet({
   }
 
   return (
-    <div className="h-full overflow-y-auto p-6 space-y-6">
-      {/* Character Header */}
+    <div className="h-full flex flex-col">
+      {/* Character Header - Fixed */}
       <CharacterHeader
         name={participant.display_name}
         currentHP={participant.current_hp}
@@ -45,34 +47,39 @@ export function ActiveCharacterSheet({
         armorClass={participant.armor_class}
       />
 
-      <Separator />
+      {/* Scrollable Content */}
+      <ScrollArea className="flex-1">
+        <div className="p-6 space-y-6">
+          {/* Stats Grid */}
+          <section>
+            <SectionHeader icon={Dumbbell} title="Ability Scores" />
+            <StatsGrid stats={participant.stats} />
+          </section>
 
-      {/* Stats Grid */}
-      <div>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Ability Scores</h3>
-        <StatsGrid stats={participant.stats} />
-      </div>
+          <GradientSeparator />
 
-      <Separator />
+          {/* Actions */}
+          <section>
+            <SectionHeader icon={Swords} title="Actions" />
+            <ActionsList actions={participant.actions} onActionClick={onActionClick} />
+          </section>
 
-      {/* Actions */}
-      <div>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Actions</h3>
-        <ActionsList actions={participant.actions} onActionClick={onActionClick} />
-      </div>
+          <GradientSeparator />
 
-      <Separator />
+          {/* Roll Controls */}
+          <section>
+            <RollControls value={rollMode} onChange={onRollModeChange} />
+          </section>
 
-      {/* Roll Controls */}
-      <RollControls value={rollMode} onChange={onRollModeChange} />
+          <GradientSeparator />
 
-      <Separator />
-
-      {/* Roll Log */}
-      <div>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Recent Rolls</h3>
-        <RollLog rolls={recentRolls} />
-      </div>
+          {/* Roll Log */}
+          <section>
+            <SectionHeader icon={Dices} title="Recent Rolls" />
+            <RollLog rolls={recentRolls} />
+          </section>
+        </div>
+      </ScrollArea>
     </div>
   );
 }

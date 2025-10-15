@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { Skull } from "lucide-react";
-import type { CombatParticipantDTO, ActiveConditionDTO, ConditionDTO } from "@/types";
+import type { CombatParticipantDTO, ConditionDTO } from "@/types";
 import { InitiativeBadge } from "./InitiativeBadge";
 import { ACBadge } from "./ACBadge";
 import { HPControls } from "./HPControls";
@@ -34,36 +34,36 @@ export function InitiativeItem({
     [participant.current_hp, participant.max_hp, onUpdate]
   );
 
-  const baseClasses = "p-4 border-b transition-all duration-200";
-  const activeClasses = isActive ? "ring-2 ring-emerald-500 bg-emerald-500/10" : "";
-  const unconsciousClasses = isUnconscious ? "opacity-50" : "";
+  const baseClasses = "px-4 py-3 border-b transition-all duration-200 hover:bg-muted/30";
+  const activeClasses = isActive ? "ring-2 ring-inset ring-emerald-500 bg-emerald-500/10" : "";
+  const unconsciousClasses = isUnconscious ? "opacity-60" : "";
 
   return (
     <div className={`${baseClasses} ${activeClasses} ${unconsciousClasses}`}>
       <div className="space-y-3">
         {/* Header: Name + Initiative + AC */}
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
             <h3
-              className={`font-semibold ${isActive ? "text-lg" : "text-base"} ${isUnconscious ? "line-through" : ""}`}
+              className={`font-semibold truncate ${isActive ? "text-base" : "text-sm"} ${isUnconscious ? "line-through" : ""}`}
             >
               {participant.display_name}
-              {isUnconscious && <Skull className="inline ml-2 h-4 w-4" />}
+              {isUnconscious && <Skull className="inline ml-1.5 h-3.5 w-3.5" />}
             </h3>
-            <p className="text-xs text-muted-foreground capitalize">{participant.source.replace("_", " ")}</p>
+            <p className="text-xs text-muted-foreground capitalize mt-0.5">{participant.source.replace("_", " ")}</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-1.5 flex-shrink-0">
             <InitiativeBadge value={participant.initiative} />
             <ACBadge value={participant.armor_class} />
           </div>
         </div>
 
-        {/* HP Controls */}
+        {/* HP Controls with Progress Bar */}
         <HPControls currentHP={participant.current_hp} maxHP={participant.max_hp} onHPChange={handleHPChange} />
 
         {/* Active Conditions */}
         {participant.active_conditions.length > 0 && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 pt-1">
             {participant.active_conditions.map((condition) => {
               const fullCondition = conditions.find((c) => c.id === condition.condition_id);
               if (!fullCondition) return null;
@@ -79,8 +79,6 @@ export function InitiativeItem({
             })}
           </div>
         )}
-
-        {/* TODO: Add Condition button (future enhancement) */}
       </div>
     </div>
   );
