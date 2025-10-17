@@ -135,10 +135,10 @@ export const useCombatStore = create<CombatState>((set, get) => ({
     // Stwórz obiekty RollResult
     const rollResults = createRollResults(action, result.attack, result.damage);
 
-    // Dodaj do roll log (max 3)
-    set((state) => ({
-      recentRolls: [...rollResults, ...state.recentRolls].slice(0, 3),
-    }));
+    // Zastąp poprzednie rzuty (pokazuj tylko ostatnią akcję)
+    set({
+      recentRolls: rollResults,
+    });
   },
 
   // Akcja: Zmień tryb rzutu

@@ -17,7 +17,7 @@ export function RollLog({ rolls }: RollLogProps) {
   }
 
   return (
-    <div className="space-y-2 max-w-full overflow-hidden">
+    <div className="flex flex-wrap gap-2 max-w-full">
       {rolls.map((roll) => (
         <RollCard key={roll.id} roll={roll} />
       ))}

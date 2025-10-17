@@ -23,36 +23,26 @@ export function RollCard({ roll }: RollCardProps) {
   const formatRollBreakdown = () => {
     const rollsStr = roll.rolls.join(", ");
 
-    if (roll.modifier === 0) {
-      // No modifier: "3, 5 = 8"
-      return `${rollsStr} = ${roll.result}`;
-    } else if (roll.modifier > 0) {
-      // Positive modifier: "3, 5 + 4 = 12"
-      return `${rollsStr} + ${roll.modifier} = ${roll.result}`;
-    } else {
-      // Negative modifier: "3, 5 - 2 = 6"
-      return `${rollsStr} - ${Math.abs(roll.modifier)} = ${roll.result}`;
-    }
+    return rollsStr;
   };
 
   return (
-    <Card className={`${cardBorder} max-w-full overflow-hidden`}>
-      <CardContent className="p-4 space-y-2">
-        <div className="flex items-center justify-between gap-2 min-w-0">
-          <div className="flex items-center gap-2 min-w-0 flex-1">
-            <Icon className="h-4 w-4 text-muted-foreground shrink-0" />
-            <span className="text-sm font-semibold capitalize truncate">{roll.type}</span>
+    <Card className={`${cardBorder} overflow-hidden flex-shrink-0 w-auto min-w-[250px]`}>
+      <CardContent className="p-2 space-y-1">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <Icon className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+            <span className="text-xs font-semibold capitalize whitespace-nowrap">{roll.type}</span>
             {roll.type === "damage" && roll.damageType && (
-              <DamageBadge type={roll.damageType} className="ml-1" />
+              <DamageBadge type={roll.damageType} className="ml-0.5 text-xs px-1.5 py-0" />
             )}
           </div>
-          <span className={`text-2xl font-bold ${resultColor} shrink-0`}>{roll.result}</span>
+          <span className={`text-xl font-bold ${resultColor} shrink-0`}>{roll.result}</span>
         </div>
-        <div className="text-xs text-muted-foreground space-y-1">
-          <p className="font-mono truncate">{formatRollBreakdown()}</p>
-          <p className="truncate italic">{roll.formula}</p>
-          {roll.actionName && <p className="font-semibold truncate">{roll.actionName}</p>}
-          <p className="truncate">{formatDistanceToNow(roll.timestamp, { addSuffix: true })}</p>
+        <div className="text-[14px] text-muted-foreground space-y-0.5">
+          <p className="italic whitespace-nowrap">{roll.formula}</p>
+          <p className="font-mono whitespace-nowrap">Roll: {formatRollBreakdown()}</p>
+          {roll.actionName && <p className="font-semibold whitespace-nowrap">{roll.actionName}</p>}
         </div>
       </CardContent>
     </Card>
