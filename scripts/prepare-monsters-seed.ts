@@ -63,7 +63,7 @@ ON CONFLICT DO NOTHING;
 `;
 
   // Write the migration file
-  const migrationPath = path.join(__dirname, "../supabase/migrations/20251012000000_seed_monsters.sql");
+  const migrationPath = path.join(__dirname, "../supabase/migrations/20251012000002_seed_monsters.sql");
   fs.writeFileSync(migrationPath, migrationContent, "utf-8");
 
   console.log(`✅ Migration file created: ${migrationPath}`);
