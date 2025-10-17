@@ -5,15 +5,12 @@ import type { RollMode, RollResult } from "@/types/combat-view.types";
 import type { MonsterAction } from "@/lib/schemas/monster.schema";
 import { CharacterHeader } from "./CharacterHeader";
 import { StatsGrid } from "./StatsGrid";
-import { ActionsList } from "./ActionsList";
 import { RollControls } from "./RollControls";
 import { RollLog } from "./RollLog";
 import { CombatProperties } from "./CombatProperties";
 import { DescriptiveAbilities } from "./DescriptiveAbilities";
 import { GradientSeparator, SectionHeader } from "@/components/library";
-import { Dumbbell, Swords, Dices, Shield } from "lucide-react";
-import { isRollableAction } from "./utils";
-import { useMemo } from "react";
+import { Dumbbell, Dices, Shield } from "lucide-react";
 
 interface ActiveCharacterSheetProps {
   participant: CombatParticipantDTO | null;
@@ -30,12 +27,6 @@ export function ActiveCharacterSheet({
   onActionClick,
   onRollModeChange,
 }: ActiveCharacterSheetProps) {
-  // Filter actions to separate rollable from descriptive
-  const rollableActions = useMemo(() => {
-    if (!participant) return [];
-    return participant.actions.filter(isRollableAction);
-  }, [participant]);
-
   if (!participant) {
     return (
       <div className="flex items-center justify-center h-full text-muted-foreground p-8">
@@ -67,7 +58,6 @@ export function ActiveCharacterSheet({
             <SectionHeader icon={Dumbbell} title="Ability Scores" />
             <StatsGrid stats={participant.stats} />
           </section>
-          kokos
 
           {/* Combat Properties */}
           {(participant.damageVulnerabilities ||
@@ -90,8 +80,9 @@ export function ActiveCharacterSheet({
             </>
           )}
 
-          {/* Descriptive Abilities */}
+          {/* Abilities - All traits, actions, bonus actions, reactions, legendary actions */}
           {(participant.traits ||
+            participant.actions ||
             participant.bonusActions ||
             participant.reactions ||
             participant.legendaryActions) && (
@@ -104,18 +95,8 @@ export function ActiveCharacterSheet({
                   bonusActions={participant.bonusActions}
                   reactions={participant.reactions}
                   legendaryActions={participant.legendaryActions}
+                  onActionClick={onActionClick}
                 />
-              </section>
-            </>
-          )}
-
-          {/* Actions with Rolls */}
-          {rollableActions.length > 0 && (
-            <>
-              <GradientSeparator />
-              <section className="overflow-hidden">
-                <SectionHeader icon={Swords} title="Actions" />
-                <ActionsList actions={rollableActions} onActionClick={onActionClick} />
               </section>
             </>
           )}

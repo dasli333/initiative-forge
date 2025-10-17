@@ -1,7 +1,14 @@
-// Display descriptive abilities (traits, non-rollable actions, reactions, etc.)
+// Display all abilities with mixed rendering: clickable buttons for rollable abilities, cards for descriptive ones
 
 import type { MonsterTrait, MonsterAction, LegendaryActions } from "@/lib/schemas/monster.schema";
-import { isRollableMonsterAction, isRollableTrait } from "./utils";
+import type { ActionDTO } from "@/types";
+import {
+  isRollableMonsterAction,
+  isRollableTrait,
+  convertMonsterActionToActionDTO,
+  convertMonsterTraitToActionDTO,
+} from "./utils";
+import { ActionButton } from "./ActionButton";
 import { BookOpen, Swords, Zap, Shield, Crown } from "lucide-react";
 
 interface DescriptiveAbilitiesProps {
@@ -10,6 +17,7 @@ interface DescriptiveAbilitiesProps {
   bonusActions?: MonsterAction[];
   reactions?: MonsterAction[];
   legendaryActions?: LegendaryActions;
+  onActionClick: (action: ActionDTO) => void;
 }
 
 export function DescriptiveAbilities({
@@ -18,21 +26,15 @@ export function DescriptiveAbilities({
   bonusActions,
   reactions,
   legendaryActions,
+  onActionClick,
 }: DescriptiveAbilitiesProps) {
-  // Filter out rollable abilities
-  const descriptiveTraits = traits?.filter((trait) => !isRollableTrait(trait));
-  const descriptiveActions = actions?.filter((action) => !isRollableMonsterAction(action));
-  const descriptiveBonusActions = bonusActions?.filter((action) => !isRollableMonsterAction(action));
-  const descriptiveReactions = reactions?.filter((action) => !isRollableMonsterAction(action));
-  const descriptiveLegendaryActions = legendaryActions?.actions?.filter((action) => !isRollableMonsterAction(action));
-
-  // Don't render if no descriptive abilities
+  // Check if we have any abilities to show
   const hasAny =
-    (descriptiveTraits && descriptiveTraits.length > 0) ||
-    (descriptiveActions && descriptiveActions.length > 0) ||
-    (descriptiveBonusActions && descriptiveBonusActions.length > 0) ||
-    (descriptiveReactions && descriptiveReactions.length > 0) ||
-    (descriptiveLegendaryActions && descriptiveLegendaryActions.length > 0);
+    (traits && traits.length > 0) ||
+    (actions && actions.length > 0) ||
+    (bonusActions && bonusActions.length > 0) ||
+    (reactions && reactions.length > 0) ||
+    (legendaryActions && legendaryActions.actions && legendaryActions.actions.length > 0);
 
   if (!hasAny) {
     return null;
@@ -41,43 +43,71 @@ export function DescriptiveAbilities({
   return (
     <div className="space-y-3">
       {/* Traits */}
-      {descriptiveTraits && descriptiveTraits.length > 0 && (
-        <AbilityGroup
-          icon={BookOpen}
-          label="Traits"
-          abilities={descriptiveTraits.map((t) => ({ name: t.name, description: t.description }))}
-        />
+      {traits && traits.length > 0 && (
+        <AbilityGroup icon={BookOpen} label="Traits">
+          {traits.map((trait, index) =>
+            isRollableTrait(trait) ? (
+              <ActionButton key={index} action={convertMonsterTraitToActionDTO(trait)} onClick={onActionClick} />
+            ) : (
+              <AbilityCard key={index} name={trait.name} description={trait.description} />
+            )
+          )}
+        </AbilityGroup>
       )}
 
-      {/* Actions (non-rollable) */}
-      {descriptiveActions && descriptiveActions.length > 0 && (
-        <AbilityGroup
-          icon={Swords}
-          label="Actions"
-          abilities={descriptiveActions.map((a) => ({ name: a.name, description: a.description }))}
-        />
+      {/* Actions */}
+      {actions && actions.length > 0 && (
+        <AbilityGroup icon={Swords} label="Actions">
+          {actions.map((action, index) =>
+            isRollableMonsterAction(action) ? (
+              <ActionButton
+                key={index}
+                action={convertMonsterActionToActionDTO(action, "action")}
+                onClick={onActionClick}
+              />
+            ) : (
+              <AbilityCard key={index} name={action.name} description={action.description} />
+            )
+          )}
+        </AbilityGroup>
       )}
 
-      {/* Bonus Actions (non-rollable) */}
-      {descriptiveBonusActions && descriptiveBonusActions.length > 0 && (
-        <AbilityGroup
-          icon={Zap}
-          label="Bonus Actions"
-          abilities={descriptiveBonusActions.map((a) => ({ name: a.name, description: a.description }))}
-        />
+      {/* Bonus Actions */}
+      {bonusActions && bonusActions.length > 0 && (
+        <AbilityGroup icon={Zap} label="Bonus Actions">
+          {bonusActions.map((action, index) =>
+            isRollableMonsterAction(action) ? (
+              <ActionButton
+                key={index}
+                action={convertMonsterActionToActionDTO(action, "bonus_action")}
+                onClick={onActionClick}
+              />
+            ) : (
+              <AbilityCard key={index} name={action.name} description={action.description} />
+            )
+          )}
+        </AbilityGroup>
       )}
 
-      {/* Reactions (non-rollable) */}
-      {descriptiveReactions && descriptiveReactions.length > 0 && (
-        <AbilityGroup
-          icon={Shield}
-          label="Reactions"
-          abilities={descriptiveReactions.map((a) => ({ name: a.name, description: a.description }))}
-        />
+      {/* Reactions */}
+      {reactions && reactions.length > 0 && (
+        <AbilityGroup icon={Shield} label="Reactions">
+          {reactions.map((action, index) =>
+            isRollableMonsterAction(action) ? (
+              <ActionButton
+                key={index}
+                action={convertMonsterActionToActionDTO(action, "reaction")}
+                onClick={onActionClick}
+              />
+            ) : (
+              <AbilityCard key={index} name={action.name} description={action.description} />
+            )
+          )}
+        </AbilityGroup>
       )}
 
-      {/* Legendary Actions (non-rollable) */}
-      {descriptiveLegendaryActions && descriptiveLegendaryActions.length > 0 && legendaryActions && (
+      {/* Legendary Actions */}
+      {legendaryActions && legendaryActions.actions && legendaryActions.actions.length > 0 && (
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
             <Crown className="h-3.5 w-3.5" />
@@ -87,9 +117,17 @@ export function DescriptiveAbilities({
             <p className="text-xs text-muted-foreground italic pl-5">{legendaryActions.usageDescription}</p>
           )}
           <div className="space-y-2 pl-5">
-            {descriptiveLegendaryActions.map((action, index) => (
-              <AbilityCard key={index} name={action.name} description={action.description} />
-            ))}
+            {legendaryActions.actions.map((action, index) =>
+              isRollableMonsterAction(action) ? (
+                <ActionButton
+                  key={index}
+                  action={convertMonsterActionToActionDTO(action, "legendary_action")}
+                  onClick={onActionClick}
+                />
+              ) : (
+                <AbilityCard key={index} name={action.name} description={action.description} />
+              )
+            )}
           </div>
         </div>
       )}
@@ -100,21 +138,17 @@ export function DescriptiveAbilities({
 interface AbilityGroupProps {
   icon: React.ElementType;
   label: string;
-  abilities: { name: string; description: string }[];
+  children: React.ReactNode;
 }
 
-function AbilityGroup({ icon: Icon, label, abilities }: AbilityGroupProps) {
+function AbilityGroup({ icon: Icon, label, children }: AbilityGroupProps) {
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
         <Icon className="h-3.5 w-3.5" />
         <span>{label}</span>
       </div>
-      <div className="space-y-2 pl-5">
-        {abilities.map((ability, index) => (
-          <AbilityCard key={index} name={ability.name} description={ability.description} />
-        ))}
-      </div>
+      <div className="space-y-2 pl-5">{children}</div>
     </div>
   );
 }

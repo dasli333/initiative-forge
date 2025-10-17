@@ -23,3 +23,32 @@ export function isRollableMonsterAction(action: MonsterAction): boolean {
 export function isRollableTrait(trait: MonsterTrait): boolean {
   return !!(trait.damage && trait.damage.length > 0);
 }
+
+/**
+ * Converts a MonsterAction to ActionDTO format for clickable buttons
+ */
+export function convertMonsterActionToActionDTO(action: MonsterAction, actionType?: string): ActionDTO {
+  return {
+    name: action.name,
+    type: actionType || action.type || "action",
+    attack_bonus: action.attackRoll?.bonus,
+    range: action.range,
+    damage_dice: action.damage?.[0]?.formula,
+    damage_type: action.damage?.[0]?.type,
+    description: action.description,
+    attackRoll: action.attackRoll,
+    damage: action.damage,
+  };
+}
+
+/**
+ * Converts a MonsterTrait to ActionDTO format for clickable buttons
+ */
+export function convertMonsterTraitToActionDTO(trait: MonsterTrait): ActionDTO {
+  return {
+    name: trait.name,
+    type: "trait",
+    description: trait.description,
+    damage: trait.damage,
+  };
+}
