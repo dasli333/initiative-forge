@@ -186,6 +186,18 @@ async function resolveMonster(
         cha: monsterData.abilityScores.charisma.score,
       },
       actions: mapMonsterActions(monsterData.actions),
+      // Combat properties
+      damageVulnerabilities:
+        monsterData.damageVulnerabilities.length > 0 ? monsterData.damageVulnerabilities : undefined,
+      damageResistances: monsterData.damageResistances.length > 0 ? monsterData.damageResistances : undefined,
+      damageImmunities: monsterData.damageImmunities.length > 0 ? monsterData.damageImmunities : undefined,
+      conditionImmunities: monsterData.conditionImmunities.length > 0 ? monsterData.conditionImmunities : undefined,
+      gear: monsterData.gear.length > 0 ? monsterData.gear : undefined,
+      // Additional abilities
+      traits: monsterData.traits.length > 0 ? monsterData.traits : undefined,
+      bonusActions: monsterData.bonusActions.length > 0 ? monsterData.bonusActions : undefined,
+      reactions: monsterData.reactions.length > 0 ? monsterData.reactions : undefined,
+      legendaryActions: monsterData.legendaryActions,
       is_active_turn: false,
       active_conditions: [],
     });
@@ -269,6 +281,7 @@ export async function getCombat(
   }
 
   // Remove the campaigns field from the response
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { campaigns, ...combatData } = combat;
   return combatData as CombatDTO;
 }

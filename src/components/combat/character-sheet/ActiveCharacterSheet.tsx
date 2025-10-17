@@ -2,13 +2,18 @@
 
 import type { CombatParticipantDTO, ActionDTO } from "@/types";
 import type { RollMode, RollResult } from "@/types/combat-view.types";
+import type { MonsterAction } from "@/lib/schemas/monster.schema";
 import { CharacterHeader } from "./CharacterHeader";
 import { StatsGrid } from "./StatsGrid";
 import { ActionsList } from "./ActionsList";
 import { RollControls } from "./RollControls";
 import { RollLog } from "./RollLog";
+import { CombatProperties } from "./CombatProperties";
+import { DescriptiveAbilities } from "./DescriptiveAbilities";
 import { GradientSeparator, SectionHeader } from "@/components/library";
-import { Dumbbell, Swords, Dices } from "lucide-react";
+import { Dumbbell, Swords, Dices, Shield } from "lucide-react";
+import { isRollableAction } from "./utils";
+import { useMemo } from "react";
 
 interface ActiveCharacterSheetProps {
   participant: CombatParticipantDTO | null;
@@ -25,6 +30,12 @@ export function ActiveCharacterSheet({
   onActionClick,
   onRollModeChange,
 }: ActiveCharacterSheetProps) {
+  // Filter actions to separate rollable from descriptive
+  const rollableActions = useMemo(() => {
+    if (!participant) return [];
+    return participant.actions.filter(isRollableAction);
+  }, [participant]);
+
   if (!participant) {
     return (
       <div className="flex items-center justify-center h-full text-muted-foreground p-8">
@@ -56,14 +67,58 @@ export function ActiveCharacterSheet({
             <SectionHeader icon={Dumbbell} title="Ability Scores" />
             <StatsGrid stats={participant.stats} />
           </section>
+          kokos
 
-          <GradientSeparator />
+          {/* Combat Properties */}
+          {(participant.damageVulnerabilities ||
+            participant.damageResistances ||
+            participant.damageImmunities ||
+            participant.conditionImmunities ||
+            participant.gear) && (
+            <>
+              <GradientSeparator />
+              <section className="overflow-hidden">
+                <SectionHeader icon={Shield} title="Combat Properties" />
+                <CombatProperties
+                  damageVulnerabilities={participant.damageVulnerabilities}
+                  damageResistances={participant.damageResistances}
+                  damageImmunities={participant.damageImmunities}
+                  conditionImmunities={participant.conditionImmunities}
+                  gear={participant.gear}
+                />
+              </section>
+            </>
+          )}
 
-          {/* Actions */}
-          <section className="overflow-hidden">
-            <SectionHeader icon={Swords} title="Actions" />
-            <ActionsList actions={participant.actions} onActionClick={onActionClick} />
-          </section>
+          {/* Descriptive Abilities */}
+          {(participant.traits ||
+            participant.bonusActions ||
+            participant.reactions ||
+            participant.legendaryActions) && (
+            <>
+              <GradientSeparator />
+              <section className="overflow-hidden">
+                <DescriptiveAbilities
+                  traits={participant.traits}
+                  actions={participant.actions as MonsterAction[]}
+                  bonusActions={participant.bonusActions}
+                  reactions={participant.reactions}
+                  legendaryActions={participant.legendaryActions}
+                />
+              </section>
+            </>
+          )}
+
+          {/* Actions with Rolls */}
+          {rollableActions.length > 0 && (
+            <>
+              <GradientSeparator />
+              <section className="overflow-hidden">
+                <SectionHeader icon={Swords} title="Actions" />
+                <ActionsList actions={rollableActions} onActionClick={onActionClick} />
+              </section>
+            </>
+          )}
 
           <GradientSeparator />
 

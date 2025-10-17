@@ -324,6 +324,19 @@ export interface CombatParticipantDTO {
   stats: StatsDTO;
   actions: ActionDTO[];
 
+  // Combat properties (primarily from monsters)
+  damageVulnerabilities?: string[];
+  damageResistances?: string[];
+  damageImmunities?: string[];
+  conditionImmunities?: string[];
+  gear?: string[];
+
+  // Additional abilities (primarily from monsters)
+  traits?: MonsterTrait[];
+  bonusActions?: MonsterAction[];
+  reactions?: MonsterAction[];
+  legendaryActions?: LegendaryActions;
+
   // Combat-specific state
   is_active_turn: boolean;
   active_conditions: ActiveConditionDTO[];

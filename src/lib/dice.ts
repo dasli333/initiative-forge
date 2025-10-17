@@ -99,7 +99,7 @@ export function rollDamage(formula: string): {
   const count = parseInt(match[1], 10);
   const sides = parseInt(match[2], 10);
   // Remove spaces from modifier before parsing
-  const bonus = match[3] ? parseInt(match[3].replace(/\s/g, ''), 10) : 0;
+  const bonus = match[3] ? parseInt(match[3].replace(/\s/g, ""), 10) : 0;
 
   const rolls = rollDice(count, sides);
   const total = rolls.reduce((sum, roll) => sum + roll, 0) + bonus;
@@ -127,29 +127,29 @@ export function executeAttack(
     isCrit: boolean;
     isFail: boolean;
   };
-  damage: Array<{
+  damage: {
     rolls: number[];
     total: number;
     formula: string;
     type: string;
-  }>;
+  }[];
 } {
   // Roll attack
   const attackBonus = action.attack_bonus || 0;
   const attack = rollD20(mode, attackBonus);
 
   // Roll damage for each damage type
-  const damageResults: Array<{
+  const damageResults: {
     rolls: number[];
     total: number;
     formula: string;
     type: string;
-  }> = [];
+  }[] = [];
 
   if (action.damage && action.damage.length > 0) {
     // Use new damage array (supports multiple damage types)
     for (const dmg of action.damage) {
-      let damageResult = rollDamage(dmg.formula);
+      const damageResult = rollDamage(dmg.formula);
 
       // Double damage dice on crit (but not the bonus)
       if (attack.isCrit) {
@@ -166,7 +166,7 @@ export function executeAttack(
           // Recalculate total (all dice + original bonus, ignoring spaces)
           const diceTotal = damageResult.rolls.reduce((sum, roll) => sum + roll, 0);
           const bonusMatch = dmg.formula.match(/([+-]\s*\d+)/);
-          const bonus = bonusMatch ? parseInt(bonusMatch[1].replace(/\s/g, ''), 10) : 0;
+          const bonus = bonusMatch ? parseInt(bonusMatch[1].replace(/\s/g, ""), 10) : 0;
           damageResult.total = diceTotal + bonus;
         }
       }
@@ -233,7 +233,7 @@ export function createRollResults(
     for (const dmg of damageResults) {
       // Extract modifier from formula (supports both "+4" and "- 2" with optional spaces)
       const modifierMatch = dmg.formula.match(/([+-]\s*\d+)\s*$/);
-      const modifier = modifierMatch ? parseInt(modifierMatch[1].replace(/\s/g, ''), 10) : 0;
+      const modifier = modifierMatch ? parseInt(modifierMatch[1].replace(/\s/g, ""), 10) : 0;
 
       results.push({
         id: crypto.randomUUID(),

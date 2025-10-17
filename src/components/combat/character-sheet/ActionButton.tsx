@@ -27,16 +27,11 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
           {action.attack_bonus !== undefined && action.attack_bonus !== null && (
             <AttackBadge bonus={action.attack_bonus} />
           )}
-          {action.damage && action.damage.length > 0 && (
+          {action.damage &&
+            action.damage.length > 0 &&
             action.damage.map((dmg, index) => (
-              <DamageBadge
-                key={index}
-                average={dmg.average}
-                formula={dmg.formula}
-                type={dmg.type}
-              />
-            ))
-          )}
+              <DamageBadge key={index} average={dmg.average} formula={dmg.formula} type={dmg.type} />
+            ))}
         </div>
         {action.description && (
           <p className="w-full text-xs text-muted-foreground line-clamp-3 leading-relaxed mt-1 break-words whitespace-normal">
