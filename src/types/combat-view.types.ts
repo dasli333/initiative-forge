@@ -22,6 +22,7 @@ export interface RollResult {
   isCrit?: boolean; // Natural 20 na ataku
   isFail?: boolean; // Natural 1 na ataku
   actionName?: string; // Nazwa akcji, np. "Longsword Attack"
+  damageType?: string; // Typ obrażeń, np. "Piercing", "Fire" (tylko dla type="damage")
 }
 
 /**

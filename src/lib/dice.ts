@@ -114,7 +114,7 @@ export function rollDamage(formula: string): {
  * Execute an attack action with attack roll and damage
  * @param action Action to execute
  * @param mode Roll mode for the attack roll
- * @returns Attack and damage roll results
+ * @returns Attack and damage roll results (supports multiple damage types)
  */
 export function executeAttack(
   action: ActionDTO,
@@ -126,37 +126,60 @@ export function executeAttack(
     isCrit: boolean;
     isFail: boolean;
   };
-  damage: {
+  damage: Array<{
     rolls: number[];
     total: number;
     formula: string;
-  } | null;
+    type: string;
+  }>;
 } {
   // Roll attack
   const attackBonus = action.attack_bonus || 0;
   const attack = rollD20(mode, attackBonus);
 
-  // Roll damage if action has damage dice
-  let damage: { rolls: number[]; total: number; formula: string } | null = null;
+  // Roll damage for each damage type
+  const damageResults: Array<{
+    rolls: number[];
+    total: number;
+    formula: string;
+    type: string;
+  }> = [];
 
-  if (action.damage_dice) {
-    // Build damage formula
-    const damageBonus = action.damage_bonus || 0;
-    const formula = damageBonus > 0 ? `${action.damage_dice}+${damageBonus}` : action.damage_dice;
+  if (action.damage && action.damage.length > 0) {
+    // Use new damage array (supports multiple damage types)
+    for (const dmg of action.damage) {
+      let damageResult = rollDamage(dmg.formula);
 
-    damage = rollDamage(formula);
+      // Double damage dice on crit (but not the bonus)
+      if (attack.isCrit) {
+        // Parse formula to extract dice count and sides
+        const match = dmg.formula.match(/(\d+)d(\d+)/);
+        if (match) {
+          const count = parseInt(match[1], 10);
+          const sides = parseInt(match[2], 10);
 
-    // Double damage on crit
-    if (attack.isCrit && damage) {
-      const critRolls = rollDice(damage.rolls.length, parseInt(action.damage_dice.split("d")[1], 10));
-      damage.rolls = [...damage.rolls, ...critRolls];
-      damage.total = damage.rolls.reduce((sum, roll) => sum + roll, 0) + damageBonus;
+          // Roll additional dice for crit
+          const critRolls = rollDice(count, sides);
+          damageResult.rolls = [...damageResult.rolls, ...critRolls];
+
+          // Recalculate total (all dice + original bonus)
+          const diceTotal = damageResult.rolls.reduce((sum, roll) => sum + roll, 0);
+          const bonusMatch = dmg.formula.match(/\+(\d+)/);
+          const bonus = bonusMatch ? parseInt(bonusMatch[1], 10) : 0;
+          damageResult.total = diceTotal + bonus;
+        }
+      }
+
+      damageResults.push({
+        ...damageResult,
+        type: dmg.type,
+      });
     }
   }
 
   return {
     attack,
-    damage,
+    damage: damageResults,
   };
 }
 
@@ -177,13 +200,13 @@ export function formatRollResult(rolls: number[], modifier: number): string {
  * Create RollResult object from attack execution
  * @param action Action that was executed
  * @param attackResult Attack roll result
- * @param damageResult Damage roll result (optional)
- * @returns Array of RollResult objects (attack + damage)
+ * @param damageResults Damage roll results (array supporting multiple damage types)
+ * @returns Array of RollResult objects (attack + damage for each type)
  */
 export function createRollResults(
   action: ActionDTO,
   attackResult: ReturnType<typeof executeAttack>["attack"],
-  damageResult: ReturnType<typeof executeAttack>["damage"]
+  damageResults: ReturnType<typeof executeAttack>["damage"]
 ): RollResult[] {
   const results: RollResult[] = [];
 
@@ -204,21 +227,25 @@ export function createRollResults(
     actionName: action.name,
   });
 
-  // Damage roll result (if applicable)
-  if (damageResult) {
-    const damageBonus = action.damage_bonus || 0;
-    const damageFormula = damageResult.formula;
+  // Damage roll results (one for each damage type)
+  if (damageResults && damageResults.length > 0) {
+    for (const dmg of damageResults) {
+      // Extract modifier from formula
+      const bonusMatch = dmg.formula.match(/\+(\d+)/);
+      const modifier = bonusMatch ? parseInt(bonusMatch[1], 10) : 0;
 
-    results.push({
-      id: crypto.randomUUID(),
-      type: "damage",
-      result: damageResult.total,
-      formula: damageFormula,
-      rolls: damageResult.rolls,
-      modifier: damageBonus,
-      timestamp: new Date(),
-      actionName: action.name,
-    });
+      results.push({
+        id: crypto.randomUUID(),
+        type: "damage",
+        result: dmg.total,
+        formula: dmg.formula,
+        rolls: dmg.rolls,
+        modifier: modifier,
+        timestamp: new Date(),
+        actionName: action.name,
+        damageType: dmg.type,
+      });
+    }
   }
 
   return results;

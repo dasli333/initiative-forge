@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Sword, Heart, Shield } from "lucide-react";
 import type { RollResult } from "@/types/combat-view.types";
 import { formatDistanceToNow } from "date-fns";
+import { DamageBadge } from "@/components/library";
 
 interface RollCardProps {
   roll: RollResult;
@@ -25,6 +26,9 @@ export function RollCard({ roll }: RollCardProps) {
           <div className="flex items-center gap-2 min-w-0 flex-1">
             <Icon className="h-4 w-4 text-muted-foreground shrink-0" />
             <span className="text-sm font-semibold capitalize truncate">{roll.type}</span>
+            {roll.type === "damage" && roll.damageType && (
+              <DamageBadge type={roll.damageType} className="ml-1" />
+            )}
           </div>
           <span className={`text-2xl font-bold ${resultColor} shrink-0`}>{roll.result}</span>
         </div>
