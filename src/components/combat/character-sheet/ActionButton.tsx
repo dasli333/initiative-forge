@@ -14,13 +14,6 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
   // Icon based on action type
   const Icon = action.type === "melee" ? Sword : action.type === "ranged" ? Zap : Wand2;
 
-  // Prepare damage formula
-  const damageFormula = action.damage_dice
-    ? action.damage_bonus && action.damage_bonus > 0
-      ? `${action.damage_dice}+${action.damage_bonus}`
-      : action.damage_dice
-    : null;
-
   return (
     <Button
       variant="outline"
@@ -34,8 +27,15 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
           {action.attack_bonus !== undefined && action.attack_bonus !== null && (
             <AttackBadge bonus={action.attack_bonus} />
           )}
-          {damageFormula && (
-            <DamageBadge formula={damageFormula} type={action.damage_type} showType={!!action.damage_type} />
+          {action.damage && action.damage.length > 0 && (
+            action.damage.map((dmg, index) => (
+              <DamageBadge
+                key={index}
+                average={dmg.average}
+                formula={dmg.formula}
+                type={dmg.type}
+              />
+            ))
           )}
         </div>
         {action.description && (
