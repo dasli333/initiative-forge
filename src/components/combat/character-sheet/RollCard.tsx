@@ -19,6 +19,22 @@ export function RollCard({ roll }: RollCardProps) {
 
   const cardBorder = roll.isCrit ? "border-emerald-500" : roll.isFail ? "border-red-500" : "";
 
+  // Format roll breakdown: "3, 5 + 4 = 12" or "18 + 4 = 22"
+  const formatRollBreakdown = () => {
+    const rollsStr = roll.rolls.join(", ");
+
+    if (roll.modifier === 0) {
+      // No modifier: "3, 5 = 8"
+      return `${rollsStr} = ${roll.result}`;
+    } else if (roll.modifier > 0) {
+      // Positive modifier: "3, 5 + 4 = 12"
+      return `${rollsStr} + ${roll.modifier} = ${roll.result}`;
+    } else {
+      // Negative modifier: "3, 5 - 2 = 6"
+      return `${rollsStr} - ${Math.abs(roll.modifier)} = ${roll.result}`;
+    }
+  };
+
   return (
     <Card className={`${cardBorder} max-w-full overflow-hidden`}>
       <CardContent className="p-4 space-y-2">
@@ -32,10 +48,11 @@ export function RollCard({ roll }: RollCardProps) {
           </div>
           <span className={`text-2xl font-bold ${resultColor} shrink-0`}>{roll.result}</span>
         </div>
-        <div className="text-xs text-muted-foreground">
-          <p className="truncate">{roll.formula}</p>
-          {roll.actionName && <p className="font-semibold mt-1 truncate">{roll.actionName}</p>}
-          <p className="mt-1 truncate">{formatDistanceToNow(roll.timestamp, { addSuffix: true })}</p>
+        <div className="text-xs text-muted-foreground space-y-1">
+          <p className="font-mono truncate">{formatRollBreakdown()}</p>
+          <p className="truncate italic">{roll.formula}</p>
+          {roll.actionName && <p className="font-semibold truncate">{roll.actionName}</p>}
+          <p className="truncate">{formatDistanceToNow(roll.timestamp, { addSuffix: true })}</p>
         </div>
       </CardContent>
     </Card>

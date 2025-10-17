@@ -79,7 +79,7 @@ export function rollD20(
 
 /**
  * Parse damage dice formula and roll
- * Supports formats like "1d8+3", "2d6", "1d10+5"
+ * Supports formats like "1d8+3", "2d6", "1d10 + 5", "1d6 - 2" (with or without spaces)
  * @param formula Damage dice formula
  * @returns Object with rolls, total, and formula
  */
@@ -88,8 +88,8 @@ export function rollDamage(formula: string): {
   total: number;
   formula: string;
 } {
-  // Parse formula like "1d8+3" or "2d6"
-  const match = formula.match(/(\d+)d(\d+)(?:\+(\d+))?/);
+  // Parse formula like "1d8+3", "2d6", "1d10 + 5", or "1d6 - 2" (ignoring spaces)
+  const match = formula.match(/(\d+)d(\d+)\s*([+-]\s*\d+)?/);
 
   if (!match) {
     // Invalid formula, return 0
@@ -98,7 +98,8 @@ export function rollDamage(formula: string): {
 
   const count = parseInt(match[1], 10);
   const sides = parseInt(match[2], 10);
-  const bonus = match[3] ? parseInt(match[3], 10) : 0;
+  // Remove spaces from modifier before parsing
+  const bonus = match[3] ? parseInt(match[3].replace(/\s/g, ''), 10) : 0;
 
   const rolls = rollDice(count, sides);
   const total = rolls.reduce((sum, roll) => sum + roll, 0) + bonus;
@@ -162,10 +163,10 @@ export function executeAttack(
           const critRolls = rollDice(count, sides);
           damageResult.rolls = [...damageResult.rolls, ...critRolls];
 
-          // Recalculate total (all dice + original bonus)
+          // Recalculate total (all dice + original bonus, ignoring spaces)
           const diceTotal = damageResult.rolls.reduce((sum, roll) => sum + roll, 0);
-          const bonusMatch = dmg.formula.match(/\+(\d+)/);
-          const bonus = bonusMatch ? parseInt(bonusMatch[1], 10) : 0;
+          const bonusMatch = dmg.formula.match(/([+-]\s*\d+)/);
+          const bonus = bonusMatch ? parseInt(bonusMatch[1].replace(/\s/g, ''), 10) : 0;
           damageResult.total = diceTotal + bonus;
         }
       }
@@ -230,9 +231,9 @@ export function createRollResults(
   // Damage roll results (one for each damage type)
   if (damageResults && damageResults.length > 0) {
     for (const dmg of damageResults) {
-      // Extract modifier from formula
-      const bonusMatch = dmg.formula.match(/\+(\d+)/);
-      const modifier = bonusMatch ? parseInt(bonusMatch[1], 10) : 0;
+      // Extract modifier from formula (supports both "+4" and "- 2" with optional spaces)
+      const modifierMatch = dmg.formula.match(/([+-]\s*\d+)\s*$/);
+      const modifier = modifierMatch ? parseInt(modifierMatch[1].replace(/\s/g, ''), 10) : 0;
 
       results.push({
         id: crypto.randomUUID(),
