@@ -33,7 +33,7 @@ export function ReferencePanel({
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredConditions = conditions.filter((condition) =>
-    condition.name.toLowerCase().includes(searchTerm.toLowerCase())
+    condition.name.pl.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleApplyCondition = (conditionId: string) => {
