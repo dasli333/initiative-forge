@@ -68,8 +68,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -261,9 +259,26 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Lightning",
+      "Piercing",
+      "Slashing"
+    ],
+    "damageImmunities": [
+      "Poison",
+      "Thunder"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned",
+      "Prone",
+      "Restrained",
+      "Unconscious"
+    ],
     "gear": [],
     "traits": [
       {
@@ -386,8 +401,19 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison",
+      "Psychic"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Deafened",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -484,8 +510,19 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison",
+      "Psychic"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Deafened",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -576,8 +613,19 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison",
+      "Psychic"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Deafened",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -681,8 +729,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -811,10 +857,14 @@
       "Stealth +10"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "damageResistances": [
+      "Poison"
+    ],
+    "gear": [
+      "Light Crossbow",
+      "Shortsword",
+      "Studded Leather Armor"
+    ],
     "traits": [
       {
         "name": "Evasion",
@@ -951,10 +1001,12 @@
       "proficiencyBonus": 2
     },
     "skills": [],
-    "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageVulnerabilities": [
+      "Fire"
+    ],
+    "damageResistances": [
+      "Piercing"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -1033,10 +1085,13 @@
       "proficiencyBonus": 2
     },
     "skills": [],
-    "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageVulnerabilities": [
+      "Fire"
+    ],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -1122,8 +1177,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -1215,8 +1268,13 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -1335,9 +1393,19 @@
       "Perception +9"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold",
+      "Lightning"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -1523,9 +1591,11 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Leather Armor",
+      "Light Crossbow",
+      "Scimitar"
+    ],
     "traits": [],
     "actions": [
       {
@@ -1636,9 +1706,11 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Pistol",
+      "Scimitar",
+      "Studded Leather Armor"
+    ],
     "traits": [],
     "actions": [
       {
@@ -1766,9 +1838,16 @@
       "Perception +8"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -1926,8 +2005,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -2038,9 +2115,17 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Frightened",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -2174,7 +2259,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Lightning"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -2340,9 +2427,10 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Greataxe",
+      "Hide Armor"
+    ],
     "traits": [
       {
         "name": "Bloodied Frenzy",
@@ -2445,7 +2533,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Acid"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -2578,7 +2668,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Acid"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -2711,7 +2803,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Acid"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -2903,7 +2997,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Acid"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -3089,8 +3185,21 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Acid",
+      "Cold",
+      "Lightning",
+      "Slashing"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Deafened",
+      "Exhaustion",
+      "Frightened",
+      "Grappled",
+      "Prone",
+      "Restrained"
+    ],
     "gear": [],
     "traits": [
       {
@@ -3135,12 +3244,7 @@
       },
       {
         "name": "Reactions Split",
-        "description": "Trigger: While the pudding is Large or Medium and has 10+ Hit Points, it becomes Bloodied or is subjected to Lightning or Slashing damage. Response: The pudding splits into two new Black Puddings. Each new pudding is one size smaller than the original pudding and acts on its Initiative. The original pudding’s Hit",
-        "type": "special"
-      },
-      {
-        "name": "Points are divided evenly between the new puddings (round down)",
-        "description": "",
+        "description": "Trigger: While the pudding is Large or Medium and has 10+ Hit Points, it becomes Bloodied or is subjected to Lightning or Slashing damage. Response: The pudding splits into two new Black Puddings. Each new pudding is one size smaller than the original pudding and acts on its Initiative. The original pudding’s Hit Points are divided evenly between the new puddings (round down).",
         "type": "special"
       }
     ],
@@ -3148,12 +3252,7 @@
     "reactions": [
       {
         "name": "Split",
-        "description": "Trigger: While the pudding is Large or Medium and has 10+ Hit Points, it becomes Bloodied or is subjected to Lightning or Slashing damage. Response: The pudding splits into two new Black Puddings. Each new pudding is one size smaller than the original pudding and acts on its Initiative. The original pudding’s Hit",
-        "type": "special"
-      },
-      {
-        "name": "Points are divided evenly between the new puddings (round down)",
-        "description": "",
+        "description": "Trigger: While the pudding is Large or Medium and has 10+ Hit Points, it becomes Bloodied or is subjected to Lightning or Slashing damage. Response: The pudding splits into two new Black Puddings. Each new pudding is one size smaller than the original pudding and acts on its Initiative. The original pudding’s Hit Points are divided evenly between the new puddings (round down).",
         "type": "special"
       }
     ],
@@ -3226,8 +3325,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -3331,7 +3428,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Lightning"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -3458,7 +3557,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Lightning"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -3585,7 +3686,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Lightning"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -3762,7 +3865,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Lightning"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -3936,9 +4041,16 @@
       "Insight +6"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -4079,7 +4191,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -4206,7 +4320,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -4339,7 +4455,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -4541,7 +4659,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -4740,7 +4860,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Lightning"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -4883,7 +5005,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Lightning"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -5026,7 +5150,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Lightning"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -5148,17 +5274,19 @@
         },
         {
           "name": "Thunderclap",
-          "description": "Constitution Saving Throw: DC 17, each creature in a 20-foot-radius Sphere centered on a point the dragon can see within 90 feet. Failure: 10 (3d6)",
+          "description": "Constitution Saving Throw: DC 17, each creature in a 20-foot-radius Sphere centered on a point the dragon can see within 90 feet. Failure: 10 (3d6) Thunder damage, and the target has the Deafened condition until the end of its next turn.",
           "type": "special",
           "savingThrow": {
             "ability": "Constitution",
             "dc": 17
-          }
-        },
-        {
-          "name": "Thunder damage, and the target has the Deafened condition until the end of its next turn",
-          "description": "",
-          "type": "special"
+          },
+          "damage": [
+            {
+              "average": 10,
+              "formula": "3d6",
+              "type": "Thunder"
+            }
+          ]
         }
       ]
     },
@@ -5235,7 +5363,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Lightning"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -5445,9 +5575,11 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Chain Shirt",
+      "Javelins (6)",
+      "Morningstar"
+    ],
     "traits": [
       {
         "name": "Abduct",
@@ -5587,9 +5719,10 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Hide Armor",
+      "Light Hammers (3)"
+    ],
     "traits": [
       {
         "name": "Abduct",
@@ -5711,8 +5844,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -5840,9 +5971,11 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Breastplate",
+      "Longbow",
+      "Pike"
+    ],
     "traits": [],
     "actions": [
       {
@@ -5976,9 +6109,19 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Cold",
+      "Piercing",
+      "Slashing"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -6150,8 +6293,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -6310,8 +6451,12 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -6442,9 +6587,24 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
+    "damageImmunities": [
+      "Acid",
+      "Poison",
+      "Psychic"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -6579,7 +6739,9 @@
     "damageVulnerabilities": [],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Frightened"
+    ],
     "gear": [],
     "traits": [
       {
@@ -6728,8 +6890,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -6876,7 +7036,9 @@
     "damageVulnerabilities": [],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Petrified"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -6980,9 +7142,9 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Club"
+    ],
     "traits": [
       {
         "name": "Training",
@@ -7085,7 +7247,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Acid"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -7212,7 +7376,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Acid"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -7344,7 +7510,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Acid"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -7544,7 +7712,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Acid"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -7739,8 +7909,15 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
+    "damageImmunities": [
+      "Psychic",
+      "Radiant"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -7903,9 +8080,28 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
+    "damageImmunities": [
+      "Necrotic",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Grappled",
+      "Incapacitated",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned",
+      "Prone",
+      "Restrained",
+      "Stunned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -8016,9 +8212,10 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Leather Armor",
+      "Sickle"
+    ],
     "traits": [],
     "actions": [
       {
@@ -8113,9 +8310,10 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Holy Symbol",
+      "Leather Armor"
+    ],
     "traits": [],
     "actions": [
       {
@@ -8238,8 +8436,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -8344,7 +8540,14 @@
     "damageVulnerabilities": [],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Blinded",
+      "Charmed",
+      "Deafened",
+      "Frightened",
+      "Stunned",
+      "Unconscious"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -8455,9 +8658,15 @@
       "Perception +9"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
+    "damageResistances": [
+      "Radiant"
+    ],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened"
+    ],
     "gear": [],
     "traits": [
       {
@@ -8596,7 +8805,10 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Lightning",
+      "Thunder"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -8788,7 +9000,9 @@
     "damageVulnerabilities": [],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -8912,9 +9126,9 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Fire"
+    ],
     "gear": [],
     "traits": [
       {
@@ -9060,9 +9274,17 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold",
+      "Fire",
+      "Lightning"
+    ],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -9175,8 +9397,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -9317,9 +9537,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Studded Leather Armor"
+    ],
     "traits": [],
     "actions": [
       {
@@ -9464,8 +9684,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -9616,10 +9834,20 @@
       "proficiencyBonus": 3
     },
     "skills": [],
-    "damageVulnerabilities": [],
+    "damageVulnerabilities": [
+      "Thunder"
+    ],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned",
+      "Unconscious"
+    ],
     "gear": [],
     "traits": [
       {
@@ -9746,7 +9974,9 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -9911,9 +10141,16 @@
       "Persuasion +8"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -10068,8 +10305,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -10227,8 +10462,18 @@
     "damageVulnerabilities": [],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "conditionImmunities": [
+      "Blinded",
+      "Charmed",
+      "Deafened",
+      "Frightened",
+      "Stunned",
+      "Unconscious"
+    ],
+    "gear": [
+      "Battleaxe",
+      "Morningstar"
+    ],
     "traits": [],
     "actions": [
       {
@@ -10341,9 +10586,25 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned",
+      "Prone",
+      "Restrained",
+      "Unconscious"
+    ],
     "gear": [],
     "traits": [
       {
@@ -10485,7 +10746,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -10610,8 +10873,18 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Lightning",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -10738,7 +11011,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Cold"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -10868,7 +11143,12 @@
     "damageVulnerabilities": [],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Blinded",
+      "Charmed",
+      "Deafened",
+      "Frightened"
+    ],
     "gear": [],
     "traits": [],
     "actions": [],
@@ -10945,7 +11225,12 @@
     "damageVulnerabilities": [],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Blinded",
+      "Charmed",
+      "Deafened",
+      "Frightened"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -11042,8 +11327,14 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Petrified",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -11145,8 +11436,17 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Acid"
+    ],
+    "conditionImmunities": [
+      "Blinded",
+      "Charmed",
+      "Deafened",
+      "Exhaustion",
+      "Frightened",
+      "Prone"
+    ],
     "gear": [],
     "traits": [
       {
@@ -11278,9 +11578,17 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Necrotic"
+    ],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -11418,9 +11726,31 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Acid",
+      "Bludgeoning",
+      "Cold",
+      "Fire",
+      "Lightning",
+      "Piercing",
+      "Slashing",
+      "Thunder"
+    ],
+    "damageImmunities": [
+      "Necrotic",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned",
+      "Prone",
+      "Restrained"
+    ],
     "gear": [],
     "traits": [
       {
@@ -11571,8 +11901,14 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -11700,7 +12036,9 @@
     "damageVulnerabilities": [],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Prone"
+    ],
     "gear": [],
     "traits": [
       {
@@ -11833,9 +12171,17 @@
       "Perception +7"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold",
+      "Fire",
+      "Lightning"
+    ],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -11991,9 +12337,11 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Shield",
+      "Spears (3)",
+      "Studded Leather Armor"
+    ],
     "traits": [],
     "actions": [
       {
@@ -12122,8 +12470,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -12241,9 +12587,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Daggers (3)"
+    ],
     "traits": [],
     "actions": [
       {
@@ -12345,9 +12691,12 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Leather Armor",
+      "Scimitar",
+      "Shield",
+      "Shortbow"
+    ],
     "traits": [],
     "actions": [
       {
@@ -12475,9 +12824,12 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Chain Shirt",
+      "Scimitar",
+      "Shield",
+      "Shortbow"
+    ],
     "traits": [],
     "actions": [
       {
@@ -12623,7 +12975,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -12762,7 +13116,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -12901,7 +13257,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -13106,7 +13464,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -13305,7 +13665,10 @@
     "damageVulnerabilities": [],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Petrified"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -13442,9 +13805,22 @@
       "Stealth +2"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
+    "damageResistances": [
+      "Acid",
+      "Cold",
+      "Fire"
+    ],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Blinded",
+      "Charmed",
+      "Deafened",
+      "Exhaustion",
+      "Frightened",
+      "Grappled",
+      "Prone",
+      "Restrained"
+    ],
     "gear": [],
     "traits": [
       {
@@ -13549,8 +13925,12 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -13683,8 +14063,12 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -13818,8 +14202,12 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -14010,8 +14398,12 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -14203,8 +14595,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -14341,8 +14731,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -14463,8 +14851,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -14571,8 +14957,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -14672,8 +15056,15 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Paralyzed",
+      "Poisoned",
+      "Restrained"
+    ],
     "gear": [],
     "traits": [
       {
@@ -14826,9 +15217,11 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Chain Shirt",
+      "Shield",
+      "Spear"
+    ],
     "traits": [],
     "actions": [
       {
@@ -14922,9 +15315,12 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Breastplate",
+      "Javelins (6)",
+      "Longsword",
+      "Shield"
+    ],
     "traits": [],
     "actions": [
       {
@@ -15041,9 +15437,9 @@
       "Stealth +5"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Damage type chosen for the Draconic Origin\ntrait below"
+    ],
     "gear": [],
     "traits": [
       {
@@ -15157,8 +15553,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -15267,7 +15661,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -15393,9 +15789,17 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold",
+      "Fire",
+      "Lightning"
+    ],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -15531,8 +15935,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -15656,8 +16058,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -15762,9 +16162,12 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Half Plate Armor",
+      "Longbow",
+      "Longsword",
+      "Shield"
+    ],
     "traits": [
       {
         "name": "Pack Tactics",
@@ -15880,9 +16283,11 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Greatsword",
+      "Half Plate Armor",
+      "Longbow"
+    ],
     "traits": [
       {
         "name": "Aura of Authority",
@@ -16008,8 +16413,13 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -16110,9 +16520,16 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -16261,7 +16678,14 @@
     "damageVulnerabilities": [],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Blinded",
+      "Charmed",
+      "Deafened",
+      "Frightened",
+      "Stunned",
+      "Unconscious"
+    ],
     "gear": [],
     "traits": [
       {
@@ -16380,8 +16804,14 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Cold",
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -16526,9 +16956,16 @@
       "Stealth +5"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -16652,9 +17089,12 @@
       "Stealth +7"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold",
+      "Fire",
+      "Poison",
+      "Psychic"
+    ],
     "gear": [],
     "traits": [
       {
@@ -16799,9 +17239,24 @@
       "Stealth +10"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned",
+      "Prone",
+      "Restrained",
+      "Unconscious"
+    ],
     "gear": [],
     "traits": [
       {
@@ -16937,8 +17392,19 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Fire",
+      "Poison",
+      "Psychic"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -17089,8 +17555,14 @@
     "damageVulnerabilities": [],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "conditionImmunities": [
+      "Frightened"
+    ],
+    "gear": [
+      "Greatsword",
+      "Heavy Crossbow",
+      "Plate Armor"
+    ],
     "traits": [],
     "actions": [
       {
@@ -17225,9 +17697,9 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Daggers (3)"
+    ],
     "traits": [
       {
         "name": "Pack Tactics",
@@ -17337,8 +17809,16 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Cold",
+      "Lightning"
+    ],
+    "conditionImmunities": [
+      "Frightened",
+      "Grappled",
+      "Paralyzed",
+      "Restrained"
+    ],
     "gear": [],
     "traits": [
       {
@@ -17554,8 +18034,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -17699,9 +18177,18 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -17801,10 +18288,24 @@
       "Perception +9"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "damageResistances": [
+      "Cold",
+      "Lightning"
+    ],
+    "damageImmunities": [
+      "Necrotic",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Poisoned"
+    ],
+    "gear": [
+      "Component Pouch"
+    ],
     "traits": [
       {
         "name": "Legendary Resistance (4/Day, or 5/Day in Lair)",
@@ -18018,9 +18519,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Wand"
+    ],
     "traits": [],
     "actions": [
       {
@@ -18162,9 +18663,14 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Psychic",
+      "Charmed (with Mind Blank)"
+    ],
     "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Wand"
+    ],
     "traits": [
       {
         "name": "Magic Resistance",
@@ -18314,7 +18820,9 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -18432,8 +18940,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -18550,9 +19056,17 @@
       "Perception +8"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold",
+      "Fire",
+      "Lightning"
+    ],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -18718,8 +19232,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -18870,10 +19382,17 @@
       "Perception +2",
       "Stealth +4"
     ],
-    "damageVulnerabilities": [],
+    "damageVulnerabilities": [
+      "Fire"
+    ],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -19005,10 +19524,18 @@
       "Perception +2",
       "Stealth +3"
     ],
-    "damageVulnerabilities": [],
+    "damageVulnerabilities": [
+      "Fire"
+    ],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Cold",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -19146,10 +19673,18 @@
     "skills": [
       "Stealth +3"
     ],
-    "damageVulnerabilities": [],
+    "damageVulnerabilities": [
+      "Cold"
+    ],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -19284,8 +19819,14 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -19422,8 +19963,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -19529,8 +20068,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -19671,8 +20208,12 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Acid"
+    ],
+    "conditionImmunities": [
+      "Prone"
+    ],
     "gear": [],
     "traits": [
       {
@@ -19823,8 +20364,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -19946,10 +20485,21 @@
       "proficiencyBonus": 2
     },
     "skills": [],
-    "damageVulnerabilities": [],
+    "damageVulnerabilities": [
+      "Fire"
+    ],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Necrotic",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -20064,10 +20614,21 @@
       "Perception +9",
       "Religion +5"
     ],
-    "damageVulnerabilities": [],
+    "damageVulnerabilities": [
+      "Fire"
+    ],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Necrotic",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -20289,9 +20850,18 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold",
+      "Fire",
+      "Lightning"
+    ],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Frightened",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -20444,9 +21014,14 @@
       "Stealth +5"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
+    "damageResistances": [
+      "Cold",
+      "Fire"
+    ],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed"
+    ],
     "gear": [],
     "traits": [
       {
@@ -20589,7 +21164,9 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -20707,9 +21284,10 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Breastplate",
+      "Rapier"
+    ],
     "traits": [],
     "actions": [
       {
@@ -20810,9 +21388,22 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Acid"
+    ],
+    "damageImmunities": [
+      "Lightning",
+      "Slashing"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Deafened",
+      "Exhaustion",
+      "Frightened",
+      "Grappled",
+      "Prone",
+      "Restrained"
+    ],
     "gear": [],
     "traits": [
       {
@@ -20924,9 +21515,10 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Greatclub",
+      "Javelins (3)"
+    ],
     "traits": [],
     "actions": [
       {
@@ -21035,9 +21627,9 @@
       "Perception +4"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold"
+    ],
     "gear": [],
     "traits": [
       {
@@ -21197,8 +21789,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -21349,8 +21939,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -21453,8 +22041,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -21553,8 +22139,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -21686,9 +22270,10 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Daggers (6)",
+      "Leather Armor"
+    ],
     "traits": [],
     "actions": [
       {
@@ -21801,9 +22386,10 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Pistol",
+      "Rapier"
+    ],
     "traits": [],
     "actions": [
       {
@@ -21932,9 +22518,16 @@
       "Persuasion +19"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -22126,9 +22719,15 @@
       "Perception +11"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
+    "damageResistances": [
+      "Radiant"
+    ],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened"
+    ],
     "gear": [],
     "traits": [
       {
@@ -22281,9 +22880,11 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Chain Shirt",
+      "Holy Symbol",
+      "Mace"
+    ],
     "traits": [],
     "actions": [
       {
@@ -22419,9 +23020,11 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Chain Shirt",
+      "Holy Symbol",
+      "Mace"
+    ],
     "traits": [],
     "actions": [
       {
@@ -22569,8 +23172,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -22695,8 +23296,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -22852,9 +23451,17 @@
       "Stealth +5"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold",
+      "Fire",
+      "Lightning"
+    ],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -22986,10 +23593,15 @@
       "Insight +8",
       "Perception +8"
     ],
-    "damageVulnerabilities": [],
+    "damageVulnerabilities": [
+      "Piercing damage from weapons wielded by\ncreatures under the effect of a Bless spell"
+    ],
     "damageResistances": [],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened"
+    ],
     "gear": [],
     "traits": [
       {
@@ -23149,7 +23761,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -23276,7 +23890,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -23403,7 +24019,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -23578,7 +24196,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -23747,7 +24367,10 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Cold",
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -23898,8 +24521,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -24030,8 +24651,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -24156,8 +24775,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -24288,9 +24905,10 @@
       "Perception +5"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Acid",
+      "Cold"
+    ],
     "gear": [],
     "traits": [
       {
@@ -24409,9 +25027,13 @@
       "proficiencyBonus": 3
     },
     "skills": [],
-    "damageVulnerabilities": [],
+    "damageVulnerabilities": [
+      "Cold"
+    ],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Fire"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -24563,8 +25185,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -24683,9 +25303,11 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Leather Armor",
+      "Longbow",
+      "Shortsword"
+    ],
     "traits": [],
     "actions": [
       {
@@ -24801,8 +25423,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -24939,10 +25559,31 @@
     "skills": [
       "Stealth +6"
     ],
-    "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageVulnerabilities": [
+      "Radiant"
+    ],
+    "damageResistances": [
+      "Acid",
+      "Cold",
+      "Fire",
+      "Lightning",
+      "Thunder"
+    ],
+    "damageImmunities": [
+      "Necrotic",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Frightened",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned",
+      "Prone",
+      "Restrained",
+      "Unconscious"
+    ],
     "gear": [],
     "traits": [
       {
@@ -25052,9 +25693,17 @@
       "Stealth +3"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold",
+      "Fire"
+    ],
+    "damageImmunities": [
+      "Lightning"
+    ],
+    "conditionImmunities": [
+      "Deafened",
+      "Exhaustion"
+    ],
     "gear": [],
     "traits": [
       {
@@ -25182,8 +25831,17 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -25313,7 +25971,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Cold"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -25449,7 +26109,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Cold"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [],
@@ -25585,7 +26247,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Cold"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -25789,7 +26453,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Cold"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -25987,11 +26653,21 @@
       "proficiencyBonus": 2
     },
     "skills": [],
-    "damageVulnerabilities": [],
+    "damageVulnerabilities": [
+      "Bludgeoning"
+    ],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Poisoned"
+    ],
+    "gear": [
+      "Shortbow",
+      "Shortsword"
+    ],
     "traits": [],
     "actions": [
       {
@@ -26095,10 +26771,17 @@
       "proficiencyBonus": 2
     },
     "skills": [],
-    "damageVulnerabilities": [],
+    "damageVulnerabilities": [
+      "Bludgeoning"
+    ],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -26194,10 +26877,17 @@
       "proficiencyBonus": 2
     },
     "skills": [],
-    "damageVulnerabilities": [],
+    "damageVulnerabilities": [
+      "Bludgeoning"
+    ],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -26320,8 +27010,16 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison",
+      "Radiant"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -26530,9 +27228,31 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Acid",
+      "Bludgeoning",
+      "Cold",
+      "Fire",
+      "Lightning",
+      "Piercing",
+      "Slashing",
+      "Thunder"
+    ],
+    "damageImmunities": [
+      "Necrotic",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned",
+      "Prone",
+      "Restrained",
+      "Unconscious"
+    ],
     "gear": [],
     "traits": [
       {
@@ -26648,9 +27368,11 @@
       "Stealth +5"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Necrotic",
+      "Psychic",
+      "Radiant"
+    ],
     "gear": [],
     "traits": [
       {
@@ -26771,9 +27493,17 @@
       "Religion +12"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Necrotic",
+      "Radiant"
+    ],
+    "damageImmunities": [
+      "Psychic"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened"
+    ],
     "gear": [],
     "traits": [
       {
@@ -26951,9 +27681,17 @@
       "Religion +15"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Necrotic",
+      "Radiant"
+    ],
+    "damageImmunities": [
+      "Psychic"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened"
+    ],
     "gear": [],
     "traits": [
       {
@@ -27161,8 +27899,13 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -27316,8 +28059,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -27445,9 +28186,11 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Hand Crossbow",
+      "Shortsword",
+      "Thieves’ Tools"
+    ],
     "traits": [],
     "actions": [
       {
@@ -27565,8 +28308,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -27668,8 +28409,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -27821,8 +28560,18 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison",
+      "Psychic"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -27965,8 +28714,13 @@
       "Perception +10"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
+    "damageResistances": [
+      "Cold"
+    ],
+    "damageImmunities": [
+      "Lightning",
+      "Thunder"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -28136,9 +28890,12 @@
       "Stealth +7"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold",
+      "Fire",
+      "Poison",
+      "Psychic"
+    ],
     "gear": [],
     "traits": [
       {
@@ -28270,9 +29027,22 @@
       "Perception +9"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
+    "damageImmunities": [
+      "Fire",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Deafened",
+      "Frightened",
+      "Paralyzed",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -28499,9 +29269,11 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Heavy Crossbow",
+      "Leather Armor",
+      "Mace"
+    ],
     "traits": [
       {
         "name": "Pack Tactics",
@@ -28614,9 +29386,11 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Chain Mail",
+      "Heavy Crossbow",
+      "Warhammer"
+    ],
     "traits": [
       {
         "name": "Pack Tactics",
@@ -28735,10 +29509,13 @@
       "proficiencyBonus": 4
     },
     "skills": [],
-    "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageVulnerabilities": [
+      "Fire"
+    ],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing"
+    ],
     "gear": [],
     "traits": [
       {
@@ -28865,8 +29642,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -28979,8 +29754,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -29087,8 +29860,14 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Paralyzed",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -29256,10 +30035,16 @@
       "Stealth +7"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
+    "damageResistances": [
+      "Necrotic"
+    ],
+    "damageImmunities": [
+      "Charmed (except from its vampire master)"
+    ],
     "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Daggers (10)"
+    ],
     "traits": [
       {
         "name": "Vampiric Connection",
@@ -29383,9 +30168,9 @@
       "Stealth +6"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Necrotic"
+    ],
     "gear": [],
     "traits": [
       {
@@ -29555,9 +30340,9 @@
       "Stealth +9"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Necrotic"
+    ],
     "gear": [],
     "traits": [
       {
@@ -29772,9 +30557,17 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold",
+      "Fire",
+      "Lightning"
+    ],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -29930,9 +30723,10 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Chain Shirt",
+      "Spear"
+    ],
     "traits": [
       {
         "name": "Pack Tactics",
@@ -30032,9 +30826,11 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Greatsword",
+      "Heavy Crossbow",
+      "Splint Armor"
+    ],
     "traits": [],
     "actions": [
       {
@@ -30158,9 +30954,23 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Acid",
+      "Fire"
+    ],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned",
+      "Prone",
+      "Restrained",
+      "Unconscious"
+    ],
     "gear": [],
     "traits": [
       {
@@ -30307,9 +31117,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Handaxes (4)"
+    ],
     "traits": [],
     "actions": [
       {
@@ -30450,9 +31260,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Javelins (6)"
+    ],
     "traits": [],
     "actions": [
       {
@@ -30606,9 +31416,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Hand Crossbow"
+    ],
     "traits": [],
     "actions": [
       {
@@ -30751,9 +31561,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Longbow"
+    ],
     "traits": [],
     "actions": [
       {
@@ -30901,9 +31711,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "gear": [
+      "Longbow"
+    ],
     "traits": [
       {
         "name": "Pack Tactics",
@@ -31055,7 +31865,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Cold"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -31189,7 +32001,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Cold"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -31323,7 +32137,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Cold"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -31495,7 +32311,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Cold"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -31662,10 +32480,19 @@
       "Stealth +4"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
-    "gear": [],
+    "damageResistances": [
+      "Necrotic"
+    ],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Poisoned"
+    ],
+    "gear": [
+      "Studded Leather Armor"
+    ],
     "traits": [
       {
         "name": "Sunlight Sensitivity",
@@ -31810,9 +32637,29 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Acid",
+      "Bludgeoning",
+      "Cold",
+      "Fire",
+      "Necrotic",
+      "Piercing",
+      "Slashing"
+    ],
+    "damageImmunities": [
+      "Lightning",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned",
+      "Prone",
+      "Restrained",
+      "Unconscious"
+    ],
     "gear": [],
     "traits": [
       {
@@ -31950,7 +32797,9 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
+    "damageImmunities": [
+      "Cold"
+    ],
     "conditionImmunities": [],
     "gear": [],
     "traits": [
@@ -32074,8 +32923,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -32168,9 +33015,29 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Acid",
+      "Bludgeoning",
+      "Cold",
+      "Fire",
+      "Piercing",
+      "Slashing"
+    ],
+    "damageImmunities": [
+      "Necrotic",
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Poisoned",
+      "Prone",
+      "Restrained",
+      "Unconscious"
+    ],
     "gear": [],
     "traits": [
       {
@@ -32287,8 +33154,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -32416,8 +33281,14 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Paralyzed",
+      "Petrified",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -32548,8 +33419,13 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -32644,8 +33520,13 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison"
+    ],
+    "conditionImmunities": [
+      "Exhaustion",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -32739,8 +33620,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -32762,7 +33641,7 @@
       },
       {
         "name": "Claws",
-        "description": "Melee Attack Roll: +6, reach 5 ft. Hit: 8 (1d8 + 4) Slashing damage. If the target is a Large or smaller creature and the allosaurus moved 30+ feet straight toward it immediately before the hit, the target has the",
+        "description": "Melee Attack Roll: +6, reach 5 ft. Hit: 8 (1d8 + 4) Slashing damage. If the target is a Large or smaller creature and the allosaurus moved 30+ feet straight toward it immediately before the hit, the target has the Prone condition, and the allosaurus can make one Bite attack against it.",
         "type": "melee",
         "attackRoll": {
           "type": "melee",
@@ -32774,12 +33653,12 @@
             "formula": "1d8 + 4",
             "type": "Slashing"
           }
+        ],
+        "conditions": [
+          {
+            "name": "Prone"
+          }
         ]
-      },
-      {
-        "name": "Prone condition, and the allosaurus can make one Bite attack against it",
-        "description": "",
-        "type": "special"
       }
     ],
     "bonusActions": [],
@@ -32852,8 +33731,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -32958,8 +33835,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -33073,8 +33948,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -33177,8 +34050,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -33277,9 +34148,9 @@
       "Perception +3"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Poison"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -33364,8 +34235,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -33453,8 +34322,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -33552,8 +34419,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -33654,8 +34519,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -33765,8 +34628,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -33883,8 +34744,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -33975,8 +34834,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -34070,8 +34927,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -34187,8 +35042,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -34280,8 +35133,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -34389,8 +35240,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -34490,8 +35339,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -34592,8 +35439,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -34686,8 +35531,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -34777,8 +35620,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -34899,8 +35740,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -35003,8 +35842,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -35105,8 +35942,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -35205,8 +36040,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -35331,9 +36164,9 @@
       "Perception +3"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Poison"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -35425,8 +36258,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -35516,8 +36347,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -35625,8 +36454,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -35725,8 +36552,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -35847,8 +36672,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -35953,8 +36776,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -36085,9 +36906,10 @@
       "Perception +6"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Necrotic",
+      "Radiant"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -36191,9 +37013,10 @@
       "Perception +4"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Necrotic",
+      "Radiant"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -36299,9 +37122,9 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Fire"
+    ],
     "gear": [],
     "traits": [
       {
@@ -36395,8 +37218,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -36524,8 +37345,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -36628,8 +37447,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -36727,8 +37544,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -36829,8 +37644,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -36952,9 +37765,10 @@
       "Stealth +6"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Necrotic",
+      "Radiant"
+    ],
     "gear": [],
     "traits": [
       {
@@ -37073,8 +37887,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -37171,8 +37983,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -37295,8 +38105,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -37407,8 +38215,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -37514,8 +38320,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -37637,8 +38441,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -37771,8 +38573,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -37872,9 +38672,9 @@
       "Perception +3"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Necrotic"
+    ],
     "gear": [],
     "traits": [
       {
@@ -37976,8 +38776,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -38084,8 +38882,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -38180,8 +38976,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -38286,8 +39080,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -38380,8 +39172,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -38467,8 +39257,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -38569,8 +39357,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -38669,8 +39455,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -38770,8 +39554,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -38866,8 +39648,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -38967,8 +39747,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -39090,8 +39868,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -39180,8 +39956,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -39306,8 +40080,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -39402,8 +40174,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -39504,8 +40274,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -39615,8 +40383,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -39710,8 +40476,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -39809,8 +40573,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -39903,8 +40665,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -40005,9 +40765,9 @@
       "Stealth +4"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageResistances": [
+      "Cold"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -40102,8 +40862,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -40196,8 +40954,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -40298,8 +41054,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -40391,8 +41145,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -40485,8 +41237,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -40587,8 +41337,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -40684,8 +41432,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -40779,8 +41525,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -40888,8 +41632,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -40983,8 +41725,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -41073,8 +41813,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -41176,9 +41914,22 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Prone",
+      "Restrained",
+      "Stunned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -41280,9 +42031,22 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Prone",
+      "Restrained",
+      "Stunned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -41389,9 +42153,22 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Prone",
+      "Restrained",
+      "Stunned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -41498,9 +42275,22 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Prone",
+      "Restrained",
+      "Stunned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -41603,9 +42393,22 @@
       "Perception +5"
     ],
     "damageVulnerabilities": [],
-    "damageResistances": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Prone",
+      "Restrained",
+      "Stunned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -41716,9 +42519,22 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
+    "damageResistances": [
+      "Bludgeoning",
+      "Piercing",
+      "Slashing"
+    ],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened",
+      "Grappled",
+      "Paralyzed",
+      "Petrified",
+      "Prone",
+      "Restrained",
+      "Stunned"
+    ],
     "gear": [],
     "traits": [
       {
@@ -41828,8 +42644,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -41930,8 +42744,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -42035,8 +42847,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -42164,8 +42974,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -42263,8 +43071,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -42360,8 +43166,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -42467,8 +43271,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [],
     "actions": [
@@ -42555,8 +43357,6 @@
     ],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -42660,8 +43460,17 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
+    "damageImmunities": [
+      "Poison",
+      "Psychic"
+    ],
+    "conditionImmunities": [
+      "Charmed",
+      "Exhaustion",
+      "Frightened",
+      "Paralyzed",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [],
     "actions": [
@@ -42736,8 +43545,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -42823,8 +43630,6 @@
     "skills": [],
     "damageVulnerabilities": [],
     "damageResistances": [],
-    "damageImmunities": [],
-    "conditionImmunities": [],
     "gear": [],
     "traits": [
       {
@@ -42931,9 +43736,19 @@
     },
     "skills": [],
     "damageVulnerabilities": [],
-    "damageResistances": [],
+    "damageResistances": [
+      "Acid",
+      "Cold",
+      "Fire",
+      "Lightning",
+      "Poison"
+    ],
     "damageImmunities": [],
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "Charmed",
+      "Frightened",
+      "Poisoned"
+    ],
     "gear": [],
     "traits": [
       {
