@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { X } from "lucide-react";
 import type { ActiveConditionDTO, ConditionDTO } from "@/types";
+import { formatConditionDescription } from "@/lib/format-description";
 
 interface ConditionBadgeProps {
   condition: ActiveConditionDTO;
@@ -36,7 +37,7 @@ export function ConditionBadge({ condition, fullCondition, onRemove }: Condition
         <TooltipContent className="max-w-xs">
           <div className="space-y-2">
             <p className="font-semibold">{fullCondition.name.pl}</p>
-            <p className="text-sm text-muted-foreground">{fullCondition.description}</p>
+            <div className="text-sm text-muted-foreground">{formatConditionDescription(fullCondition.description)}</div>
             {condition.duration_in_rounds && (
               <p className="text-xs text-muted-foreground">Duration: {condition.duration_in_rounds} rounds</p>
             )}

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { ConditionDTO } from "@/types";
+import { formatConditionDescription } from "@/lib/format-description";
 
 interface ConditionsTabProps {
   conditions: ConditionDTO[];
@@ -18,7 +19,7 @@ export function ConditionsTab({ conditions, activeParticipantId, onApply }: Cond
           <AccordionTrigger className="text-left">{condition.name.pl}</AccordionTrigger>
           <AccordionContent>
             <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">{condition.description}</p>
+              <div className="text-sm text-muted-foreground">{formatConditionDescription(condition.description)}</div>
               <Button
                 size="sm"
                 onClick={() => onApply(condition.id)}
