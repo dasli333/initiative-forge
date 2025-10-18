@@ -199,15 +199,15 @@ async function resolveMonster(
       actions: mapMonsterActions(monsterData.actions),
       // Combat properties
       damageVulnerabilities:
-        monsterData.damageVulnerabilities.length > 0 ? monsterData.damageVulnerabilities : undefined,
-      damageResistances: monsterData.damageResistances.length > 0 ? monsterData.damageResistances : undefined,
-      damageImmunities: monsterData.damageImmunities.length > 0 ? monsterData.damageImmunities : undefined,
-      conditionImmunities: monsterData.conditionImmunities.length > 0 ? monsterData.conditionImmunities : undefined,
-      gear: monsterData.gear.length > 0 ? monsterData.gear : undefined,
+        monsterData.damageVulnerabilities?.length > 0 ? monsterData.damageVulnerabilities : undefined,
+      damageResistances: monsterData.damageResistances?.length > 0 ? monsterData.damageResistances : undefined,
+      damageImmunities: monsterData.damageImmunities?.length > 0 ? monsterData.damageImmunities : undefined,
+      conditionImmunities: monsterData.conditionImmunities?.length > 0 ? monsterData.conditionImmunities : undefined,
+      gear: monsterData.gear?.length > 0 ? monsterData.gear : undefined,
       // Additional abilities
-      traits: monsterData.traits.length > 0 ? monsterData.traits : undefined,
-      bonusActions: monsterData.bonusActions.length > 0 ? monsterData.bonusActions : undefined,
-      reactions: monsterData.reactions.length > 0 ? monsterData.reactions : undefined,
+      traits: monsterData.traits?.length > 0 ? monsterData.traits : undefined,
+      bonusActions: monsterData.bonusActions?.length > 0 ? monsterData.bonusActions : undefined,
+      reactions: monsterData.reactions?.length > 0 ? monsterData.reactions : undefined,
       legendaryActions: monsterData.legendaryActions,
       is_active_turn: false,
       active_conditions: [],
@@ -221,6 +221,9 @@ async function resolveMonster(
  * Maps monster actions to the common ActionDTO format
  */
 function mapMonsterActions(monsterActions: MonsterDataDTO["actions"]): ActionDTO[] {
+  if (!monsterActions || !Array.isArray(monsterActions)) {
+    return [];
+  }
   return monsterActions.map((action) => ({
     name: action.name,
     type: action.type || "action",

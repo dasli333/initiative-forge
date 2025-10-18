@@ -57,7 +57,7 @@ const variantClasses = {
  * ```
  */
 export function PillGroup({ label, items, variant = "default", labelColor, className }: PillGroupProps) {
-  if (items.length === 0) return null;
+  if (!items || !Array.isArray(items) || items.length === 0) return null;
 
   return (
     <div className={className}>
