@@ -81,21 +81,6 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
     [activeParticipant, executeAction]
   );
 
-  const handleApplyCondition = useCallback(
-    (conditionId: string, participantId: string) => {
-      const condition = conditions.find((c) => c.id === conditionId);
-      if (condition) {
-        const activeCondition: ActiveConditionDTO = {
-          condition_id: condition.id,
-          name: condition.name.pl, // Using Polish name for denormalized storage
-          duration_in_rounds: null, // TODO: Allow user to specify duration
-        };
-        addCondition(participantId, activeCondition);
-      }
-    },
-    [conditions, addCondition]
-  );
-
   const handleAddCondition = useCallback(
     (participantId: string, conditionId: string, duration: number | null) => {
       const condition = conditions.find((c) => c.id === conditionId);
@@ -147,8 +132,6 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
         <div className="overflow-hidden min-w-0">
           <ReferencePanel
             conditions={conditions}
-            activeParticipantId={activeParticipant?.id ?? null}
-            onApplyCondition={handleApplyCondition}
             rollMode={rollMode}
             recentRolls={recentRolls}
             onRollModeChange={setRollMode}

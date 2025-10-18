@@ -14,33 +14,18 @@ import { GradientSeparator } from "@/components/library";
 
 interface ReferencePanelProps {
   conditions: ConditionDTO[];
-  activeParticipantId: string | null;
-  onApplyCondition: (conditionId: string, participantId: string) => void;
   // Roll controls props
   rollMode: RollMode;
   recentRolls: RollResult[];
   onRollModeChange: (mode: RollMode) => void;
 }
 
-export function ReferencePanel({
-  conditions,
-  activeParticipantId,
-  onApplyCondition,
-  rollMode,
-  recentRolls,
-  onRollModeChange,
-}: ReferencePanelProps) {
+export function ReferencePanel({ conditions, rollMode, recentRolls, onRollModeChange }: ReferencePanelProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredConditions = conditions.filter((condition) =>
     condition.name.pl.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const handleApplyCondition = (conditionId: string) => {
-    if (activeParticipantId) {
-      onApplyCondition(conditionId, activeParticipantId);
-    }
-  };
 
   return (
     <div className="flex flex-col h-full border-l">
@@ -87,11 +72,7 @@ export function ReferencePanel({
 
           <ScrollArea className="flex-1">
             <TabsContent value="conditions" className="p-4 mt-0">
-              <ConditionsTab
-                conditions={filteredConditions}
-                activeParticipantId={activeParticipantId}
-                onApply={handleApplyCondition}
-              />
+              <ConditionsTab conditions={filteredConditions} />
             </TabsContent>
 
             <TabsContent value="spells" className="p-4 mt-0">

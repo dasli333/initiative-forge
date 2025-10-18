@@ -18,7 +18,7 @@ export function ConditionBadge({ condition, fullCondition, onRemove }: Condition
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Badge variant="outline" className="group relative gap-1 pr-5 hover:bg-accent">
+          <Badge variant="warning" className="group relative gap-1 pr-5">
             <span className="truncate max-w-[80px]">
               {condition.name}
               {condition.duration_in_rounds !== null && ` ${condition.duration_in_rounds}`}
