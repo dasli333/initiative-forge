@@ -23,6 +23,7 @@ Aplikacja w wersji MVP (Minimum Viable Product) będzie posiadała następujące
 
 - Użytkownik może założyć konto przy użyciu adresu e-mail i hasła.
 - Użytkownik może zalogować się na swoje konto.
+- Tylko zalogowany użytkownik ma dostęp do dalszych modułów aplikacji
 
 ### 3.2. Zarządzanie Kampanią
 
@@ -87,7 +88,10 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 - Formularz rejestracji zawiera pola na adres e-mail, hasło i potwierdzenie hasła.
 - System waliduje poprawność formatu adresu e-mail.
 - System sprawdza, czy hasła w obu polach są identyczne.
-- Po pomyślnej rejestracji, użytkownik jest automatycznie zalogowany i przekierowany do panelu głównego.
+- Po pomyślnej rejestracji, system wysyła email weryfikacyjny na podany adres.
+- Użytkownik otrzymuje czytelną informację o konieczności weryfikacji adresu email.
+- Po kliknięciu w link weryfikacyjny w emailu, konto użytkownika zostaje aktywowane.
+- Użytkownik może zalogować się dopiero po weryfikacji adresu email.
 - Jeśli adres e-mail jest już zajęty, system wyświetla czytelny komunikat o błędzie.
 
 #### ID: US-002
@@ -101,10 +105,28 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 - Formularz logowania zawiera pola na adres e-mail i hasło.
 - Po poprawnym wprowadzeniu danych, użytkownik jest zalogowany i przekierowany do panelu głównego.
 - W przypadku podania błędnego e-maila lub hasła, system wyświetla odpowiedni komunikat.
+- Jeśli użytkownik nie zweryfikował jeszcze adresu email, system wyświetla odpowiedni komunikat.
+- Tylko zalogowany użytkownik ma dostęp do aplikacji
+
+#### ID: US-003
+
+**Tytuł:** Odzyskiwanie hasła
+
+**Opis:** Jako użytkownik, który zapomniał hasła, chcę móc zresetować swoje hasło za pomocą adresu e-mail, aby odzyskać dostęp do mojego konta.
+
+**Kryteria akceptacji:**
+
+- Na stronie logowania znajduje się link "Zapomniałem hasła".
+- Po kliknięciu użytkownik jest przekierowany do formularza resetowania hasła.
+- Formularz zawiera pole na adres e-mail.
+- Po podaniu adresu email, system wysyła wiadomość z linkiem do zmiany hasła.
+- Użytkownik otrzymuje czytelną informację o wysłaniu emaila z instrukcjami.
+- Link z emaila prowadzi do formularza ustawienia nowego hasła.
+- Po pomyślnej zmianie hasła, użytkownik może zalogować się nowymi danymi.
 
 ### Moduł: Zarządzanie Kampanią i Postaciami
 
-#### ID: US-003
+#### ID: US-004
 
 **Tytuł:** Tworzenie nowej kampanii
 
@@ -117,7 +139,7 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 - Po zatwierdzeniu nazwy, nowa kampania pojawia się na liście moich kampanii.
 - Użytkownik może wejść w szczegóły nowo utworzonej kampanii.
 
-#### ID: US-004
+#### ID: US-005
 
 **Tytuł:** Dodawanie postaci gracza do kampanii
 
@@ -132,7 +154,7 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 
 ### Moduł: Biblioteki Danych
 
-#### ID: US-005
+#### ID: US-006
 
 **Tytuł:** Przeglądanie i filtrowanie biblioteki potworów
 
@@ -145,7 +167,7 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 - Dostępny jest filtr (np. dropdown lub suwak) pozwalający na wybranie konkretnego CR lub zakresu CR.
 - Kliknięcie na potwora na liście rozwija jego pełną kartę statystyk.
 
-#### ID: US-006
+#### ID: US-007
 
 **Tytuł:** Przeglądanie i filtrowanie biblioteki czarów
 
@@ -160,7 +182,7 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 
 ### Moduł: Walka
 
-#### ID: US-007
+#### ID: US-008
 
 **Tytuł:** Rozpoczynanie nowej walki
 
@@ -175,7 +197,7 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 - System pozwala na dodanie wielu kopii tego samego potwora (np. 3 gobliny), które będą traktowane jako osobne jednostki.
 - Po dodaniu wszystkich uczestników, przycisk "Rzuć na inicjatywę" staje się aktywny.
 
-#### ID: US-008
+#### ID: US-009
 
 **Tytuł:** Ustalanie kolejności w walce
 
@@ -187,7 +209,7 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 - Uczestnicy walki są wyświetleni w formie listy w porządku malejącej inicjatywy.
 - Pierwsza postać na liście jest oznaczona jako aktywna.
 
-#### ID: US-009
+#### ID: US-010
 
 **Tytuł:** Śledzenie tur i stanu postaci
 
@@ -201,7 +223,7 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 - Przy każdej postaci widoczne są przyciski/pola do wpisania wartości obrażeń lub leczenia, które aktualizują jej aktualne HP.
 - Postaci z 0 HP są wyraźnie oznaczone (np. wyszarzone, przekreślone).
 
-#### ID: US-010
+#### ID: US-011
 
 **Tytuł:** Wykonywanie akcji w turze
 
@@ -214,7 +236,7 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 - Kliknięcie w nazwę akcji powoduje wykonanie rzutu na trafienie (k20 + modyfikator) i wyświetlenie wyniku.
 - System wyświetla również rzut na obrażenia powiązany z daną akcją.
 
-#### ID: US-011
+#### ID: US-012
 
 **Tytuł:** Rzuty z ułatwieniem i utrudnieniem
 
@@ -226,7 +248,7 @@ Następujące funkcjonalności celowo nie wchodzą w zakres wersji MVP:
 - Wybranie "Ułatwienia" powoduje rzut dwiema kośćmi k20 i wybranie wyższego wyniku.
 - Wybranie "Utrudnienia" powoduje rzut dwiema kośćmi k20 i wybranie niższego wyniku.
 
-#### ID: US-012
+#### ID: US-013
 
 **Tytuł:** Zarządzanie stanami (conditions)
 
