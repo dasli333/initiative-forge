@@ -167,12 +167,23 @@ async function resolveMonster(
   const monsters: CombatParticipantDTO[] = [];
   for (let i = 0; i < count; i++) {
     const displayName = count > 1 ? `${monsterData.name.pl} #${i + 1}` : monsterData.name.pl;
+    const displayNameLocalized =
+      count > 1
+        ? {
+            en: `${monsterData.name.en} #${i + 1}`,
+            pl: `${monsterData.name.pl} #${i + 1}`,
+          }
+        : {
+            en: monsterData.name.en,
+            pl: monsterData.name.pl,
+          };
 
     monsters.push({
       id: crypto.randomUUID(),
       source: "monster",
       monster_id: monsterId,
       display_name: displayName,
+      display_name_localized: displayNameLocalized,
       initiative: 0,
       current_hp: monsterData.hitPoints.average,
       max_hp: monsterData.hitPoints.average,

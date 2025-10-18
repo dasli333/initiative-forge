@@ -45,7 +45,19 @@ export const useCombatStore = create<CombatState>((set, get) => ({
 
     set({
       participants: sorted,
+      isDirty: true,
+    });
+  },
+
+  // Akcja: Rozpocznij walkę
+  startCombat: () => {
+    const { participants } = get();
+
+    if (participants.length === 0) return;
+
+    set({
       activeParticipantIndex: 0,
+      currentRound: 1,
       isDirty: true,
     });
   },

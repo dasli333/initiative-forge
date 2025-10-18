@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { CombatParticipantDTO, ConditionDTO } from "@/types";
-import { InitiativeHeader } from "./InitiativeHeader";
+import { CombatControlBar } from "../CombatControlBar";
 import { InitiativeItem } from "./InitiativeItem";
 
 interface InitiativeListProps {
@@ -11,6 +11,12 @@ interface InitiativeListProps {
   currentRound: number;
   activeParticipantIndex: number | null;
   onRollInitiative: () => void;
+  onStartCombat: () => void;
+  onNextTurn: () => void;
+  onSave: () => void;
+  isDirty: boolean;
+  isSaving: boolean;
+  campaignId: string;
   onParticipantUpdate: (id: string, updates: Partial<CombatParticipantDTO>) => void;
   onAddCondition: (participantId: string, conditionId: string, duration: number | null) => void;
   onRemoveCondition: (participantId: string, conditionId: string) => void;
@@ -22,6 +28,12 @@ export function InitiativeList({
   currentRound,
   activeParticipantIndex,
   onRollInitiative,
+  onStartCombat,
+  onNextTurn,
+  onSave,
+  isDirty,
+  isSaving,
+  campaignId,
   onParticipantUpdate,
   onAddCondition,
   onRemoveCondition,
@@ -40,14 +52,22 @@ export function InitiativeList({
     }
   }, [activeParticipantIndex]);
 
-  const initiativeRolled = activeParticipantIndex !== null;
+  const isCombatStarted = activeParticipantIndex !== null;
+  const hasParticipants = participants.length > 0;
 
   return (
     <div className="flex flex-col h-full border-r">
-      <InitiativeHeader
+      <CombatControlBar
         currentRound={currentRound}
+        isCombatStarted={isCombatStarted}
+        hasParticipants={hasParticipants}
+        isDirty={isDirty}
+        isSaving={isSaving}
         onRollInitiative={onRollInitiative}
-        initiativeRolled={initiativeRolled}
+        onStartCombat={onStartCombat}
+        onNextTurn={onNextTurn}
+        onSave={onSave}
+        campaignId={campaignId}
       />
       <ScrollArea className="flex-1" ref={scrollAreaRef}>
         {participants.length === 0 ? (

@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { X } from "lucide-react";
 import type { ActiveConditionDTO, ConditionDTO } from "@/types";
 import { formatConditionDescription } from "@/lib/format-description";
+import { useLanguageStore } from "@/stores/languageStore";
 
 interface ConditionBadgeProps {
   condition: ActiveConditionDTO;
@@ -14,13 +15,15 @@ interface ConditionBadgeProps {
 }
 
 export function ConditionBadge({ condition, fullCondition, onRemove }: ConditionBadgeProps) {
+  const selectedLanguage = useLanguageStore((state) => state.selectedLanguage);
+
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
           <Badge variant="warning" className="group relative gap-1 pr-5">
             <span className="truncate max-w-[80px]">
-              {condition.name}
+              {fullCondition.name[selectedLanguage]}
               {condition.duration_in_rounds !== null && ` ${condition.duration_in_rounds}`}
             </span>
             <Button
@@ -31,7 +34,7 @@ export function ConditionBadge({ condition, fullCondition, onRemove }: Condition
                 e.stopPropagation();
                 onRemove(condition.condition_id);
               }}
-              aria-label={`Remove ${condition.name} condition`}
+              aria-label={`Remove ${fullCondition.name[selectedLanguage]} condition`}
             >
               <X className="h-3 w-3" />
             </Button>
@@ -39,7 +42,7 @@ export function ConditionBadge({ condition, fullCondition, onRemove }: Condition
         </TooltipTrigger>
         <TooltipContent className="max-w-xs">
           <div className="space-y-2">
-            <p className="font-semibold">{fullCondition.name.pl}</p>
+            <p className="font-semibold">{fullCondition.name[selectedLanguage]}</p>
             <div className="text-sm text-muted-foreground">{formatConditionDescription(fullCondition.description)}</div>
             {condition.duration_in_rounds && (
               <p className="text-xs text-muted-foreground">Duration: {condition.duration_in_rounds} rounds</p>

@@ -9,6 +9,7 @@ import { HPControls } from "./HPControls";
 import { ConditionBadge } from "./ConditionBadge";
 import { AddConditionDialog } from "./AddConditionDialog";
 import { Button } from "@/components/ui/button";
+import { useLanguageStore } from "@/stores/languageStore";
 
 interface InitiativeItemProps {
   participant: CombatParticipantDTO;
@@ -29,6 +30,10 @@ export function InitiativeItem({
 }: InitiativeItemProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const isUnconscious = participant.current_hp === 0;
+  const selectedLanguage = useLanguageStore((state) => state.selectedLanguage);
+
+  // Get localized name or fallback to display_name
+  const displayName = participant.display_name_localized?.[selectedLanguage] ?? participant.display_name;
 
   const handleHPChange = useCallback(
     (amount: number, type: "damage" | "heal") => {
@@ -52,7 +57,7 @@ export function InitiativeItem({
             <h3
               className={`font-semibold truncate ${isActive ? "text-base" : "text-sm"} ${isUnconscious ? "line-through" : ""}`}
             >
-              {participant.display_name}
+              {displayName}
               {isUnconscious && <Skull className="inline ml-1.5 h-3.5 w-3.5" />}
             </h3>
             <p className="text-xs text-muted-foreground capitalize mt-0.5">{participant.source.replace("_", " ")}</p>
@@ -103,7 +108,7 @@ export function InitiativeItem({
       {/* Add Condition Dialog */}
       <AddConditionDialog
         isOpen={isDialogOpen}
-        participantName={participant.display_name}
+        participantName={displayName}
         conditions={conditions}
         existingConditionIds={participant.active_conditions.map((c) => c.condition_id)}
         onAdd={(conditionId, duration) => {

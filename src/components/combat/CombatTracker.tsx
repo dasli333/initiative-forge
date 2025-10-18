@@ -8,7 +8,6 @@ import type { CombatDTO, ActiveConditionDTO, ActionDTO, CombatParticipantDTO } f
 import { InitiativeList } from "./initiative/InitiativeList";
 import { ActiveCharacterSheet } from "./character-sheet/ActiveCharacterSheet";
 import { ReferencePanel } from "./reference/ReferencePanel";
-import { NextTurnButton } from "./NextTurnButton";
 import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
 
 interface CombatTrackerProps {
@@ -17,7 +16,7 @@ interface CombatTrackerProps {
   initialData: CombatDTO;
 }
 
-export function CombatTracker({ initialData }: CombatTrackerProps) {
+export function CombatTracker({ initialData, campaignId }: CombatTrackerProps) {
   // Zustand store
   const {
     loadCombat,
@@ -27,6 +26,7 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
     rollMode,
     recentRolls,
     rollInitiative,
+    startCombat,
     nextTurn,
     updateHP,
     addCondition,
@@ -34,6 +34,8 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
     executeAction,
     setRollMode,
     saveSnapshot,
+    isDirty,
+    isSaving,
   } = useCombatStore();
 
   // React Query
@@ -47,7 +49,7 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
   // Keyboard shortcuts
   useKeyboardShortcuts({
     " ": () => {
-      // Space bar - next turn
+      // Space bar - next turn (only if combat started)
       if (activeParticipantIndex !== null) {
         nextTurn();
       }
@@ -116,6 +118,12 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
             currentRound={currentRound}
             activeParticipantIndex={activeParticipantIndex}
             onRollInitiative={rollInitiative}
+            onStartCombat={startCombat}
+            onNextTurn={nextTurn}
+            onSave={saveSnapshot}
+            isDirty={isDirty}
+            isSaving={isSaving}
+            campaignId={campaignId}
             onParticipantUpdate={handleParticipantUpdate}
             onAddCondition={handleAddCondition}
             onRemoveCondition={handleRemoveCondition}
@@ -138,9 +146,6 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
           />
         </div>
       </div>
-
-      {/* Floating Action Button */}
-      <NextTurnButton onClick={nextTurn} disabled={activeParticipantIndex === null} />
 
       {/* Unsaved Changes Dialog */}
       <UnsavedChangesDialog

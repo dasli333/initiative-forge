@@ -325,6 +325,10 @@ export interface CombatParticipantDTO {
 
   // Denormalized data (snapshot at time of adding to combat)
   display_name: string;
+  display_name_localized?: {
+    en: string;
+    pl: string;
+  };
   initiative: number;
   current_hp: number;
   max_hp: number;
