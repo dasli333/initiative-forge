@@ -23,9 +23,12 @@ interface ReferencePanelProps {
 export function ReferencePanel({ conditions, rollMode, recentRolls, onRollModeChange }: ReferencePanelProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredConditions = conditions.filter((condition) =>
-    condition.name.pl.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredConditions = conditions.filter((condition) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      condition.name.en.toLowerCase().includes(search) || condition.name.pl.toLowerCase().includes(search)
+    );
+  });
 
   return (
     <div className="flex flex-col h-full border-l">
