@@ -19,15 +19,13 @@ export function RollCard({ roll }: RollCardProps) {
 
   const cardBorder = roll.isCrit ? "border-emerald-500" : roll.isFail ? "border-red-500" : "";
 
-  // Format roll breakdown: "3, 5 + 4 = 12" or "18 + 4 = 22"
+  // Format roll breakdown: "3, 5" or "18"
   const formatRollBreakdown = () => {
-    const rollsStr = roll.rolls.join(", ");
-
-    return rollsStr;
+    return roll.rolls.join(", ");
   };
 
   return (
-    <Card className={`${cardBorder} overflow-hidden flex-shrink-0 w-auto min-w-[250px]`}>
+    <Card className={`${cardBorder} overflow-hidden flex-shrink-0 w-auto min-w-[250px] py-1`}>
       <CardContent className="p-2 space-y-1">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
@@ -42,7 +40,6 @@ export function RollCard({ roll }: RollCardProps) {
         <div className="text-[14px] text-muted-foreground space-y-0.5">
           <p className="italic whitespace-nowrap">{roll.formula}</p>
           <p className="font-mono whitespace-nowrap">Roll: {formatRollBreakdown()}</p>
-          {roll.actionName && <p className="font-semibold whitespace-nowrap">{roll.actionName}</p>}
         </div>
       </CardContent>
     </Card>

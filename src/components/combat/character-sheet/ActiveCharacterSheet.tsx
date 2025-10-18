@@ -1,32 +1,20 @@
 // Active character sheet (middle column)
 
 import type { CombatParticipantDTO, ActionDTO } from "@/types";
-import type { RollMode, RollResult } from "@/types/combat-view.types";
 import type { MonsterAction } from "@/lib/schemas/monster.schema";
 import { CharacterHeader } from "./CharacterHeader";
 import { StatsGrid } from "./StatsGrid";
-import { RollControls } from "./RollControls";
-import { RollLog } from "./RollLog";
 import { CombatProperties } from "./CombatProperties";
 import { DescriptiveAbilities } from "./DescriptiveAbilities";
 import { GradientSeparator, SectionHeader } from "@/components/library";
-import { Dumbbell, Dices, Shield } from "lucide-react";
+import { Dumbbell, Shield } from "lucide-react";
 
 interface ActiveCharacterSheetProps {
   participant: CombatParticipantDTO | null;
-  rollMode: RollMode;
-  recentRolls: RollResult[];
   onActionClick: (action: ActionDTO) => void;
-  onRollModeChange: (mode: RollMode) => void;
 }
 
-export function ActiveCharacterSheet({
-  participant,
-  rollMode,
-  recentRolls,
-  onActionClick,
-  onRollModeChange,
-}: ActiveCharacterSheetProps) {
+export function ActiveCharacterSheet({ participant, onActionClick }: ActiveCharacterSheetProps) {
   if (!participant) {
     return (
       <div className="flex items-center justify-center h-full text-muted-foreground p-8">
@@ -100,21 +88,6 @@ export function ActiveCharacterSheet({
               </section>
             </>
           )}
-
-          <GradientSeparator />
-
-          {/* Roll Controls */}
-          <section className="overflow-hidden">
-            <RollControls value={rollMode} onChange={onRollModeChange} />
-          </section>
-
-          <GradientSeparator />
-
-          {/* Roll Log */}
-          <section className="overflow-hidden">
-            <SectionHeader icon={Dices} title="Recent Rolls" />
-            <RollLog rolls={recentRolls} />
-          </section>
         </div>
       </div>
     </div>

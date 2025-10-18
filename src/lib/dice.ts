@@ -126,7 +126,7 @@ export function executeAttack(
     result: number;
     isCrit: boolean;
     isFail: boolean;
-  };
+  } | null;
   damage: {
     rolls: number[];
     total: number;
@@ -134,9 +134,17 @@ export function executeAttack(
     type: string;
   }[];
 } {
-  // Roll attack
-  const attackBonus = action.attack_bonus || 0;
-  const attack = rollD20(mode, attackBonus);
+  // Roll attack only if action has attackRoll
+  let attack: {
+    rolls: number[];
+    result: number;
+    isCrit: boolean;
+    isFail: boolean;
+  } | null = null;
+
+  if (action.attackRoll) {
+    attack = rollD20(mode, action.attackRoll.bonus);
+  }
 
   // Roll damage for each damage type
   const damageResults: {
@@ -152,7 +160,7 @@ export function executeAttack(
       const damageResult = rollDamage(dmg.formula);
 
       // Double damage dice on crit (but not the bonus)
-      if (attack.isCrit) {
+      if (attack && attack.isCrit) {
         // Parse formula to extract dice count and sides
         const match = dmg.formula.match(/(\d+)d(\d+)/);
         if (match) {
@@ -211,22 +219,24 @@ export function createRollResults(
 ): RollResult[] {
   const results: RollResult[] = [];
 
-  // Attack roll result
-  const attackBonus = action.attack_bonus || 0;
-  const attackFormula = `1d20${attackBonus >= 0 ? "+" : ""}${attackBonus}`;
+  // Attack roll result (only if action has attackRoll)
+  if (attackResult && action.attackRoll) {
+    const attackBonus = action.attackRoll.bonus;
+    const attackFormula = `1d20${attackBonus >= 0 ? "+" : ""}${attackBonus}`;
 
-  results.push({
-    id: crypto.randomUUID(),
-    type: "attack",
-    result: attackResult.result,
-    formula: attackFormula,
-    rolls: attackResult.rolls,
-    modifier: attackBonus,
-    timestamp: new Date(),
-    isCrit: attackResult.isCrit,
-    isFail: attackResult.isFail,
-    actionName: action.name,
-  });
+    results.push({
+      id: crypto.randomUUID(),
+      type: "attack",
+      result: attackResult.result,
+      formula: attackFormula,
+      rolls: attackResult.rolls,
+      modifier: attackBonus,
+      timestamp: new Date(),
+      isCrit: attackResult.isCrit,
+      isFail: attackResult.isFail,
+      actionName: action.name,
+    });
+  }
 
   // Damage roll results (one for each damage type)
   if (damageResults && damageResults.length > 0) {

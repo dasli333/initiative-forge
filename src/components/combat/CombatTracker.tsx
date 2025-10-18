@@ -115,13 +115,7 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
 
         {/* Middle Column: Active Character Sheet */}
         <div className="overflow-hidden min-w-0">
-          <ActiveCharacterSheet
-            participant={activeParticipant}
-            rollMode={rollMode}
-            recentRolls={recentRolls}
-            onActionClick={handleActionClick}
-            onRollModeChange={setRollMode}
-          />
+          <ActiveCharacterSheet participant={activeParticipant} onActionClick={handleActionClick} />
         </div>
 
         {/* Right Column: Reference Panel */}
@@ -130,6 +124,9 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
             conditions={conditions}
             activeParticipantId={activeParticipant?.id ?? null}
             onApplyCondition={handleApplyCondition}
+            rollMode={rollMode}
+            recentRolls={recentRolls}
+            onRollModeChange={setRollMode}
           />
         </div>
       </div>
