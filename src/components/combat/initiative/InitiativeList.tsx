@@ -12,6 +12,8 @@ interface InitiativeListProps {
   activeParticipantIndex: number | null;
   onRollInitiative: () => void;
   onParticipantUpdate: (id: string, updates: Partial<CombatParticipantDTO>) => void;
+  onAddCondition: (participantId: string, conditionId: string, duration: number | null) => void;
+  onRemoveCondition: (participantId: string, conditionId: string) => void;
   conditions: ConditionDTO[]; // Full conditions list
 }
 
@@ -21,6 +23,8 @@ export function InitiativeList({
   activeParticipantIndex,
   onRollInitiative,
   onParticipantUpdate,
+  onAddCondition,
+  onRemoveCondition,
   conditions,
 }: InitiativeListProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -57,9 +61,8 @@ export function InitiativeList({
                 participant={participant}
                 isActive={index === activeParticipantIndex}
                 onUpdate={(updates) => onParticipantUpdate(participant.id, updates)}
-                onRemoveCondition={() => {
-                  // TODO: Implement remove condition logic
-                }}
+                onRemoveCondition={(conditionId) => onRemoveCondition(participant.id, conditionId)}
+                onAddCondition={(conditionId, duration) => onAddCondition(participant.id, conditionId, duration)}
                 conditions={conditions}
               />
             </div>

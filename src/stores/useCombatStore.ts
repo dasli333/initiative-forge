@@ -56,11 +56,40 @@ export const useCombatStore = create<CombatState>((set, get) => ({
 
     if (activeParticipantIndex === null) return;
 
+    // Zmniejsz liczniki stanów dla aktywnego uczestnika
+    const updatedParticipants = participants.map((p, index) => {
+      if (index !== activeParticipantIndex) return p;
+
+      // Zmniejsz duration_in_rounds o 1 i usuń stany które osiągnęły 0
+      const updatedConditions = p.active_conditions
+        .map((condition) => {
+          if (condition.duration_in_rounds === null) {
+            // Stan na czas nieokreślony - nie zmniejszamy
+            return condition;
+          }
+          // Zmniejsz licznik
+          return {
+            ...condition,
+            duration_in_rounds: condition.duration_in_rounds - 1,
+          };
+        })
+        .filter((condition) => {
+          // Usuń stany które osiągnęły 0
+          return condition.duration_in_rounds === null || condition.duration_in_rounds > 0;
+        });
+
+      return {
+        ...p,
+        active_conditions: updatedConditions,
+      };
+    });
+
     const nextIndex = activeParticipantIndex + 1;
 
     if (nextIndex >= participants.length) {
       // Koniec rundy
       set((state) => ({
+        participants: updatedParticipants,
         activeParticipantIndex: 0,
         currentRound: state.currentRound + 1,
         isDirty: true,
@@ -69,6 +98,7 @@ export const useCombatStore = create<CombatState>((set, get) => ({
       // TODO: Toast notification "Round X begins"
     } else {
       set({
+        participants: updatedParticipants,
         activeParticipantIndex: nextIndex,
         isDirty: true,
       });

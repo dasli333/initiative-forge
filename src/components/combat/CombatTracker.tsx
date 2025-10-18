@@ -30,6 +30,7 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
     nextTurn,
     updateHP,
     addCondition,
+    removeCondition,
     executeAction,
     setRollMode,
     saveSnapshot,
@@ -95,6 +96,28 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
     [conditions, addCondition]
   );
 
+  const handleAddCondition = useCallback(
+    (participantId: string, conditionId: string, duration: number | null) => {
+      const condition = conditions.find((c) => c.id === conditionId);
+      if (condition) {
+        const activeCondition: ActiveConditionDTO = {
+          condition_id: condition.id,
+          name: condition.name.pl, // Using Polish name for denormalized storage
+          duration_in_rounds: duration,
+        };
+        addCondition(participantId, activeCondition);
+      }
+    },
+    [conditions, addCondition]
+  );
+
+  const handleRemoveCondition = useCallback(
+    (participantId: string, conditionId: string) => {
+      removeCondition(participantId, conditionId);
+    },
+    [removeCondition]
+  );
+
   // Unsaved changes dialog (simplified for now)
   const [showUnsavedDialog, setShowUnsavedDialog] = useState(false);
 
@@ -109,6 +132,8 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
             activeParticipantIndex={activeParticipantIndex}
             onRollInitiative={rollInitiative}
             onParticipantUpdate={handleParticipantUpdate}
+            onAddCondition={handleAddCondition}
+            onRemoveCondition={handleRemoveCondition}
             conditions={conditions}
           />
         </div>

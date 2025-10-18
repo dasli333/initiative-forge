@@ -19,7 +19,10 @@ export function ConditionBadge({ condition, fullCondition, onRemove }: Condition
       <Tooltip>
         <TooltipTrigger asChild>
           <Badge variant="outline" className="group relative gap-1 pr-5 hover:bg-accent">
-            <span className="truncate max-w-[80px]">{condition.name}</span>
+            <span className="truncate max-w-[80px]">
+              {condition.name}
+              {condition.duration_in_rounds !== null && ` ${condition.duration_in_rounds}`}
+            </span>
             <Button
               size="sm"
               variant="ghost"

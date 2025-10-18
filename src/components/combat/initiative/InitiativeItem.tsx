@@ -1,18 +1,21 @@
 // Single participant in initiative list
 
-import { useCallback } from "react";
-import { Skull } from "lucide-react";
+import { useCallback, useState } from "react";
+import { Skull, Plus } from "lucide-react";
 import type { CombatParticipantDTO, ConditionDTO } from "@/types";
 import { InitiativeBadge } from "./InitiativeBadge";
 import { ACBadge } from "./ACBadge";
 import { HPControls } from "./HPControls";
 import { ConditionBadge } from "./ConditionBadge";
+import { AddConditionDialog } from "./AddConditionDialog";
+import { Button } from "@/components/ui/button";
 
 interface InitiativeItemProps {
   participant: CombatParticipantDTO;
   isActive: boolean;
   onUpdate: (updates: Partial<CombatParticipantDTO>) => void;
   onRemoveCondition: (conditionId: string) => void;
+  onAddCondition: (conditionId: string, duration: number | null) => void;
   conditions: ConditionDTO[]; // Full conditions list for tooltips
 }
 
@@ -21,8 +24,10 @@ export function InitiativeItem({
   isActive,
   onUpdate,
   onRemoveCondition,
+  onAddCondition,
   conditions,
 }: InitiativeItemProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const isUnconscious = participant.current_hp === 0;
 
   const handleHPChange = useCallback(
@@ -61,6 +66,20 @@ export function InitiativeItem({
         {/* HP Controls with Progress Bar */}
         <HPControls currentHP={participant.current_hp} maxHP={participant.max_hp} onHPChange={handleHPChange} />
 
+        {/* Add Condition Button */}
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-7 text-xs"
+            onClick={() => setIsDialogOpen(true)}
+            disabled={isUnconscious}
+          >
+            <Plus className="h-3 w-3 mr-1" />
+            Add Condition
+          </Button>
+        </div>
+
         {/* Active Conditions */}
         {participant.active_conditions.length > 0 && (
           <div className="flex flex-wrap gap-1.5 pt-1">
@@ -80,6 +99,19 @@ export function InitiativeItem({
           </div>
         )}
       </div>
+
+      {/* Add Condition Dialog */}
+      <AddConditionDialog
+        isOpen={isDialogOpen}
+        participantName={participant.display_name}
+        conditions={conditions}
+        existingConditionIds={participant.active_conditions.map((c) => c.condition_id)}
+        onAdd={(conditionId, duration) => {
+          onAddCondition(conditionId, duration);
+          setIsDialogOpen(false);
+        }}
+        onCancel={() => setIsDialogOpen(false)}
+      />
     </div>
   );
 }
