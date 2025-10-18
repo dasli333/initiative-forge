@@ -288,9 +288,17 @@ export interface ListSpellsResponseDTO extends PaginationMetadataDTO {
 // ============================================================================
 
 /**
- * Condition DTO (direct mapping, no transformations needed)
+ * Condition DTO with localized names
+ * The database stores name as JSONB with structure { en: string, pl: string }
  */
-export type ConditionDTO = Condition;
+export interface ConditionDTO {
+  id: string;
+  name: {
+    en: string;
+    pl: string;
+  };
+  description: string;
+}
 
 /**
  * List conditions response

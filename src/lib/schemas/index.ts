@@ -17,6 +17,14 @@ export {
   type SavingThrow,
 } from "./shared.schema";
 
+// Condition schemas
+export {
+  ConditionSchema,
+  ListConditionsResponseSchema,
+  type Condition,
+  type ListConditionsResponse,
+} from "./condition.schema";
+
 // Monster schemas
 export {
   AbilityScoreSchema,

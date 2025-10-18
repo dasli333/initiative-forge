@@ -89,17 +89,17 @@ export interface Database {
         Row: {
           description: string;
           id: string;
-          name: string;
+          name: Json;
         };
         Insert: {
           description: string;
-          id?: string;
-          name: string;
+          id: string;
+          name: Json;
         };
         Update: {
           description?: string;
           id?: string;
-          name?: string;
+          name?: Json;
         };
         Relationships: [];
       };

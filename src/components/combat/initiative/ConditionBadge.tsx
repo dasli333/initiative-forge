@@ -35,7 +35,7 @@ export function ConditionBadge({ condition, fullCondition, onRemove }: Condition
         </TooltipTrigger>
         <TooltipContent className="max-w-xs">
           <div className="space-y-2">
-            <p className="font-semibold">{fullCondition.name}</p>
+            <p className="font-semibold">{fullCondition.name.pl}</p>
             <p className="text-sm text-muted-foreground">{fullCondition.description}</p>
             {condition.duration_in_rounds && (
               <p className="text-xs text-muted-foreground">Duration: {condition.duration_in_rounds} rounds</p>

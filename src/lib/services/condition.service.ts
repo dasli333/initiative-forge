@@ -18,9 +18,10 @@ export async function listConditions(supabase: SupabaseClient): Promise<ListCond
   }
 
   // Map database rows to DTOs
+  // Supabase automatically parses JSONB to JavaScript objects
   const conditions: ConditionDTO[] = (data || []).map((row) => ({
     id: row.id,
-    name: row.name,
+    name: row.name as { en: string; pl: string },
     description: row.description,
   }));
 
@@ -53,9 +54,10 @@ export async function getConditionById(supabase: SupabaseClient, id: string): Pr
   }
 
   // Map database row to DTO
+  // Supabase automatically parses JSONB to JavaScript objects
   return {
     id: data.id,
-    name: data.name,
+    name: data.name as { en: string; pl: string },
     description: data.description,
   };
 }

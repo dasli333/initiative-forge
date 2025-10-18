@@ -15,7 +15,7 @@ export function ConditionsTab({ conditions, activeParticipantId, onApply }: Cond
     <Accordion type="single" collapsible className="w-full">
       {conditions.map((condition) => (
         <AccordionItem key={condition.id} value={condition.id}>
-          <AccordionTrigger className="text-left">{condition.name}</AccordionTrigger>
+          <AccordionTrigger className="text-left">{condition.name.pl}</AccordionTrigger>
           <AccordionContent>
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">{condition.description}</p>

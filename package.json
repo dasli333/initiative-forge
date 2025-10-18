@@ -11,7 +11,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "seed:prepare-monsters": "tsx scripts/prepare-monsters-seed.ts",
-    "seed:prepare-spells": "tsx scripts/prepare-spells-seed.ts"
+    "seed:prepare-spells": "tsx scripts/prepare-spells-seed.ts",
+    "seed:prepare-conditions": "tsx scripts/prepare-conditions-seed.ts"
   },
   "dependencies": {
     "@astrojs/node": "^9.4.3",

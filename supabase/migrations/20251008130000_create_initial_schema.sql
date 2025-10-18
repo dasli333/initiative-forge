@@ -145,13 +145,16 @@ create index idx_combats_state_snapshot_gin on combats using gin(state_snapshot)
 -- 6. create conditions table
 -- ====================
 -- static reference table for d&d 5e condition definitions
--- provides names and descriptions for conditions (e.g., "Blinded", "Stunned")
+-- provides localized names and descriptions for conditions (e.g., "Blinded", "Stunned")
 
 create table conditions (
-  id uuid primary key default gen_random_uuid(),
-  -- condition name must be globally unique
-  name text not null unique,
-  description text not null
+  id text primary key,  -- Using text ID from JSON data (e.g., 'blinded', 'charmed')
+  name jsonb not null,  -- Localized name: { "en": "Blinded", "pl": "Oślepiony" }
+  description text not null,
+
+  -- Validate JSONB structure has required language keys
+  constraint name_has_en check (name ? 'en'),
+  constraint name_has_pl check (name ? 'pl')
 );
 
 -- enable row level security for conditions

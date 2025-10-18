@@ -86,7 +86,7 @@ export function CombatTracker({ initialData }: CombatTrackerProps) {
       if (condition) {
         const activeCondition: ActiveConditionDTO = {
           condition_id: condition.id,
-          name: condition.name,
+          name: condition.name.pl, // Using Polish name for denormalized storage
           duration_in_rounds: null, // TODO: Allow user to specify duration
         };
         addCondition(participantId, activeCondition);
