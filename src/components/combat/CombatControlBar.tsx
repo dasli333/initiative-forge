@@ -14,6 +14,7 @@ interface CombatControlBarProps {
   currentRound: number;
   isCombatStarted: boolean;
   hasParticipants: boolean;
+  allInitiativesSet: boolean;
   isDirty: boolean;
   isSaving: boolean;
 
@@ -31,6 +32,7 @@ export function CombatControlBar({
   currentRound,
   isCombatStarted,
   hasParticipants,
+  allInitiativesSet,
   isDirty,
   isSaving,
   onRollInitiative,
@@ -59,7 +61,7 @@ export function CombatControlBar({
               <Dices className="mr-2 h-4 w-4" />
               Roll Initiative
             </Button>
-            <Button onClick={onStartCombat} disabled={!hasParticipants} size="sm">
+            <Button onClick={onStartCombat} disabled={!hasParticipants || !allInitiativesSet} size="sm">
               <Play className="mr-2 h-4 w-4" />
               Start Combat
             </Button>

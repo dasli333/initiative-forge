@@ -329,7 +329,7 @@ export interface CombatParticipantDTO {
     en: string;
     pl: string;
   };
-  initiative: number;
+  initiative: number | null;
   current_hp: number;
   max_hp: number;
   armor_class: number;

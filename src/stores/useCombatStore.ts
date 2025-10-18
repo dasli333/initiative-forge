@@ -40,8 +40,12 @@ export const useCombatStore = create<CombatState>((set, get) => ({
       initiative: rollDice(1, 20)[0] + calculateModifier(p.stats.dex),
     }));
 
-    // Sortuj malejąco po inicjatywie
-    const sorted = withInitiative.sort((a, b) => b.initiative - a.initiative);
+    // Sortuj malejąco po inicjatywie (null na końcu)
+    const sorted = withInitiative.sort((a, b) => {
+      if (a.initiative === null) return 1;
+      if (b.initiative === null) return -1;
+      return b.initiative - a.initiative;
+    });
 
     set({
       participants: sorted,

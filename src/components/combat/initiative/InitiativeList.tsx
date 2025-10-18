@@ -54,6 +54,7 @@ export function InitiativeList({
 
   const isCombatStarted = activeParticipantIndex !== null;
   const hasParticipants = participants.length > 0;
+  const allInitiativesSet = participants.length > 0 && participants.every((p) => p.initiative !== null);
 
   return (
     <div className="flex flex-col h-full border-r">
@@ -61,6 +62,7 @@ export function InitiativeList({
         currentRound={currentRound}
         isCombatStarted={isCombatStarted}
         hasParticipants={hasParticipants}
+        allInitiativesSet={allInitiativesSet}
         isDirty={isDirty}
         isSaving={isSaving}
         onRollInitiative={onRollInitiative}
