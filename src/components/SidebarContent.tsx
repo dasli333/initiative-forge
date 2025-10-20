@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { navigate } from "astro:transitions/client";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/authStore";
 import { useCampaignStore } from "@/stores/campaignStore";
 import { AppHeader } from "./sidebar/AppHeader";
@@ -13,19 +13,30 @@ interface SidebarContentProps {
 }
 
 export function SidebarContent({ currentPath }: SidebarContentProps) {
+  const queryClient = useQueryClient();
   const user = useAuthStore((state) => state.user);
   const isLoadingUser = useAuthStore((state) => state.isLoading);
   const logout = useAuthStore((state) => state.logout);
-  const { selectedCampaignId, selectedCampaign } = useCampaignStore();
+  const { selectedCampaignId, selectedCampaign, clearSelection } = useCampaignStore();
 
   const campaign = selectedCampaign;
 
-  // Handle logout with View Transitions navigation
+  // Handle logout with full page reload
   const handleLogout = useCallback(async () => {
+    // 1. Logout from Supabase (clears cookies and localStorage)
     await logout();
-    // Navigate to login page using View Transitions
-    navigate("/auth/login");
-  }, [logout]);
+
+    // 2. Clear campaign selection (both in-memory and localStorage)
+    clearSelection();
+
+    // 3. Clear React Query cache (removes all cached user data)
+    queryClient.clear();
+
+    // 4. Full page reload to /auth/login
+    // Note: We use window.location.href instead of navigate() to avoid hydration mismatch
+    // After clearing cache, SPA navigation would cause server/client state desync
+    window.location.href = "/auth/login";
+  }, [logout, clearSelection, queryClient]);
 
   return (
     <aside

@@ -44,13 +44,28 @@ function toUserViewModel(user: User | null): UserViewModel | null {
 
 /**
  * Clears authentication-related state from storage
+ * Removes all user-specific data while preserving UI preferences
  */
 function clearAuthState() {
-  // Clear auth-specific localStorage keys
-  // Zustand persist uses 'auth-storage' key
   try {
+    // List of localStorage keys to preserve (UI preferences, not user data)
+    const keysToPreserve = [
+      "language-storage", // User language preference (safe to keep)
+    ];
+
+    // Get all localStorage keys
+    const allKeys = Object.keys(localStorage);
+
+    // Remove all keys except those in the preserve list
+    allKeys.forEach((key) => {
+      if (!keysToPreserve.includes(key)) {
+        localStorage.removeItem(key);
+      }
+    });
+
+    // Explicitly clear known user-specific stores (defense in depth)
     localStorage.removeItem("auth-storage");
-    // Add other auth-related keys if needed
+    localStorage.removeItem("campaign-storage");
   } catch (error) {
     console.error("Error clearing auth state:", error);
   }
