@@ -1,5 +1,4 @@
 import { useState, useCallback, useId } from "react";
-import { navigate } from "astro:transitions/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -72,8 +71,9 @@ export function LoginForm({ redirect = "/campaigns" }: LoginFormProps) {
           return;
         }
 
-        // Successful login - redirect using Astro's navigate
-        navigate(redirect);
+        // Successful login - redirect with full page reload
+        // Use window.location.href to ensure middleware reloads session
+        window.location.href = redirect;
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unexpected error occurred");
       } finally {

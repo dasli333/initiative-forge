@@ -112,10 +112,18 @@ export const useAuthStore = create<AuthStore>()(
         const supabase = createSupabaseBrowserClient();
 
         try {
-          await supabase.auth.signOut();
+          const { error: signOutError } = await supabase.auth.signOut();
+          if (signOutError) {
+            console.error("Logout error:", signOutError);
+          }
           get().setUser(null);
+          // Redirect to login after successful logout
+          // Use window.location.href for full page reload (clears all state)
+          window.location.href = "/auth/login";
         } catch (error) {
           console.error("Logout error:", error);
+          // Force logout UX - even if API call failed
+          window.location.href = "/auth/login";
         }
       },
 
