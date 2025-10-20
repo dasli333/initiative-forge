@@ -1,0 +1,79 @@
+---
+import "../styles/global.css";
+import { Toaster } from "@/components/ui/sonner";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+  title?: string;
+}
+
+const { title = "Initiative Forge" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <ClientRouter />
+  </head>
+  <body class="h-full bg-slate-950">
+    <div class="flex min-h-screen items-center justify-center px-6 py-12 lg:px-8">
+      <div class="w-full max-w-md pb-6">
+        <!-- Logo -->
+        <div class="mb-10">
+          <a href="/" class="block group">
+            <h1 class="forge-logo text-center text-4xl font-black tracking-wide transition-all duration-300 group-hover:scale-105">
+              Initiative Forge
+            </h1>
+          </a>
+        </div>
+
+        <!-- Main Content -->
+        <div>
+          <slot />
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <Toaster client:load />
+  </body>
+</html>
+
+<style>
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .forge-logo {
+    background: linear-gradient(135deg, #f97316 0%, #dc2626 50%, #991b1b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow:
+      0 0 20px rgba(249, 115, 22, 0.5),
+      0 0 40px rgba(220, 38, 38, 0.3),
+      0 0 60px rgba(153, 27, 27, 0.2);
+    filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.4))
+            drop-shadow(0 0 30px rgba(220, 38, 38, 0.3));
+  }
+
+  .group:hover .forge-logo {
+    filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.6))
+            drop-shadow(0 0 40px rgba(220, 38, 38, 0.5))
+            drop-shadow(0 0 60px rgba(153, 27, 27, 0.3));
+  }
+</style>

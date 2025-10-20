@@ -1,0 +1,22 @@
+---
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import { LoginForm } from "@/components/auth/LoginForm";
+
+// Note: This page will handle server-side session checks in backend implementation phase
+// For now, we just render the login form
+const redirect = Astro.url.searchParams.get("redirect") || "/campaigns";
+---
+
+<AuthLayout title="Login - Initiative Forge">
+  <LoginForm client:load redirect={redirect} />
+
+  <p class="mt-6 text-center text-sm text-slate-400">
+    Don't have an account?{" "}
+    <a
+      href="/auth/register"
+      class="font-semibold text-blue-400 hover:text-blue-300 transition-colors"
+    >
+      Register here
+    </a>
+  </p>
+</AuthLayout>
