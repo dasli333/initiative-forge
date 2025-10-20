@@ -25,9 +25,7 @@ export function ReferencePanel({ conditions, rollMode, recentRolls, onRollModeCh
 
   const filteredConditions = conditions.filter((condition) => {
     const search = searchTerm.toLowerCase();
-    return (
-      condition.name.en.toLowerCase().includes(search) || condition.name.pl.toLowerCase().includes(search)
-    );
+    return condition.name.en.toLowerCase().includes(search) || condition.name.pl.toLowerCase().includes(search);
   });
 
   return (

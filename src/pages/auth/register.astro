@@ -2,8 +2,12 @@
 import AuthLayout from "@/layouts/AuthLayout.astro";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 
-// Note: This page will handle server-side session checks in backend implementation phase
-// For now, we just render the register form
+export const prerender = false;
+
+// Server-side session check - if user is already logged in, redirect to campaigns
+if (Astro.locals.user) {
+  return Astro.redirect("/campaigns");
+}
 ---
 
 <AuthLayout title="Register - Initiative Forge">
@@ -11,11 +15,6 @@ import { RegisterForm } from "@/components/auth/RegisterForm";
 
   <p class="mt-6 text-center text-sm text-slate-400">
     Already have an account?{" "}
-    <a
-      href="/auth/login"
-      class="font-semibold text-blue-400 hover:text-blue-300 transition-colors"
-    >
-      Sign in here
-    </a>
+    <a href="/auth/login" class="font-semibold text-blue-400 hover:text-blue-300 transition-colors"> Sign in here </a>
   </p>
 </AuthLayout>

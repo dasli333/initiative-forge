@@ -2,7 +2,6 @@ import type { APIContext } from "astro";
 import { createPlayerCharacter, listPlayerCharacters } from "@/lib/services/player-character.service";
 import { CreatePlayerCharacterCommandSchema } from "@/lib/schemas/player-character.schema";
 import { ZodError } from "zod";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
@@ -24,25 +23,15 @@ export const prerender = false;
 export async function POST(context: APIContext): Promise<Response> {
   const supabase = context.locals.supabase;
 
-  // TODO: Authentication temporarily disabled - using default user
-  // Check authentication
-  // const {
-  //   data: { user },
-  //   error: authError,
-  // } = await supabase.auth.getUser();
+  // Check authentication - user should be set by middleware
+  if (!context.locals.user) {
+    return new Response(JSON.stringify({ error: "Authentication required" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 
-  // if (authError || !user) {
-  //   return new Response(
-  //     JSON.stringify({ error: "Authentication required" }),
-  //     {
-  //       status: 401,
-  //       headers: { "Content-Type": "application/json" },
-  //     }
-  //   );
-  // }
-
-  // Using default user for now
-  const userId = DEFAULT_USER_ID;
+  const userId = context.locals.user.id;
 
   // Extract campaignId from URL params
   const campaignId = context.params.campaignId;
@@ -143,25 +132,15 @@ export async function POST(context: APIContext): Promise<Response> {
 export async function GET(context: APIContext): Promise<Response> {
   const supabase = context.locals.supabase;
 
-  // TODO: Authentication temporarily disabled - using default user
-  // Check authentication
-  // const {
-  //   data: { user },
-  //   error: authError,
-  // } = await supabase.auth.getUser();
+  // Check authentication - user should be set by middleware
+  if (!context.locals.user) {
+    return new Response(JSON.stringify({ error: "Authentication required" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 
-  // if (authError || !user) {
-  //   return new Response(
-  //     JSON.stringify({ error: "Authentication required" }),
-  //     {
-  //       status: 401,
-  //       headers: { "Content-Type": "application/json" },
-  //     }
-  //   );
-  // }
-
-  // Using default user for now
-  const userId = DEFAULT_USER_ID;
+  const userId = context.locals.user.id;
 
   // Extract campaignId from URL params
   const campaignId = context.params.campaignId;

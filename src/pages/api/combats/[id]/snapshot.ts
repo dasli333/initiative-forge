@@ -2,7 +2,6 @@
 
 import type { APIRoute } from "astro";
 import { updateCombatSnapshot } from "@/lib/services/combat.service";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
@@ -12,8 +11,14 @@ export const prerender = false;
  * Simplified endpoint - no campaign_id required in URL
  */
 export const PATCH: APIRoute = async ({ params, locals, request }) => {
-  // TODO: Authentication temporarily disabled - using default user
-  const userId = DEFAULT_USER_ID;
+  // Check authentication - user should be set by middleware
+  if (!locals.user) {
+    return new Response(JSON.stringify({ error: "Authentication required" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const userId = locals.user.id;
 
   try {
     const { id } = params;

@@ -2,8 +2,15 @@
 import AuthLayout from "@/layouts/AuthLayout.astro";
 import { LoginForm } from "@/components/auth/LoginForm";
 
-// Note: This page will handle server-side session checks in backend implementation phase
-// For now, we just render the login form
+export const prerender = false;
+
+// Server-side session check - if user is already logged in, redirect to campaigns
+// The middleware already sets Astro.locals.user if authenticated
+if (Astro.locals.user) {
+  const redirect = Astro.url.searchParams.get("redirect") || "/campaigns";
+  return Astro.redirect(redirect);
+}
+
 const redirect = Astro.url.searchParams.get("redirect") || "/campaigns";
 ---
 
@@ -12,10 +19,7 @@ const redirect = Astro.url.searchParams.get("redirect") || "/campaigns";
 
   <p class="mt-6 text-center text-sm text-slate-400">
     Don't have an account?{" "}
-    <a
-      href="/auth/register"
-      class="font-semibold text-blue-400 hover:text-blue-300 transition-colors"
-    >
+    <a href="/auth/register" class="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
       Register here
     </a>
   </p>

@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/authStore";
 import { useCampaignStore } from "@/stores/campaignStore";
 import { AppHeader } from "./sidebar/AppHeader";
 import { CurrentCampaignDisplay } from "./sidebar/CurrentCampaignDisplay";
@@ -11,7 +11,9 @@ interface SidebarContentProps {
 }
 
 export function SidebarContent({ currentPath }: SidebarContentProps) {
-  const { user, isLoading: isLoadingUser, logout } = useAuth();
+  const user = useAuthStore((state) => state.user);
+  const isLoadingUser = useAuthStore((state) => state.isLoading);
+  const logout = useAuthStore((state) => state.logout);
   const { selectedCampaignId, selectedCampaign } = useCampaignStore();
 
   const campaign = selectedCampaign;

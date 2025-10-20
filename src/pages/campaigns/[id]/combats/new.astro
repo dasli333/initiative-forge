@@ -3,24 +3,29 @@ import { dehydrate } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/queryClient";
 import MainLayout from "@/layouts/MainLayout.astro";
 import { CombatCreationWizardWrapper } from "@/components/combat/wizard/CombatCreationWizardWrapper";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
 const { id } = Astro.params;
 const supabase = Astro.locals.supabase;
+const user = Astro.locals.user;
+
+// Authentication check - user should be set by middleware
+if (!user) {
+  return Astro.redirect("/auth/login");
+}
 
 // Validate campaign ID
 if (!id) {
   return Astro.redirect("/campaigns");
 }
 
-// Fetch campaign to verify it exists and get the name
+// Fetch campaign to verify it exists and belongs to the user
 const { data: campaign, error } = await supabase
   .from("campaigns")
   .select("id, name")
   .eq("id", id)
-  .eq("user_id", DEFAULT_USER_ID)
+  .eq("user_id", user.id)
   .single();
 
 if (error || !campaign) {

@@ -1,30 +1,76 @@
-import { createClient } from "@supabase/supabase-js";
+import type { AstroCookies } from "astro";
+import { createServerClient, createBrowserClient } from "@supabase/ssr";
+import type { CookieOptionsWithName } from "@supabase/ssr";
 
 import type { Database } from "./database.types";
 
-const supabaseUrl = import.meta.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
-const supabaseServiceRoleKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
-
 // ============================================================================
-// TESTING MODE: Comment/uncomment the appropriate client below
+// COOKIE OPTIONS
 // ============================================================================
 
-// 🔧 FOR TESTING: Uses service role key, bypasses RLS
-// Uncomment this when you want to test without authentication/RLS
-export const supabaseClient = createClient<Database>(supabaseUrl, supabaseServiceRoleKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-  },
-});
-
-// 🔒 FOR PRODUCTION: Uses anon key, respects RLS
-// Comment out the testing version above and uncomment this for normal use
-// export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey);
+export const cookieOptions: CookieOptionsWithName = {
+  path: "/",
+  secure: true,
+  httpOnly: true,
+  sameSite: "lax",
+};
 
 // ============================================================================
+// HELPER FUNCTION: Parse Cookie Header
+// ============================================================================
 
-export type SupabaseClient = typeof supabaseClient;
+function parseCookieHeader(cookieHeader: string): { name: string; value: string }[] {
+  return cookieHeader.split(";").map((cookie) => {
+    const [name, ...rest] = cookie.trim().split("=");
+    return { name, value: rest.join("=") };
+  });
+}
 
-export const DEFAULT_USER_ID = "a347a7ee-1c0d-4cbb-998e-0a63b05b867c";
+// ============================================================================
+// SERVER CLIENT (SSR) - For Astro middleware and pages
+// ============================================================================
+
+export const createSupabaseServerInstance = (context: { headers: Headers; cookies: AstroCookies }) => {
+  const supabase = createServerClient<Database>(import.meta.env.SUPABASE_URL, import.meta.env.SUPABASE_KEY, {
+    cookies: {
+      getAll() {
+        return parseCookieHeader(context.headers.get("Cookie") ?? "");
+      },
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value, options }) => context.cookies.set(name, value, options));
+      },
+    },
+  });
+
+  return supabase;
+};
+
+// ============================================================================
+// BROWSER CLIENT - For React components
+// ============================================================================
+
+let browserClient: ReturnType<typeof createBrowserClient<Database>> | null = null;
+
+export const createSupabaseBrowserClient = () => {
+  // Singleton pattern - reuse client in browser
+  if (typeof window !== "undefined" && browserClient) {
+    return browserClient;
+  }
+
+  const client = createBrowserClient<Database>(
+    import.meta.env.PUBLIC_SUPABASE_URL,
+    import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+  );
+
+  if (typeof window !== "undefined") {
+    browserClient = client;
+  }
+
+  return client;
+};
+
+// ============================================================================
+// TYPE EXPORTS
+// ============================================================================
+
+export type SupabaseClient = ReturnType<typeof createSupabaseServerInstance>;

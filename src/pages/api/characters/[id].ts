@@ -6,7 +6,7 @@ import {
   updatePlayerCharacter,
   deletePlayerCharacter,
 } from "@/lib/services/player-character.service";
-import { DEFAULT_USER_ID, type SupabaseClient } from "@/db/supabase.client";
+import { type SupabaseClient } from "@/db/supabase.client";
 import { UpdatePlayerCharacterCommandSchema } from "@/lib/schemas/player-character.schema";
 import { ZodError } from "zod";
 
@@ -44,7 +44,14 @@ async function getCampaignIdForCharacter(
  * Get a character by ID without requiring campaign_id in URL
  */
 export const GET: APIRoute = async ({ params, locals }) => {
-  const userId = DEFAULT_USER_ID;
+  // Check authentication - user should be set by middleware
+  if (!locals.user) {
+    return new Response(JSON.stringify({ error: "Authentication required" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const userId = locals.user.id;
 
   try {
     const { id } = params;
@@ -94,7 +101,14 @@ export const GET: APIRoute = async ({ params, locals }) => {
  * Update a character by ID without requiring campaign_id in URL
  */
 export const PATCH: APIRoute = async ({ params, locals, request }) => {
-  const userId = DEFAULT_USER_ID;
+  // Check authentication - user should be set by middleware
+  if (!locals.user) {
+    return new Response(JSON.stringify({ error: "Authentication required" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const userId = locals.user.id;
 
   try {
     const { id } = params;
@@ -183,7 +197,14 @@ export const PATCH: APIRoute = async ({ params, locals, request }) => {
  * Delete a character by ID without requiring campaign_id in URL
  */
 export const DELETE: APIRoute = async ({ params, locals }) => {
-  const userId = DEFAULT_USER_ID;
+  // Check authentication - user should be set by middleware
+  if (!locals.user) {
+    return new Response(JSON.stringify({ error: "Authentication required" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const userId = locals.user.id;
 
   try {
     const { id } = params;

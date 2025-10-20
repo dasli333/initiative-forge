@@ -1,9 +1,11 @@
 import { useState, useCallback, useId } from "react";
+import { navigate } from "astro:transitions/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Loader2 } from "lucide-react";
+import { useAuthStore } from "@/stores/authStore";
 
 interface LoginFormProps {
   redirect?: string;
@@ -20,6 +22,8 @@ export function LoginForm({ redirect = "/campaigns" }: LoginFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const { login } = useAuthStore();
 
   const emailId = useId();
   const passwordId = useId();
@@ -54,28 +58,36 @@ export function LoginForm({ redirect = "/campaigns" }: LoginFormProps) {
       setIsLoading(true);
 
       try {
-        // TODO: Implement Supabase authentication in backend phase
-        // For now, just show a placeholder message
-        console.log("Login attempt:", { email, redirect });
+        const { error: authError } = await login(email, password);
 
-        // Placeholder error for UI demonstration
-        throw new Error("Authentication not yet implemented. Backend integration coming in next phase.");
+        if (authError) {
+          // Handle specific Supabase error messages
+          if (authError.message.includes("Invalid login credentials")) {
+            setError("Invalid email or password. Please try again.");
+          } else if (authError.message.includes("Email not confirmed")) {
+            setError("Please verify your email address before logging in.");
+          } else {
+            setError(authError.message);
+          }
+          return;
+        }
+
+        // Successful login - redirect using Astro's navigate
+        navigate(redirect);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unexpected error occurred");
       } finally {
         setIsLoading(false);
       }
     },
-    [email, password, redirect, validateForm]
+    [email, password, redirect, validateForm, login]
   );
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-slate-100">Sign in to your account</h2>
-        <p className="mt-2 text-sm text-slate-400">
-          Enter your credentials to access your campaigns
-        </p>
+        <p className="mt-2 text-sm text-slate-400">Enter your credentials to access your campaigns</p>
       </div>
 
       {error && (
@@ -111,9 +123,7 @@ export function LoginForm({ redirect = "/campaigns" }: LoginFormProps) {
                 : "border-slate-700"
             }`}
           />
-          {fieldErrors.email && (
-            <p className="text-sm text-red-400 mt-1">{fieldErrors.email}</p>
-          )}
+          {fieldErrors.email && <p className="text-sm text-red-400 mt-1">{fieldErrors.email}</p>}
         </div>
 
         <div className="space-y-2">
@@ -121,10 +131,7 @@ export function LoginForm({ redirect = "/campaigns" }: LoginFormProps) {
             <Label htmlFor={passwordId} className="text-slate-200">
               Password
             </Label>
-            <a
-              href="/auth/reset-password"
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-            >
+            <a href="/auth/reset-password" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
               Forgot password?
             </a>
           </div>
@@ -149,9 +156,7 @@ export function LoginForm({ redirect = "/campaigns" }: LoginFormProps) {
                 : "border-slate-700"
             }`}
           />
-          {fieldErrors.password && (
-            <p className="text-sm text-red-400 mt-1">{fieldErrors.password}</p>
-          )}
+          {fieldErrors.password && <p className="text-sm text-red-400 mt-1">{fieldErrors.password}</p>}
         </div>
 
         <Button type="submit" className="w-full" disabled={isLoading}>

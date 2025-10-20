@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
+import { useAuthStore } from "@/stores/authStore";
 
 interface FormErrors {
   email?: string;
@@ -19,6 +20,8 @@ export function RegisterForm() {
   const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const { register } = useAuthStore();
 
   const emailId = useId();
   const passwordId = useId();
@@ -62,19 +65,29 @@ export function RegisterForm() {
       setIsLoading(true);
 
       try {
-        // TODO: Implement Supabase authentication in backend phase
-        // For now, just show a placeholder message
-        console.log("Registration attempt:", { email });
+        const { error: authError } = await register(email, password);
 
-        // Placeholder error for UI demonstration
-        throw new Error("Authentication not yet implemented. Backend integration coming in next phase.");
+        if (authError) {
+          // Handle specific Supabase error messages
+          if (authError.message.includes("already registered")) {
+            setError("This email is already registered. Please log in instead.");
+          } else if (authError.message.includes("Password should be")) {
+            setError("Password does not meet security requirements.");
+          } else {
+            setError(authError.message);
+          }
+          return;
+        }
+
+        // Registration successful - show success message
+        setIsSuccess(true);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unexpected error occurred");
       } finally {
         setIsLoading(false);
       }
     },
-    [email, password, confirmPassword, validateForm]
+    [email, password, validateForm, register]
   );
 
   if (isSuccess) {
@@ -84,8 +97,8 @@ export function RegisterForm() {
           <CheckCircle2 className="h-4 w-4 text-green-400" />
           <AlertTitle className="text-green-300">Account created successfully!</AlertTitle>
           <AlertDescription className="text-green-200">
-            We've sent a verification email to <strong>{email}</strong>. Please check your inbox
-            and click the link to verify your account before signing in.
+            We've sent a verification email to <strong>{email}</strong>. Please check your inbox and click the link to
+            verify your account before signing in.
           </AlertDescription>
         </Alert>
 
@@ -100,9 +113,7 @@ export function RegisterForm() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-slate-100">Create your account</h2>
-        <p className="mt-2 text-sm text-slate-400">
-          Join Initiative Forge to manage your campaigns
-        </p>
+        <p className="mt-2 text-sm text-slate-400">Join Initiative Forge to manage your campaigns</p>
       </div>
 
       {error && (
@@ -138,9 +149,7 @@ export function RegisterForm() {
                 : "border-slate-700"
             }`}
           />
-          {fieldErrors.email && (
-            <p className="text-sm text-red-400 mt-1">{fieldErrors.email}</p>
-          )}
+          {fieldErrors.email && <p className="text-sm text-red-400 mt-1">{fieldErrors.email}</p>}
         </div>
 
         <div className="space-y-2">
@@ -200,9 +209,7 @@ export function RegisterForm() {
                 : "border-slate-700"
             }`}
           />
-          {fieldErrors.confirmPassword && (
-            <p className="text-sm text-red-400 mt-1">{fieldErrors.confirmPassword}</p>
-          )}
+          {fieldErrors.confirmPassword && <p className="text-sm text-red-400 mt-1">{fieldErrors.confirmPassword}</p>}
         </div>
 
         <Button type="submit" className="w-full" disabled={isLoading}>

@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Loader2, CheckCircle2, Mail } from "lucide-react";
+import { createSupabaseBrowserClient } from "@/db/supabase.client";
 
 interface PasswordResetFormProps {
   isResettingPassword?: boolean;
@@ -74,11 +75,18 @@ export function PasswordResetForm({ isResettingPassword = false, token }: Passwo
       setIsLoading(true);
 
       try {
-        // TODO: Implement Supabase resetPasswordForEmail in backend phase
-        console.log("Password reset request for:", email);
+        const supabase = createSupabaseBrowserClient();
+        const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/auth/reset-password`,
+        });
 
-        // Placeholder error for UI demonstration
-        throw new Error("Authentication not yet implemented. Backend integration coming in next phase.");
+        if (resetError) {
+          setError(resetError.message);
+          return;
+        }
+
+        // Success - show email sent message
+        setIsSuccess(true);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unexpected error occurred");
       } finally {
@@ -101,18 +109,25 @@ export function PasswordResetForm({ isResettingPassword = false, token }: Passwo
       setIsLoading(true);
 
       try {
-        // TODO: Implement Supabase updateUser in backend phase
-        console.log("Setting new password with token:", token);
+        const supabase = createSupabaseBrowserClient();
+        const { error: updateError } = await supabase.auth.updateUser({
+          password: password,
+        });
 
-        // Placeholder error for UI demonstration
-        throw new Error("Authentication not yet implemented. Backend integration coming in next phase.");
+        if (updateError) {
+          setError(updateError.message);
+          return;
+        }
+
+        // Success - show password changed message
+        setIsSuccess(true);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unexpected error occurred");
       } finally {
         setIsLoading(false);
       }
     },
-    [password, confirmPassword, token, validatePasswordForm]
+    [password, validatePasswordForm]
   );
 
   // Success state for email sent
@@ -123,8 +138,8 @@ export function PasswordResetForm({ isResettingPassword = false, token }: Passwo
           <Mail className="h-4 w-4 text-blue-400" />
           <AlertTitle className="text-blue-300">Check your email</AlertTitle>
           <AlertDescription className="text-blue-200">
-            We've sent a password reset link to <strong>{email}</strong>. Please check your inbox
-            and click the link to reset your password.
+            We've sent a password reset link to <strong>{email}</strong>. Please check your inbox and click the link to
+            reset your password.
           </AlertDescription>
         </Alert>
 
@@ -160,9 +175,7 @@ export function PasswordResetForm({ isResettingPassword = false, token }: Passwo
       <div className="space-y-6">
         <div>
           <h2 className="text-2xl font-bold text-slate-100">Set new password</h2>
-          <p className="mt-2 text-sm text-slate-400">
-            Enter your new password below
-          </p>
+          <p className="mt-2 text-sm text-slate-400">Enter your new password below</p>
         </div>
 
         {error && (
@@ -230,9 +243,7 @@ export function PasswordResetForm({ isResettingPassword = false, token }: Passwo
                   : "border-slate-700"
               }`}
             />
-            {fieldErrors.confirmPassword && (
-              <p className="text-sm text-red-400 mt-1">{fieldErrors.confirmPassword}</p>
-            )}
+            {fieldErrors.confirmPassword && <p className="text-sm text-red-400 mt-1">{fieldErrors.confirmPassword}</p>}
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
@@ -293,9 +304,7 @@ export function PasswordResetForm({ isResettingPassword = false, token }: Passwo
                 : "border-slate-700"
             }`}
           />
-          {fieldErrors.email && (
-            <p className="text-sm text-red-400 mt-1">{fieldErrors.email}</p>
-          )}
+          {fieldErrors.email && <p className="text-sm text-red-400 mt-1">{fieldErrors.email}</p>}
         </div>
 
         <Button type="submit" className="w-full" disabled={isLoading}>

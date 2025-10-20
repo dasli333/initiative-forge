@@ -1,7 +1,6 @@
 import type { APIContext } from "astro";
 import { CreateCombatCommandSchema } from "@/lib/schemas/combat.schema";
 import { createCombat, listCombats } from "@/lib/services/combat.service";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
@@ -10,7 +9,14 @@ export const prerender = false;
  * Returns all combats in a campaign
  */
 export async function GET(context: APIContext): Promise<Response> {
-  const userId = DEFAULT_USER_ID;
+  // Check authentication - user should be set by middleware
+  if (!context.locals.user) {
+    return new Response(JSON.stringify({ error: "Authentication required" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const userId = context.locals.user.id;
 
   // Extract params
   const campaignId = context.params.campaignId;
@@ -67,24 +73,16 @@ export async function GET(context: APIContext): Promise<Response> {
  * Creates a new combat encounter with initial participants
  */
 export async function POST(context: APIContext): Promise<Response> {
-  // TODO: Authentication temporarily disabled - using default user
-  // 1. Auth check
-  // const {
-  //   data: { user },
-  //   error: authError,
-  // } = await context.locals.supabase.auth.getUser();
+  // Check authentication - user should be set by middleware
+  if (!context.locals.user) {
+    return new Response(JSON.stringify({ error: "Authentication required" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const userId = context.locals.user.id;
 
-  // if (authError || !user) {
-  //   return new Response(JSON.stringify({ error: "Authentication required" }), {
-  //     status: 401,
-  //     headers: { "Content-Type": "application/json" },
-  //   });
-  // }
-
-  // Using default user for now
-  const userId = DEFAULT_USER_ID;
-
-  // 2. Extract campaignId from params
+  // Extract campaignId from params
   const campaignId = context.params.campaignId;
   if (!campaignId) {
     return new Response(JSON.stringify({ error: "Campaign ID is required" }), {
@@ -93,7 +91,7 @@ export async function POST(context: APIContext): Promise<Response> {
     });
   }
 
-  // 3. Parse and validate request body
+  // Parse and validate request body
   let body;
   try {
     body = await context.request.json();
@@ -118,7 +116,7 @@ export async function POST(context: APIContext): Promise<Response> {
     );
   }
 
-  // 4. Execute service
+  // Execute service
   try {
     const combat = await createCombat(context.locals.supabase, userId, campaignId, validation.data);
 

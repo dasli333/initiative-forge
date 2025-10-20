@@ -32,7 +32,9 @@ const { title = "Initiative Forge" } = Astro.props;
         <!-- Logo -->
         <div class="mb-10">
           <a href="/" class="block group">
-            <h1 class="forge-logo text-center text-4xl font-black tracking-wide transition-all duration-300 group-hover:scale-105">
+            <h1
+              class="forge-logo text-center text-4xl font-black tracking-wide transition-all duration-300 group-hover:scale-105"
+            >
               Initiative Forge
             </h1>
           </a>
@@ -67,13 +69,11 @@ const { title = "Initiative Forge" } = Astro.props;
       0 0 20px rgba(249, 115, 22, 0.5),
       0 0 40px rgba(220, 38, 38, 0.3),
       0 0 60px rgba(153, 27, 27, 0.2);
-    filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.4))
-            drop-shadow(0 0 30px rgba(220, 38, 38, 0.3));
+    filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.4)) drop-shadow(0 0 30px rgba(220, 38, 38, 0.3));
   }
 
   .group:hover .forge-logo {
-    filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.6))
-            drop-shadow(0 0 40px rgba(220, 38, 38, 0.5))
-            drop-shadow(0 0 60px rgba(153, 27, 27, 0.3));
+    filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.6)) drop-shadow(0 0 40px rgba(220, 38, 38, 0.5))
+      drop-shadow(0 0 60px rgba(153, 27, 27, 0.3));
   }
 </style>

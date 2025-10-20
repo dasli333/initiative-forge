@@ -2,7 +2,6 @@ import type { APIContext } from "astro";
 import { getCampaign, updateCampaign, deleteCampaign } from "@/lib/services/campaign.service";
 import { updateCampaignSchema } from "@/lib/schemas/campaign.schema";
 import { ZodError } from "zod";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
@@ -16,22 +15,14 @@ export const prerender = false;
 export async function GET(context: APIContext) {
   const supabase = context.locals.supabase;
 
-  // TODO: Authentication temporarily disabled - using default user
-  // Check authentication
-  // const {
-  //   data: { user },
-  //   error: authError,
-  // } = await supabase.auth.getUser();
-
-  // if (authError || !user) {
-  //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-  //     status: 401,
-  //     headers: { "Content-Type": "application/json" },
-  //   });
-  // }
-
-  // Using default user for now
-  const userId = DEFAULT_USER_ID;
+  // Check authentication - user should be set by middleware
+  if (!context.locals.user) {
+    return new Response(JSON.stringify({ error: "Authentication required" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const userId = context.locals.user.id;
 
   // Get campaign ID from URL params
   const campaignId = context.params.id;
@@ -91,22 +82,14 @@ export async function GET(context: APIContext) {
 export async function PATCH(context: APIContext) {
   const supabase = context.locals.supabase;
 
-  // TODO: Authentication temporarily disabled - using default user
-  // Check authentication
-  // const {
-  //   data: { user },
-  //   error: authError,
-  // } = await supabase.auth.getUser();
-
-  // if (authError || !user) {
-  //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-  //     status: 401,
-  //     headers: { "Content-Type": "application/json" },
-  //   });
-  // }
-
-  // Using default user for now
-  const userId = DEFAULT_USER_ID;
+  // Check authentication - user should be set by middleware
+  if (!context.locals.user) {
+    return new Response(JSON.stringify({ error: "Authentication required" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const userId = context.locals.user.id;
 
   // Get campaign ID from URL params
   const campaignId = context.params.id;
@@ -222,22 +205,14 @@ export async function PATCH(context: APIContext) {
 export async function DELETE(context: APIContext) {
   const supabase = context.locals.supabase;
 
-  // TODO: Authentication temporarily disabled - using default user
-  // Check authentication
-  // const {
-  //   data: { user },
-  //   error: authError,
-  // } = await supabase.auth.getUser();
-
-  // if (authError || !user) {
-  //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-  //     status: 401,
-  //     headers: { "Content-Type": "application/json" },
-  //   });
-  // }
-
-  // Using default user for now
-  const userId = DEFAULT_USER_ID;
+  // Check authentication - user should be set by middleware
+  if (!context.locals.user) {
+    return new Response(JSON.stringify({ error: "Authentication required" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const userId = context.locals.user.id;
 
   // Get campaign ID from URL params
   const campaignId = context.params.id;
