@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+import { navigate } from "astro:transitions/client";
 import { useAuthStore } from "@/stores/authStore";
 import { useCampaignStore } from "@/stores/campaignStore";
 import { AppHeader } from "./sidebar/AppHeader";
@@ -17,6 +19,13 @@ export function SidebarContent({ currentPath }: SidebarContentProps) {
   const { selectedCampaignId, selectedCampaign } = useCampaignStore();
 
   const campaign = selectedCampaign;
+
+  // Handle logout with View Transitions navigation
+  const handleLogout = useCallback(async () => {
+    await logout();
+    // Navigate to login page using View Transitions
+    navigate("/auth/login");
+  }, [logout]);
 
   return (
     <aside
@@ -40,7 +49,7 @@ export function SidebarContent({ currentPath }: SidebarContentProps) {
       {isLoadingUser ? (
         <div className="h-16 bg-slate-800 animate-pulse m-4 rounded" />
       ) : (
-        user && <UserMenu user={user} onLogout={logout} />
+        user && <UserMenu user={user} onLogout={handleLogout} />
       )}
     </aside>
   );

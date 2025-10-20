@@ -42,6 +42,20 @@ function toUserViewModel(user: User | null): UserViewModel | null {
   };
 }
 
+/**
+ * Clears authentication-related state from storage
+ */
+function clearAuthState() {
+  // Clear auth-specific localStorage keys
+  // Zustand persist uses 'auth-storage' key
+  try {
+    localStorage.removeItem("auth-storage");
+    // Add other auth-related keys if needed
+  } catch (error) {
+    console.error("Error clearing auth state:", error);
+  }
+}
+
 // ============================================================================
 // ZUSTAND STORE
 // ============================================================================
@@ -116,14 +130,20 @@ export const useAuthStore = create<AuthStore>()(
           if (signOutError) {
             console.error("Logout error:", signOutError);
           }
+
+          // Clear user state
           get().setUser(null);
-          // Redirect to login after successful logout
-          // Use window.location.href for full page reload (clears all state)
-          window.location.href = "/auth/login";
+
+          // Clear persisted auth state from localStorage
+          clearAuthState();
+
+          // Note: Navigation should be handled by the calling component
+          // This allows components to use navigate() for View Transitions
         } catch (error) {
           console.error("Logout error:", error);
-          // Force logout UX - even if API call failed
-          window.location.href = "/auth/login";
+          // Even on error, clear local state for security
+          get().setUser(null);
+          clearAuthState();
         }
       },
 
