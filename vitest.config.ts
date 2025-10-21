@@ -27,6 +27,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
+      "astro:transitions/client": resolve(__dirname, "./src/test/mocks/astro-navigation.ts"),
     },
   },
 });
