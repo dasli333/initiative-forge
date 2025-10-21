@@ -13,44 +13,46 @@ export function formatConditionDescription(description: string): ReactNode[] {
   // Split by newlines to create separate lines
   const lines = description.split("\n");
 
-  return lines.map((line, lineIndex) => {
-    // Skip empty lines
-    if (line.trim() === "") {
-      return null;
-    }
-
-    // Parse **bold** markers within the line
-    const parts: ReactNode[] = [];
-    let lastIndex = 0;
-    const boldRegex = /\*\*(.*?)\*\*/g;
-    let match;
-
-    while ((match = boldRegex.exec(line)) !== null) {
-      // Add text before the bold marker
-      if (match.index > lastIndex) {
-        parts.push(line.substring(lastIndex, match.index));
+  return lines
+    .map((line, lineIndex) => {
+      // Skip empty lines
+      if (line.trim() === "") {
+        return null;
       }
 
-      // Add bold text
-      parts.push(
-        <strong key={`bold-${lineIndex}-${match.index}`} className="font-semibold">
-          {match[1]}
-        </strong>
+      // Parse **bold** markers within the line
+      const parts: ReactNode[] = [];
+      let lastIndex = 0;
+      const boldRegex = /\*\*(.*?)\*\*/g;
+      let match;
+
+      while ((match = boldRegex.exec(line)) !== null) {
+        // Add text before the bold marker
+        if (match.index > lastIndex) {
+          parts.push(line.substring(lastIndex, match.index));
+        }
+
+        // Add bold text
+        parts.push(
+          <strong key={`bold-${lineIndex}-${match.index}`} className="font-semibold">
+            {match[1]}
+          </strong>
+        );
+
+        lastIndex = match.index + match[0].length;
+      }
+
+      // Add remaining text after the last bold marker
+      if (lastIndex < line.length) {
+        parts.push(line.substring(lastIndex));
+      }
+
+      // Return the line as a paragraph (or div)
+      return (
+        <p key={`line-${lineIndex}`} className="mb-2 last:mb-0">
+          {parts}
+        </p>
       );
-
-      lastIndex = match.index + match[0].length;
-    }
-
-    // Add remaining text after the last bold marker
-    if (lastIndex < line.length) {
-      parts.push(line.substring(lastIndex));
-    }
-
-    // Return the line as a paragraph (or div)
-    return (
-      <p key={`line-${lineIndex}`} className="mb-2 last:mb-0">
-        {parts}
-      </p>
-    );
-  });
+    })
+    .filter((node): node is JSX.Element => node !== null);
 }

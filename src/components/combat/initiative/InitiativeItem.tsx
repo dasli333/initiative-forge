@@ -60,7 +60,7 @@ export function InitiativeItem({
               {displayName}
               {isUnconscious && <Skull className="inline ml-1.5 h-3.5 w-3.5" />}
             </h3>
-            <p className="text-xs text-muted-foreground capitalize mt-0.5">{participant.source.replace("_", " ")}</p>
+            <p className="text-xs text-muted-foreground capitalize mt-0.5">{participant.source.replace(/_/g, " ")}</p>
           </div>
           <div className="flex gap-1.5 flex-shrink-0">
             <InitiativeBadge value={participant.initiative} />
