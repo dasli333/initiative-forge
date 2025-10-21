@@ -8,6 +8,12 @@ Frontend - Astro z React dla komponentów interaktywnych:
 - Zustand zapewnia globalny state management dla aktywnej kampanii i innych stanów aplikacji
 - TanStack Query (React Query) do zarządzania stanem serwera, cache'owania i synchronizacji danych z backendem
 
+Testy:
+
+- Vitest - szybki framework do testów jednostkowych i komponentowych
+- React Testing Library - narzędzie do testowania komponentów React
+- Playwright - framework do testów end-to-end w przeglądarkach (Chrome, Firefox)
+
 Backend - Supabase jako kompleksowe rozwiązanie backendowe:
 
 - Zapewnia bazę danych PostgreSQL

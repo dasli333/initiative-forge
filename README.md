@@ -98,6 +98,9 @@ The goal is to make combat rounds faster and more fluid, allowing DMs to focus o
 - **`npm run lint`** - Check code for linting errors
 - **`npm run lint:fix`** - Automatically fix linting issues
 - **`npm run format`** - Format code with Prettier
+- **`npm run test`** - Run unit and component tests with Vitest
+- **`npm run test:ui`** - Run tests with Vitest UI
+- **`npm run test:e2e`** - Run end-to-end tests with Playwright
 
 ## Project Scope
 
@@ -138,6 +141,38 @@ The goal is to make combat rounds faster and more fluid, allowing DMs to focus o
 - Advanced session journaling (plot notes, world details, NPC records)
 - Auto-save combat state after each turn
 - Full character sheets (inventory, skills, backstory, etc.)
+
+## Testing
+
+Initiative Forge follows a comprehensive testing strategy to ensure quality, stability, and reliability across all features.
+
+### Testing Framework
+
+- **[Vitest](https://vitest.dev/)** - Fast unit and component testing framework
+- **[React Testing Library](https://testing-library.com/react)** - Component testing utilities
+- **[Playwright](https://playwright.dev/)** - End-to-end testing across browsers
+
+### Test Types
+
+- **Unit Tests** - Individual functions, hooks, and business logic
+- **Component Tests** - React component rendering and interactions
+- **Integration Tests** - Multi-component and module cooperation
+- **E2E Tests** - Full user journey simulations
+- **API Tests** - Direct endpoint verification
+
+### Test Environment
+
+- **Browsers**: Latest Chrome and Firefox
+- **CI/CD**: GitHub Actions with automated test runs
+
+### Quality Criteria
+
+Tests run automatically on every push and pull request. Deployment requires:
+- 100% of unit and integration tests passing
+- 100% of critical E2E scenarios passing
+- No critical or blocker priority bugs
+
+For detailed test scenarios and procedures, see `.ai/test-plan.md`.
 
 ## Project Status
 
